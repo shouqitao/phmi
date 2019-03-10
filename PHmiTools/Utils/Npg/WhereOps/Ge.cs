@@ -1,10 +1,6 @@
-﻿namespace PHmiTools.Utils.Npg.WhereOps
-{
-    public class Ge : UnaryOp
-    {
+﻿namespace PHmiTools.Utils.Npg.WhereOps {
+    public class Ge : UnaryOp {
         public Ge(string column, object value)
-            : base(">=", column, value)
-        {
-        }
+            : base(">=", column, value) { }
     }
 }

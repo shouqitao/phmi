@@ -9,135 +9,103 @@ using PHmiTools;
 using PHmiTools.Utils;
 using PHmiTools.ViewModels;
 
-namespace PHmiConfigurator.Dialogs
-{
-    public class InstallServiceViewModel : ViewModelBase<IWindow>
-    {
-        private readonly IDialogHelper _dialogHelper;
+namespace PHmiConfigurator.Dialogs {
+    public class InstallServiceViewModel : ViewModelBase<IWindow> {
         private readonly IActionHelper _actionHelper;
         private readonly DelegateCommand _cancelCommand;
+        private readonly IDialogHelper _dialogHelper;
         private readonly DelegateCommand _installCommand;
-        private string _customConnectionString;
-        private bool _useCustomConnectionString = true;
         private bool _busy;
+        private string _customConnectionString;
         private string _projectConnectionString;
+        private bool _useCustomConnectionString = true;
 
-        public InstallServiceViewModel() : this(new DialogHelper(), new ActionHelper())
-        {
-        }
+        public InstallServiceViewModel() : this(new DialogHelper(), new ActionHelper()) { }
 
-        public InstallServiceViewModel(IDialogHelper dialogHelper, IActionHelper actionHelper)
-        {
+        public InstallServiceViewModel(IDialogHelper dialogHelper, IActionHelper actionHelper) {
             _actionHelper = actionHelper;
             _dialogHelper = dialogHelper;
             _cancelCommand = new DelegateCommand(CancelExecuted);
             _installCommand = new DelegateCommand(InstallExecuted, InstallCanExecute);
         }
 
-        public ICommand CancelCommand
-        {
+        public ICommand CancelCommand {
             get { return _cancelCommand; }
         }
 
-        private void CancelExecuted(object obj)
-        {
-            View.DialogResult = false;
-        }
-
-        public string ProjectConnectionString
-        {
+        public string ProjectConnectionString {
             get { return _projectConnectionString; }
-            set
-            {
+            set {
                 _projectConnectionString = value;
                 OnPropertyChanged(this, m => m.ProjectConnectionString);
-                if (_projectConnectionString != null)
-                {
-                    UseCustomConnectionString = false;
-                }
+                if (_projectConnectionString != null) UseCustomConnectionString = false;
             }
         }
 
-        public string CustomConnectionString
-        {
+        public string CustomConnectionString {
             get { return _customConnectionString; }
-            set
-            {
+            set {
                 _customConnectionString = value;
                 OnPropertyChanged(this, m => m.CustomConnectionString);
             }
         }
 
-        public bool UseCustomConnectionString
-        {
+        public bool UseCustomConnectionString {
             get { return _useCustomConnectionString; }
-            set
-            {
+            set {
                 _useCustomConnectionString = value;
                 OnPropertyChanged(this, m => m.UseCustomConnectionString);
             }
         }
 
-        public bool Busy
-        {
+        public bool Busy {
             get { return _busy; }
-            set
-            {
+            set {
                 _busy = value;
                 OnPropertyChanged(this, m => m.Busy);
             }
         }
 
-        public ICommand InstallCommand
-        {
+        public ICommand InstallCommand {
             get { return _installCommand; }
         }
 
-        private bool InstallCanExecute(object obj)
-        {
+        private void CancelExecuted(object obj) {
+            View.DialogResult = false;
+        }
+
+        private bool InstallCanExecute(object obj) {
             return !Busy;
         }
 
-        private void InstallExecuted(object obj)
-        {
+        private void InstallExecuted(object obj) {
             _actionHelper.Async(Install);
         }
 
-        private void Install()
-        {
+        private void Install() {
             Busy = true;
-            var connectionString = UseCustomConnectionString ? CustomConnectionString : ProjectConnectionString;
-            try
-            {
-                var proc = new ProcessStartInfo
-                {
+            string connectionString =
+                UseCustomConnectionString ? CustomConnectionString : ProjectConnectionString;
+            try {
+                var proc = new ProcessStartInfo {
                     FileName = string.Format("{0}.exe", PHmiConstants.PHmiServiceName),
                     Arguments = "--i " + connectionString
                 };
                 Process.Start(proc);
                 _actionHelper.Dispatch(() => { View.DialogResult = true; });
-            }
-            catch (Win32Exception)
-            {
+            } catch (Win32Exception) {
                 _actionHelper.Dispatch(() => { View.DialogResult = false; });
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 _dialogHelper.Exception(exception, View);
-            }
-            finally
-            {
+            } finally {
                 Busy = false;
             }
         }
 
-        protected override void OnPropertyChanged(string property)
-        {
+        protected override void OnPropertyChanged(string property) {
             base.OnPropertyChanged(property);
             if (property == PropertyHelper.GetPropertyName(this, m => m.Busy))
-            {
                 _actionHelper.Dispatch(() => _installCommand.RaiseCanExecuteChanged());
-            }
         }
     }
 }

@@ -5,9 +5,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid Height="14" Width="14" Background="#00FFFFFF">
-                        <Rectangle Name="Background" StrokeThickness="1"></Rectangle>
+                        <Rectangle Name="Background" StrokeThickness="1" />
                         <Viewbox Margin="3,2,2,2">
-                            <Path RenderTransformOrigin="0.5,0" Data="M0,0L2,0L5,4L8,0L10,0L6,5L10,10L8,10L5,6L2,10L0,10L4,5L0,0z" HorizontalAlignment="Center" Name="Arrow" VerticalAlignment="Center" StrokeThickness="1">
+                            <Path RenderTransformOrigin="0.5,0"
+                                  Data="M0,0L2,0L5,4L8,0L10,0L6,5L10,10L8,10L5,6L2,10L0,10L4,5L0,0z"
+                                  HorizontalAlignment="Center" Name="Arrow" VerticalAlignment="Center"
+                                  StrokeThickness="1">
                                 <Path.Fill>
                                     <SolidColorBrush Color="Gray" />
                                 </Path.Fill>

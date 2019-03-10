@@ -1,47 +1,36 @@
-﻿using PHmiClient.Utils;
+﻿using System;
+using PHmiClient.Utils;
 using PHmiIoDevice.Modbus.Configuration;
 using PHmiIoDeviceTools;
-using System;
 
-namespace PHmiIoDevice.Modbus
-{
+namespace PHmiIoDevice.Modbus {
     /// <summary>
-    /// Interaction logic for ModbusOptionsEditor.xaml
+    ///     Interaction logic for ModbusOptionsEditor.xaml
     /// </summary>
-    public partial class ModbusOptionsEditor : IOptionsEditor
-    {
-        private readonly ModbusOptionsEditorViewModel _viewModel = new ModbusOptionsEditorViewModel();
-
-        public ModbusOptionsEditor()
-        {
+    public partial class ModbusOptionsEditor : IOptionsEditor {
+        public ModbusOptionsEditor() {
             InitializeComponent();
             ViewModel.ConfigChanged += (sender, args) => OnConfigChanged();
         }
 
-        private void OnConfigChanged()
-        {
-            EventHelper.Raise(ref OptionsChanged, this, EventArgs.Empty);
-        }
+        public ModbusOptionsEditorViewModel ViewModel { get; } = new ModbusOptionsEditorViewModel();
 
-        public ModbusOptionsEditorViewModel ViewModel { get { return _viewModel; } }
-
-        public void SetOptions(string options)
-        {
-            try
-            {
+        public void SetOptions(string options) {
+            try {
                 ViewModel.Config = ConfigHelper.GetConfig(options);
-            }
-            catch
-            {
+            } catch {
                 ViewModel.Config = new TcpConfig();
             }
         }
 
-        public string GetOptions()
-        {
+        public string GetOptions() {
             return ViewModel.Config.GetXml();
         }
 
         public event EventHandler OptionsChanged;
+
+        private void OnConfigChanged() {
+            EventHelper.Raise(ref OptionsChanged, this, EventArgs.Empty);
+        }
     }
 }

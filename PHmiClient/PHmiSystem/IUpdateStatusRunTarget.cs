@@ -1,6 +1,3 @@
-﻿namespace PHmiClient.PHmiSystem
-{
-    internal interface IUpdateStatusRunTarget : IServiceRunTarget
-    {
-    }
+﻿namespace PHmiClient.PHmiSystem {
+    internal interface IUpdateStatusRunTarget : IServiceRunTarget { }
 }

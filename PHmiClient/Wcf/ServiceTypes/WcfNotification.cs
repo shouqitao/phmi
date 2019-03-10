@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    internal sealed class WcfNotification
-    {
+    internal sealed class WcfNotification {
         [DataMember]
         public DateTime StartTime { get; set; }
 

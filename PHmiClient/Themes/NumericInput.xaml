@@ -15,28 +15,46 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Controls:NumericInput}">
                     <Grid>
-                        <ToggleButton Style="{StaticResource PHmiToggleButtonStyle}" IsChecked="{Binding ElementName=popup, Mode=TwoWay, Path=IsOpen}" Padding="2" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalAlignment="{TemplateBinding VerticalAlignment}" HorizontalAlignment="{TemplateBinding HorizontalAlignment}" ToolTipService.ToolTip="{Binding Path=NumericTag.Description, RelativeSource={RelativeSource TemplatedParent}}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ToggleButton Style="{StaticResource PHmiToggleButtonStyle}"
+                                      IsChecked="{Binding ElementName=popup, Mode=TwoWay, Path=IsOpen}"
+                                      Padding="2" VerticalContentAlignment="Stretch"
+                                      HorizontalContentAlignment="Stretch"
+                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                      ToolTipService.ToolTip="{Binding Path=NumericTag.Description, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
                                 <Grid Margin="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Path=NumericTag.ValueString, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{TemplateBinding Foreground}" Margin="2" />
+                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right"
+                                               Text="{Binding Path=NumericTag.ValueString, RelativeSource={RelativeSource TemplatedParent}}"
+                                               Foreground="{TemplateBinding Foreground}" Margin="2" />
                                 </Grid>
                             </Border>
                         </ToggleButton>
-                        <Popup Name="popup" Grid.Row="1" AllowsTransparency="True" StaysOpen="False" Placement="Bottom" PopupAnimation="Fade" PlacementTarget="{Binding ElementName=button}" IsOpen="{Binding Path=IsOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                        <Popup Name="popup" Grid.Row="1" AllowsTransparency="True" StaysOpen="False"
+                               Placement="Bottom" PopupAnimation="Fade"
+                               PlacementTarget="{Binding ElementName=button}"
+                               IsOpen="{Binding Path=IsOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                             <Popup.InputBindings>
-                                <KeyBinding Key="Enter" Command="{Binding Path=EnterCommand, RelativeSource={RelativeSource TemplatedParent}}" />
-                                <KeyBinding Key="Escape" Command="{Binding Path=CloseCommand, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <KeyBinding Key="Enter"
+                                            Command="{Binding Path=EnterCommand, RelativeSource={RelativeSource TemplatedParent}}" />
+                                <KeyBinding Key="Escape"
+                                            Command="{Binding Path=CloseCommand, RelativeSource={RelativeSource TemplatedParent}}" />
                             </Popup.InputBindings>
                             <Border BorderBrush="LightBlue" BorderThickness="1" Background="WhiteSmoke">
                                 <GroupBox>
                                     <GroupBox.Header>
-                                        <TextBlock FontWeight="Bold" Foreground="Black" Text="{Binding Path=NumericTag.Description, RelativeSource={RelativeSource TemplatedParent}}" MaxWidth="200" TextWrapping="WrapWithOverflow" />
+                                        <TextBlock FontWeight="Bold" Foreground="Black"
+                                                   Text="{Binding Path=NumericTag.Description, RelativeSource={RelativeSource TemplatedParent}}"
+                                                   MaxWidth="200" TextWrapping="WrapWithOverflow" />
                                     </GroupBox.Header>
-                                    <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Grid
+                                        DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                         <Grid.Resources>
                                             <Style TargetType="Button">
                                                 <Setter Property="Margin" Value="2" />
@@ -63,53 +81,82 @@
                                             <RowDefinition />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <TextBox Grid.ColumnSpan="4" Margin="2" FontWeight="Bold" Name="textBox"/>
-                                        <Button Grid.Row="1" Grid.ColumnSpan="2" Command="{Binding Path=CloseCommand}">
+                                        <TextBox Grid.ColumnSpan="4" Margin="2" FontWeight="Bold"
+                                                 Name="textBox" />
+                                        <Button Grid.Row="1" Grid.ColumnSpan="2"
+                                                Command="{Binding Path=CloseCommand}">
                                             <TextBlock Text="Esc" />
                                         </Button>
-                                        <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Command="{Binding Path=ClearCommand}">
+                                        <Button Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                                Command="{Binding Path=ClearCommand}">
                                             <TextBlock Text="Clear" />
                                         </Button>
-                                        <Button Grid.Column="2" Grid.Row="5" Command="{Binding Path=EnterPointCommand}">
+                                        <Button Grid.Column="2" Grid.Row="5"
+                                                Command="{Binding Path=EnterPointCommand}">
                                             <TextBlock Text="." />
                                         </Button>
-                                        <Button Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Command="{Binding Path=EnterCommand}">
+                                        <Button Grid.Column="3" Grid.Row="4" Grid.RowSpan="2"
+                                                Command="{Binding Path=EnterCommand}">
                                             <TextBlock Text="OK" />
                                         </Button>
-                                        <Button Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Command="{Binding Path=BackSpaceCommand}">
-                                            <Path Stroke="Black" StrokeThickness="1" Fill="DarkGray" RenderTransformOrigin="0.5,0" Data="M0.37,7.69L5.74,14.2A1.5,1.5,0,1,0,10.26,12.27L8.42,10.42 14.9,10.39A1.5,1.5,0,1,0,14.92,5.87L8.44,5.9 10.31,4.03A1.5,1.5,0,1,0,5.79,1.77z" />
+                                        <Button Grid.Column="3" Grid.Row="2" Grid.RowSpan="2"
+                                                Command="{Binding Path=BackSpaceCommand}">
+                                            <Path Stroke="Black" StrokeThickness="1" Fill="DarkGray"
+                                                  RenderTransformOrigin="0.5,0"
+                                                  Data="M0.37,7.69L5.74,14.2A1.5,1.5,0,1,0,10.26,12.27L8.42,10.42 14.9,10.39A1.5,1.5,0,1,0,14.92,5.87L8.44,5.9 10.31,4.03A1.5,1.5,0,1,0,5.79,1.77z" />
                                         </Button>
-                                        <Button Grid.Column="0" Grid.Row="5" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="0">
+                                        <Button Grid.Column="0" Grid.Row="5"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="0">
                                             <TextBlock Text="0" />
                                         </Button>
-                                        <Button Grid.Column="1" Grid.Row="5" Command="{Binding Path=PlusMinusCommand}">
+                                        <Button Grid.Column="1" Grid.Row="5"
+                                                Command="{Binding Path=PlusMinusCommand}">
                                             <TextBlock Text="+/-" />
                                         </Button>
-                                        <Button Grid.Column="0" Grid.Row="4" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="1">
+                                        <Button Grid.Column="0" Grid.Row="4"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="1">
                                             <TextBlock Text="1" />
                                         </Button>
-                                        <Button Grid.Column="1" Grid.Row="4" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="2">
+                                        <Button Grid.Column="1" Grid.Row="4"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="2">
                                             <TextBlock Text="2" />
                                         </Button>
-                                        <Button Grid.Column="2" Grid.Row="4" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="3">
+                                        <Button Grid.Column="2" Grid.Row="4"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="3">
                                             <TextBlock Text="3" />
                                         </Button>
-                                        <Button Grid.Column="0" Grid.Row="3" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="4">
+                                        <Button Grid.Column="0" Grid.Row="3"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="4">
                                             <TextBlock Text="4" />
                                         </Button>
-                                        <Button Grid.Column="1" Grid.Row="3" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="5">
+                                        <Button Grid.Column="1" Grid.Row="3"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="5">
                                             <TextBlock Text="5" />
                                         </Button>
-                                        <Button Grid.Column="2" Grid.Row="3" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="6">
+                                        <Button Grid.Column="2" Grid.Row="3"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="6">
                                             <TextBlock Text="6" />
                                         </Button>
-                                        <Button Grid.Column="0" Grid.Row="2" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="7">
+                                        <Button Grid.Column="0" Grid.Row="2"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="7">
                                             <TextBlock Text="7" />
                                         </Button>
-                                        <Button Grid.Column="1" Grid.Row="2" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="8">
+                                        <Button Grid.Column="1" Grid.Row="2"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="8">
                                             <TextBlock Text="8" />
                                         </Button>
-                                        <Button Grid.Column="2" Grid.Row="2" Command="{Binding Path=EnterSymbolCommand}" CommandParameter="9">
+                                        <Button Grid.Column="2" Grid.Row="2"
+                                                Command="{Binding Path=EnterSymbolCommand}"
+                                                CommandParameter="9">
                                             <TextBlock Text="9" />
                                         </Button>
                                     </Grid>

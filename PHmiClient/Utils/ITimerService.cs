@@ -1,12 +1,10 @@
 ﻿using System;
 
-namespace PHmiClient.Utils
-{
-    public interface ITimerService
-    {
-        event EventHandler Elapsed;
-
+namespace PHmiClient.Utils {
+    public interface ITimerService {
         TimeSpan TimeSpan { get; set; }
+
+        event EventHandler Elapsed;
 
         void Start();
 

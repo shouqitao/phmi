@@ -1,13 +1,9 @@
-﻿
-namespace PHmiConfigurator.Modules.Collection
-{
+﻿namespace PHmiConfigurator.Modules.Collection {
     /// <summary>
-    /// Interaction logic for TrendCategories.xaml
+    ///     Interaction logic for TrendCategories.xaml
     /// </summary>
-    public partial class TrendCategories
-    {
-        public TrendCategories()
-        {
+    public partial class TrendCategories {
+        public TrendCategories() {
             InitializeComponent();
         }
     }

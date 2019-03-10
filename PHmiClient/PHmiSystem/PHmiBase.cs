@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using PHmiClient.Alarms;
 using PHmiClient.Loc;
@@ -10,29 +12,23 @@ using PHmiClient.Utils;
 using PHmiClient.Utils.Notifications;
 using PHmiClient.Utils.Runner;
 using PHmiClient.Wcf;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
-namespace PHmiClient.PHmiSystem
-{
-    public class PHmiBase : PHmiAbstract
-    {
-        private readonly string _server;
-        private readonly INotificationReporter _reporter;
-        private readonly IServiceClientFactory _clientFactory;
-        private readonly IUsers _users;
-        private readonly ITagService _tagService;
+namespace PHmiClient.PHmiSystem {
+    public class PHmiBase : PHmiAbstract {
         private readonly IAlarmService _alarmService;
-        private readonly ITrendsService _trendsService;
-        private readonly ILogService _logService;
+        private readonly IServiceClientFactory _clientFactory;
         private readonly AlarmCategoryAbstract _commonAlarmCategory;
-        private readonly ICyclicRunnerFactory _cyclicRunnerFactory;
         private readonly ICyclicRunner _cyclicRunner;
-        private readonly ITimeService _timeService;
-        private readonly ITimerService _timerService;
+        private readonly ICyclicRunnerFactory _cyclicRunnerFactory;
         private readonly IList<IoDeviceAbstract> _ioDevices = new List<IoDeviceAbstract>();
-        private readonly ReadOnlyCollection<IoDeviceAbstract> _readOnlyIoDevices;
+        private readonly ILogService _logService;
         private readonly IPHmiRunTarget _pHmiRunTarget;
+        private readonly INotificationReporter _reporter;
+        private readonly ITagService _tagService;
+        private readonly ITimerService _timerService;
+        private readonly ITimeService _timeService;
+        private readonly ITrendsService _trendsService;
+        private readonly IUsers _users;
 
         protected PHmiBase(string server, string guid) : this(
             new NotificationReporterFactory(),
@@ -42,15 +38,14 @@ namespace PHmiClient.PHmiSystem
             new TimeService(),
             new TimerService(),
             new EventRunTarget(new DispatcherService()),
-            new UpdateStatusRunTargetFactory(), 
+            new UpdateStatusRunTargetFactory(),
             new UsersRunTarget(),
             new TagServiceFactory(),
             new AlarmServiceFactory(),
-            new TrendsServiceFactory(), 
+            new TrendsServiceFactory(),
             new LogService(),
-            new EventRunTarget(new DispatcherService()))
-        {
-            _server = server;
+            new EventRunTarget(new DispatcherService())) {
+            Server = server;
         }
 
         internal PHmiBase(
@@ -67,21 +62,21 @@ namespace PHmiClient.PHmiSystem
             IAlarmServiceFactory alarmServiceFactory,
             ITrendsServiceFactory trendsServiceFactory,
             ILogService logService,
-            IEventRunTarget afterUpdateRunTarget)
-        {
+            IEventRunTarget afterUpdateRunTarget) {
             _timeService = timeService;
             _timerService = timerService;
             _timerService.Elapsed += TimerServiceElapsed;
             _reporter = reporterFactory.Create(timeService);
             _clientFactory = clientFactory;
             beforeUpdateRunTarget.Runned += BeforeUpdateRunTargetRunned;
-            var updateStatusRunTarget = updateStatusRunTargetFactory.Create(_timeService);
+            IUpdateStatusRunTarget updateStatusRunTarget = updateStatusRunTargetFactory.Create(_timeService);
             _users = new Users.Users(usersRunTarget);
             _tagService = tagServiceFactory.Create(_reporter);
             _alarmService = alarmServiceFactory.Create(_reporter);
             _trendsService = trendsServiceFactory.Create(_reporter);
             _logService = logService;
-            _commonAlarmCategory = new AlarmCategoryBase(0, "CommonAlarms", () => Res.CommonAlarmsDescription);
+            _commonAlarmCategory =
+                new AlarmCategoryBase(0, "CommonAlarms", () => Res.CommonAlarmsDescription);
             Add(_commonAlarmCategory);
             _cyclicRunnerFactory = cyclicRunnerFactory;
             afterUpdateRunTarget.Runned += AfterUpdateRunTargetRunned;
@@ -97,117 +92,93 @@ namespace PHmiClient.PHmiSystem
                 _logService,
                 afterUpdateRunTarget);
             _cyclicRunner = _cyclicRunnerFactory.Create(_pHmiRunTarget);
-            _readOnlyIoDevices = new ReadOnlyCollection<IoDeviceAbstract>(_ioDevices);
+            IoDevices = new ReadOnlyCollection<IoDeviceAbstract>(_ioDevices);
         }
 
-        public override string Server
-        {
-            get { return _server; }
+        public override string Server { get; }
+
+        public override ReadOnlyCollection<IoDeviceAbstract> IoDevices { get; }
+
+        public override AlarmCategoryAbstract CommonAlarms {
+            get { return _commonAlarmCategory; }
         }
 
-        public override ReadOnlyCollection<IoDeviceAbstract> IoDevices
-        {
-            get { return _readOnlyIoDevices; }
+        public override INotificationReporter Reporter {
+            get { return _reporter; }
         }
 
-        protected internal override T AddIoDevice<T>(T ioDevice)
-        {
+        public override DateTime Time {
+            get { return _timeService.UtcTime; }
+        }
+
+        public override IUsers Users {
+            get { return _users; }
+        }
+
+        protected internal override T AddIoDevice<T>(T ioDevice) {
             _ioDevices.Add(ioDevice);
             _tagService.Add(ioDevice);
             return ioDevice;
         }
 
-        protected internal override T AddAlarmCategory<T>(T alarmCategory)
-        {
+        protected internal override T AddAlarmCategory<T>(T alarmCategory) {
             Add(alarmCategory);
             return alarmCategory;
         }
 
-        protected internal override T AddTrendsCategory<T>(T trendsCategory)
-        {
+        protected internal override T AddTrendsCategory<T>(T trendsCategory) {
             _trendsService.Add(trendsCategory);
             return trendsCategory;
         }
 
-        private void Add(AlarmCategoryAbstract category)
-        {
+        private void Add(AlarmCategoryAbstract category) {
             category.SetIdentityGetter(_users.Identity);
             _alarmService.Add(category);
         }
 
-        protected internal override LogAbstract AddLog(int id, string name)
-        {
+        protected internal override LogAbstract AddLog(int id, string name) {
             var log = new Log(id, name);
             _logService.Add(log);
             return log;
         }
 
-        public override AlarmCategoryAbstract CommonAlarms
-        {
-            get { return _commonAlarmCategory; }
-        }
-
-        public override INotificationReporter Reporter
-        {
-            get { return _reporter; }
-        }
-
         public override event EventHandler BeforeUpdate;
 
-        private void BeforeUpdateRunTargetRunned(object sender, EventArgs e)
-        {
+        private void BeforeUpdateRunTargetRunned(object sender, EventArgs e) {
             EventHelper.Raise(ref BeforeUpdate, this, EventArgs.Empty);
         }
 
         public override event EventHandler AfterUpdate;
 
-        private void AfterUpdateRunTargetRunned(object sender, EventArgs e)
-        {
+        private void AfterUpdateRunTargetRunned(object sender, EventArgs e) {
             EventHelper.Raise(ref AfterUpdate, this, EventArgs.Empty);
         }
 
-        public override DateTime Time
-        {
-            get { return _timeService.UtcTime; }
-        }
-
-        public override IUsers Users { get { return _users; } }
-
-        public override void Start()
-        {
+        public override void Start() {
             _timerService.Start();
             _cyclicRunner.Start();
         }
 
-        public override void Stop()
-        {
+        public override void Stop() {
             _timerService.Stop();
             _cyclicRunner.Stop();
         }
 
-        public override void RunOnce()
-        {
-            try
-            {
+        public override void RunOnce() {
+            try {
                 _pHmiRunTarget.Run();
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 _pHmiRunTarget.Reporter.Report(_pHmiRunTarget.Name + ": " + Res.RunError, exception);
-            }
-            finally
-            {
+            } finally {
                 _pHmiRunTarget.Clean();
             }
         }
 
-        private void TimerServiceElapsed(object sender, EventArgs eventArgs)
-        {
+        private void TimerServiceElapsed(object sender, EventArgs eventArgs) {
             OnPropertyChanged("Time");
         }
 
-        protected virtual void OnPropertyChanged(string property)
-        {
+        protected virtual void OnPropertyChanged(string property) {
             EventHelper.Raise(ref PropertyChanged, this, new PropertyChangedEventArgs(property));
         }
 

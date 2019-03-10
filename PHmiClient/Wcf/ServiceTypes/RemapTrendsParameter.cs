@@ -1,12 +1,10 @@
-﻿using PHmiClient.Utils.Pagination;
-using System;
+﻿using System;
 using System.Runtime.Serialization;
+using PHmiClient.Utils.Pagination;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    internal class RemapTrendsParameter
-    {
+    internal class RemapTrendsParameter {
         [DataMember]
         public int CategoryId { get; set; }
 

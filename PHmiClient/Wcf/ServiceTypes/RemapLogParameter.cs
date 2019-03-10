@@ -1,13 +1,11 @@
-﻿using PHmiClient.Logs;
-using PHmiClient.Utils.Pagination;
-using System;
+﻿using System;
 using System.Runtime.Serialization;
+using PHmiClient.Logs;
+using PHmiClient.Utils.Pagination;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    public sealed class RemapLogParameter
-    {
+    public sealed class RemapLogParameter {
         [DataMember]
         public int LogId { get; set; }
 

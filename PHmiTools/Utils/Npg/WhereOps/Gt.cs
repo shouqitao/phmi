@@ -1,10 +1,6 @@
-﻿namespace PHmiTools.Utils.Npg.WhereOps
-{
-    public class Gt : UnaryOp
-    {
+﻿namespace PHmiTools.Utils.Npg.WhereOps {
+    public class Gt : UnaryOp {
         public Gt(string column, object value)
-            : base(">", column, value)
-        {
-        }
+            : base(">", column, value) { }
     }
 }

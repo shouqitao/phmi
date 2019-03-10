@@ -1,7 +1,5 @@
-﻿namespace PHmiRunner.Utils
-{
-    public interface IDataDbCreator
-    {
+﻿namespace PHmiRunner.Utils {
+    public interface IDataDbCreator {
         bool Start();
     }
 }

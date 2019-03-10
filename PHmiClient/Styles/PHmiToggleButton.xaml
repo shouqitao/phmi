@@ -8,7 +8,7 @@
             <Setter.Value>
                 <MultiBinding>
                     <MultiBinding.Converter>
-                        <MultiValueConverters:PrivilegedToTrueConverter/>
+                        <MultiValueConverters:PrivilegedToTrueConverter />
                     </MultiBinding.Converter>
                     <Binding Path="(Controls:PHmiControls.Privilege)" RelativeSource="{RelativeSource Self}" />
                     <Binding Path="Users.Current" />
@@ -24,8 +24,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                    <Border x:Name="border" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="UIElement.IsEnabled" Value="false">

@@ -1,59 +1,49 @@
-﻿using Moq;
+﻿using System;
+using System.Globalization;
+using Moq;
 using NUnit.Framework;
 using PHmiClient.Tags;
 using PHmiClient.Utils;
 using PHmiClient.Wcf.ServiceTypes;
-using System;
-using System.Globalization;
 
-namespace PHmiClientUnitTests.Client.Tags
-{
-    public class WhenUsingIoDevice : Specification
-    {
+namespace PHmiClientUnitTests.Client.Tags {
+    public class WhenUsingIoDevice : Specification {
         protected int Id;
-        protected string Name;
         protected IoDeviceStub IoDevice;
+        protected string Name;
 
-        protected class IoDeviceStub : IoDeviceBase
-        {
-            public IoDeviceStub(int id, string name) : base(id, name)
-            {
-            }
-
-            public IDigitalTag AddDigTag(TagAbstract<bool?> tag)
-            {
-                Add(tag);
-                return tag as IDigitalTag;
-            }
-
-            public INumericTag AddNumTag(TagAbstract<double?> tag)
-            {
-                Add(tag);
-                return tag as INumericTag;
-            }
-        }
-
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
             Id = RandomGenerator.GetRandomInt32();
             Name = RandomGenerator.GetRandomInt32().ToString(CultureInfo.InvariantCulture);
             IoDevice = new IoDeviceStub(Id, Name);
         }
 
-        public class AndAddedTags : WhenUsingIoDevice
-        {
-            protected int ReadDigTagId;
-            protected Mock<TagAbstract<bool?>> ReadDigTag;
-            protected int DigitalTagId;
-            protected Mock<TagAbstract<bool?>> DigitalTag;
-            protected int NumericTagId;
-            protected Mock<TagAbstract<double?>> NumericTag;
-            protected int ReadNumericTagId;
-            protected Mock<TagAbstract<double?>> ReadNumericTag;
+        protected class IoDeviceStub : IoDeviceBase {
+            public IoDeviceStub(int id, string name) : base(id, name) { }
 
-            protected override void EstablishContext()
-            {
+            public IDigitalTag AddDigTag(TagAbstract<bool?> tag) {
+                Add(tag);
+                return tag as IDigitalTag;
+            }
+
+            public INumericTag AddNumTag(TagAbstract<double?> tag) {
+                Add(tag);
+                return tag as INumericTag;
+            }
+        }
+
+        public class AndAddedTags : WhenUsingIoDevice {
+            protected Mock<TagAbstract<bool?>> DigitalTag;
+            protected int DigitalTagId;
+            protected Mock<TagAbstract<double?>> NumericTag;
+            protected int NumericTagId;
+            protected Mock<TagAbstract<bool?>> ReadDigTag;
+            protected int ReadDigTagId;
+            protected Mock<TagAbstract<double?>> ReadNumericTag;
+            protected int ReadNumericTagId;
+
+            protected override void EstablishContext() {
                 base.EstablishContext();
 
                 ReadDigTag = new Mock<TagAbstract<bool?>>();
@@ -77,154 +67,124 @@ namespace PHmiClientUnitTests.Client.Tags
                 IoDevice.AddNumTag(ReadNumericTag.Object);
             }
 
-            public class AndNothingElseOnTags : AndAddedTags
-            {
-                public class ThenCreateRemapParameterReturnsNull : AndNothingElseOnTags
-                {
+            public class AndNothingElseOnTags : AndAddedTags {
+                public class ThenCreateRemapParameterReturnsNull : AndNothingElseOnTags {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(IoDevice.CreateRemapParameter(), Is.Null);
                     }
-                } 
+                }
             }
 
-            public class AndTagsAreRead : AndAddedTags
-            {
-                protected override void EstablishContext()
-                {
+            public class AndTagsAreRead : AndAddedTags {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     ReadDigTag.SetupGet(t => t.IsRead).Returns(true);
                     ReadNumericTag.SetupGet(t => t.IsRead).Returns(true);
                 }
 
-                public class AndCallingCreateRemapParameter : AndTagsAreRead
-                {
+                public class AndCallingCreateRemapParameter : AndTagsAreRead {
                     internal RemapTagsParameter Parameter;
 
-                    protected override void EstablishContext()
-                    {
+                    protected override void EstablishContext() {
                         base.EstablishContext();
                         Parameter = IoDevice.CreateRemapParameter();
                     }
 
-                    public class ThenIoDeviceIdIsPassed : AndCallingCreateRemapParameter
-                    {
+                    public class ThenIoDeviceIdIsPassed : AndCallingCreateRemapParameter {
                         [Test]
-                        public void Test()
-                        {
+                        public void Test() {
                             Assert.That(Parameter.IoDeviceId, Is.EqualTo(Id));
                         }
                     }
 
-                    public class ThenItContainsTagsInfo : AndCallingCreateRemapParameter
-                    {
+                    public class ThenItContainsTagsInfo : AndCallingCreateRemapParameter {
                         [Test]
-                        public void ForDigitalTagTest()
-                        {
+                        public void ForDigitalTagTest() {
                             Assert.That(Parameter.DigReadIds, Contains.Item(ReadDigTagId));
                         }
 
                         [Test]
-                        public void ForNumericTagTest()
-                        {
+                        public void ForNumericTagTest() {
                             Assert.That(Parameter.NumReadIds, Contains.Item(ReadNumericTagId));
                         }
                     }
 
-                    public class ThenItDoesNotContainTagsInfo : AndCallingCreateRemapParameter
-                    {
+                    public class ThenItDoesNotContainTagsInfo : AndCallingCreateRemapParameter {
                         [Test]
-                        public void ForUnreadDigitalTagTest()
-                        {
+                        public void ForUnreadDigitalTagTest() {
                             Assert.That(Parameter.DigReadIds, Is.Not.Contains(DigitalTagId));
                         }
 
                         [Test]
-                        public void ForUnreadNumericTagTest()
-                        {
+                        public void ForUnreadNumericTagTest() {
                             Assert.That(Parameter.NumReadIds, Is.Not.Contains(NumericTagId));
                         }
                     }
 
-                    public class AndApplyRemapResultInvoked : AndCallingCreateRemapParameter
-                    {
+                    public class AndApplyRemapResultInvoked : AndCallingCreateRemapParameter {
                         internal RemapTagsResult Result;
 
-                        protected override void EstablishContext()
-                        {
+                        protected override void EstablishContext() {
                             base.EstablishContext();
-                            Result = new RemapTagsResult
-                            {
-                                DigReadValues = new bool?[] { false },
-                                NumReadValues = new double?[] { RandomGenerator.GetRandomInt32() }
+                            Result = new RemapTagsResult {
+                                DigReadValues = new bool?[] {false},
+                                NumReadValues = new double?[] {RandomGenerator.GetRandomInt32()}
                             };
                             IoDevice.ApplyRemapResult(Result);
                         }
 
-                        public class ThenValuesUpdated : AndApplyRemapResultInvoked
-                        {
+                        public class ThenValuesUpdated : AndApplyRemapResultInvoked {
                             [Test]
-                            public void ForDigitalTag()
-                            {
+                            public void ForDigitalTag() {
                                 ReadDigTag.Verify(t => t.UpdateValue(Result.DigReadValues[0]), Times.Once());
                             }
 
                             [Test]
-                            public void ForNumericTag()
-                            {
-                                ReadNumericTag.Verify(t => t.UpdateValue(Result.NumReadValues[0]), Times.Once());
+                            public void ForNumericTag() {
+                                ReadNumericTag.Verify(t => t.UpdateValue(Result.NumReadValues[0]),
+                                    Times.Once());
                             }
                         }
                     }
 
-                    public class AndApplyRemapResultWithNull : AndCallingCreateRemapParameter
-                    {
-                        protected override void EstablishContext()
-                        {
+                    public class AndApplyRemapResultWithNull : AndCallingCreateRemapParameter {
+                        protected override void EstablishContext() {
                             base.EstablishContext();
                             IoDevice.ApplyRemapResult(null);
                         }
 
-                        public class ThenValuesUpdatedWithNull : AndApplyRemapResultWithNull
-                        {
+                        public class ThenValuesUpdatedWithNull : AndApplyRemapResultWithNull {
                             [Test]
-                            public void ForDigitalTag()
-                            {
+                            public void ForDigitalTag() {
                                 ReadDigTag.Verify(t => t.UpdateValue(null), Times.Once());
                             }
 
                             [Test]
-                            public void ForNumericTag()
-                            {
+                            public void ForNumericTag() {
                                 ReadNumericTag.Verify(t => t.UpdateValue(null), Times.Once());
                             }
                         }
                     }
 
-                    public class ThenUnreadTagsAreUpdatedWithNull : AndCallingCreateRemapParameter
-                    {
+                    public class ThenUnreadTagsAreUpdatedWithNull : AndCallingCreateRemapParameter {
                         [Test]
-                        public void ForUnreadDigitalTag()
-                        {
+                        public void ForUnreadDigitalTag() {
                             DigitalTag.Verify(t => t.UpdateValue(null), Times.Once());
                         }
 
                         [Test]
-                        public void ForUnreadNumericTag()
-                        {
+                        public void ForUnreadNumericTag() {
                             NumericTag.Verify(t => t.UpdateValue(null), Times.Once());
                         }
                     }
                 }
             }
 
-            public class AndTagsAreWritten : AndAddedTags
-            {
+            public class AndTagsAreWritten : AndAddedTags {
                 protected double? NumericValue;
 
-                protected override void EstablishContext()
-                {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     ReadDigTag.SetupGet(t => t.IsWritten).Returns(true);
                     ReadDigTag.Setup(t => t.GetWrittenValue()).Returns(true);
@@ -233,76 +193,69 @@ namespace PHmiClientUnitTests.Client.Tags
                     ReadNumericTag.Setup(t => t.GetWrittenValue()).Returns(NumericValue);
                 }
 
-                public class AndCreateRemapParameterInvoked : AndTagsAreWritten
-                {
+                public class AndCreateRemapParameterInvoked : AndTagsAreWritten {
                     internal RemapTagsParameter Parameter;
 
-                    protected override void EstablishContext()
-                    {
+                    protected override void EstablishContext() {
                         base.EstablishContext();
                         Parameter = IoDevice.CreateRemapParameter();
                     }
 
-                    public class ThenParameterContainsWriteData : AndCreateRemapParameterInvoked
-                    {
+                    public class ThenParameterContainsWriteData : AndCreateRemapParameterInvoked {
                         [Test]
-                        public void ForDigitalTag()
-                        {
+                        public void ForDigitalTag() {
                             Assert.That(Parameter.DigWriteIds, Contains.Item(ReadDigTagId));
-                            Assert.That(Parameter.DigWriteValues[Array.IndexOf(Parameter.DigWriteIds, ReadDigTagId)], Is.EqualTo(true));
+                            Assert.That(
+                                Parameter.DigWriteValues[Array.IndexOf(Parameter.DigWriteIds, ReadDigTagId)],
+                                Is.EqualTo(true));
                         }
 
                         [Test]
-                        public void ForNumericTag()
-                        {
+                        public void ForNumericTag() {
                             Assert.That(Parameter.NumWriteIds, Contains.Item(ReadNumericTagId));
-                            Assert.That(Parameter.NumWriteValues[Array.IndexOf(Parameter.NumWriteIds, ReadNumericTagId)], Is.EqualTo(NumericValue));
+                            Assert.That(
+                                Parameter.NumWriteValues[
+                                    Array.IndexOf(Parameter.NumWriteIds, ReadNumericTagId)],
+                                Is.EqualTo(NumericValue));
                         }
                     }
                 }
             }
         }
 
-        public class AndAddedInterfaceTags : WhenUsingIoDevice
-        {
+        public class AndAddedInterfaceTags : WhenUsingIoDevice {
             protected DigitalTag DigitalTag;
             protected NumericTag NumericTag;
             protected IDigitalTag ReturnedDigitalTag;
             protected INumericTag ReturnedNumericTag;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 DigitalTag = new DigitalTag(new DispatcherService(), 1, "name", () => "");
                 ReturnedDigitalTag = IoDevice.AddDigTag(DigitalTag);
-                NumericTag = new NumericTag(new DispatcherService(), 1, "name", () => "", () => "", () => "", 0, 0);
+                NumericTag = new NumericTag(new DispatcherService(), 1, "name", () => "", () => "", () => "",
+                    0, 0);
                 ReturnedNumericTag = IoDevice.AddNumTag(NumericTag);
             }
 
-            public class ThenDigitalTagReturned : AndAddedInterfaceTags
-            {
+            public class ThenDigitalTagReturned : AndAddedInterfaceTags {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(ReturnedDigitalTag, Is.SameAs(DigitalTag));
                 }
             }
 
-            public class ThenNumericTagReturned : AndAddedInterfaceTags
-            {
+            public class ThenNumericTagReturned : AndAddedInterfaceTags {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(ReturnedNumericTag, Is.SameAs(NumericTag));
                 }
             }
         }
 
-        public class ThenNameReturnsName : WhenUsingIoDevice
-        {
+        public class ThenNameReturnsName : WhenUsingIoDevice {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(IoDevice.Name, Is.EqualTo(Name));
             }
         }

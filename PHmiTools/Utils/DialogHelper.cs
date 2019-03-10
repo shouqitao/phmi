@@ -2,12 +2,9 @@
 using System.Windows;
 using PHmiTools.Dialogs;
 
-namespace PHmiTools.Utils
-{
-    public class DialogHelper : IDialogHelper
-    {
-        public bool Exception(Exception exception, object owner = null)
-        {
+namespace PHmiTools.Utils {
+    public class DialogHelper : IDialogHelper {
+        public bool Exception(Exception exception, object owner = null) {
             return ExceptionDialog.Show(exception, owner);
         }
 
@@ -16,8 +13,7 @@ namespace PHmiTools.Utils
             string header,
             MessageBoxButton button = MessageBoxButton.OK,
             MessageBoxImage image = MessageBoxImage.Asterisk,
-            object owner = null)
-        {
+            object owner = null) {
             return MessageDialog.Show(message, header, button, image, owner);
         }
     }

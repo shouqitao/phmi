@@ -1,7 +1,5 @@
-﻿namespace PHmiClient.Wcf
-{
-    internal interface IServiceClientFactory
-    {
+﻿namespace PHmiClient.Wcf {
+    internal interface IServiceClientFactory {
         IServiceClient Create();
     }
 }

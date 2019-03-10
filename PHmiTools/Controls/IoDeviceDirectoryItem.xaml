@@ -9,19 +9,21 @@
     <TreeViewItem.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/PHmiResources;component/Styles/SmallImageStyle.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/PHmiResources;component/Styles/ToolBarTextBlockStyle.xaml"/>
+                <ResourceDictionary
+                    Source="pack://application:,,,/PHmiResources;component/Styles/SmallImageStyle.xaml" />
+                <ResourceDictionary
+                    Source="pack://application:,,,/PHmiResources;component/Styles/ToolBarTextBlockStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </TreeViewItem.Resources>
     <TreeViewItem.Header>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Image x:Name="image" Style="{StaticResource SmallImageStyle}"/>
-            <TextBlock Grid.Column="1" x:Name="tb" Style="{StaticResource ToolBarTextBlockStyle}"/>
+            <Image x:Name="image" Style="{StaticResource SmallImageStyle}" />
+            <TextBlock Grid.Column="1" x:Name="tb" Style="{StaticResource ToolBarTextBlockStyle}" />
         </Grid>
     </TreeViewItem.Header>
 </TreeViewItem>

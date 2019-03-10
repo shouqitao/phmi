@@ -3,26 +3,21 @@ using NUnit.Framework;
 using PHmiClient.Utils.Notifications;
 using PHmiClient.Utils.Runner;
 
-namespace PHmiClientUnitTests.Client.Utils.Runner
-{
-    public class WhenUsingCyclicRunnerFactory : Specification
-    {
+namespace PHmiClientUnitTests.Client.Utils.Runner {
+    public class WhenUsingCyclicRunnerFactory : Specification {
         protected ICyclicRunnerFactory Factory;
 
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
             Factory = new CyclicRunnerFactory();
         }
 
-        public class AndCallingCreate : WhenUsingCyclicRunnerFactory
-        {
+        public class AndCallingCreate : WhenUsingCyclicRunnerFactory {
+            protected Mock<INotificationReporter> NotificationReporter;
             protected ICyclicRunner Runner;
             protected Mock<IRunTarget> Target;
-            protected Mock<INotificationReporter> NotificationReporter;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 Target = new Mock<IRunTarget>();
                 NotificationReporter = new Mock<INotificationReporter>();
@@ -30,11 +25,9 @@ namespace PHmiClientUnitTests.Client.Utils.Runner
                 Runner = Factory.Create(Target.Object);
             }
 
-            public class ThenRunnerCreated : AndCallingCreate
-            {
+            public class ThenRunnerCreated : AndCallingCreate {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(Target, Is.Not.Null);
                 }
             }

@@ -1,7 +1,6 @@
-﻿namespace PHmiIoDevice.Modbus.BytesConverters
-{
-    public enum BytesOrder
-    {
-        HL, LH
+﻿namespace PHmiIoDevice.Modbus.BytesConverters {
+    public enum BytesOrder {
+        HL,
+        LH
     }
 }

@@ -1,14 +1,12 @@
-﻿using PHmiClient.Alarms;
+﻿using System;
+using System.Runtime.Serialization;
+using PHmiClient.Alarms;
 using PHmiClient.Users;
 using PHmiClient.Utils.Pagination;
-using System;
-using System.Runtime.Serialization;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    internal sealed class RemapAlarmsParameter
-    {
+    internal sealed class RemapAlarmsParameter {
         [DataMember]
         public int CategoryId { get; set; }
 

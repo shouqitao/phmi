@@ -4,25 +4,21 @@ using PHmiClient.Controls.Input;
 using PHmiClient.Utils;
 using PHmiTools.ViewModels;
 
-namespace PHmiConfigurator.Dialogs
-{
-    public abstract class EditDialogViewModel<T> : ViewModelBase<IEditDialog<T>> where T: class, IDataErrorInfo, INotifyPropertyChanged, new()
-    {
-        protected EditDialogViewModel()
-        {
+namespace PHmiConfigurator.Dialogs {
+    public abstract class EditDialogViewModel<T> : ViewModelBase<IEditDialog<T>>
+        where T : class, IDataErrorInfo, INotifyPropertyChanged, new() {
+        protected EditDialogViewModel() {
             _okCommand = new DelegateCommand(OkCommandExecuted, OkCommandCanExecute);
-            _cancelCommand = new DelegateCommand(CancelCommandExecuted);
+            CancelCommand = new DelegateCommand(CancelCommandExecuted);
         }
 
         #region Entity
 
         private T _entity;
 
-        public T Entity
-        {
+        public T Entity {
             get { return _entity; }
-            set
-            {
+            set {
                 UnregisterEntiyPropertyChanged();
                 _entity = value;
                 OnPropertyChanged(this, v => v.Entity);
@@ -31,60 +27,51 @@ namespace PHmiConfigurator.Dialogs
             }
         }
 
-        private void RegisterEntityPropertyChanged()
-        {
+        private void RegisterEntityPropertyChanged() {
             if (_entity != null)
                 _entity.PropertyChanged += EntityPropertyChanged;
         }
 
-        private void UnregisterEntiyPropertyChanged()
-        {
+        private void UnregisterEntiyPropertyChanged() {
             if (_entity != null)
                 _entity.PropertyChanged -= EntityPropertyChanged;
         }
 
-        private void EntityPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
+        private void EntityPropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == PropertyHelper.GetPropertyName<IDataErrorInfo>(i => i.Error))
                 _okCommand.RaiseCanExecuteChanged();
         }
 
-        #endregion
+        #endregion Entity
 
         #region OkCommand
 
         private readonly DelegateCommand _okCommand;
 
-        public ICommand OkCommand { get { return _okCommand; } }
+        public ICommand OkCommand {
+            get { return _okCommand; }
+        }
 
-        private bool OkCommandCanExecute(object obj)
-        {
+        private bool OkCommandCanExecute(object obj) {
             return Entity != null && string.IsNullOrEmpty(Entity.Error);
         }
 
-        private void OkCommandExecuted(object obj)
-        {
+        private void OkCommandExecuted(object obj) {
             UnregisterEntiyPropertyChanged();
             View.DialogResult = true;
         }
 
-        #endregion
+        #endregion OkCommand
 
         #region CancelCommand
 
-        private readonly ICommand _cancelCommand;
+        public ICommand CancelCommand { get; }
 
-        public ICommand CancelCommand
-        {
-            get { return _cancelCommand; }
-        }
-
-        private void CancelCommandExecuted(object obj)
-        {
+        private void CancelCommandExecuted(object obj) {
             UnregisterEntiyPropertyChanged();
             View.DialogResult = false;
         }
 
-        #endregion
+        #endregion CancelCommand
     }
 }

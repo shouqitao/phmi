@@ -1,7 +1,3 @@
-﻿
-namespace PHmiConfigurator.Modules.Collection
-{
-    public interface ICollectionService : IModuleService
-    {
-    }
+﻿namespace PHmiConfigurator.Modules.Collection {
+    public interface ICollectionService : IModuleService { }
 }

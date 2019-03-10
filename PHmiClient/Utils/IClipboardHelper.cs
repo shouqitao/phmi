@@ -1,9 +1,7 @@
-﻿
-namespace PHmiClient.Utils
-{
-    public interface IClipboardHelper
-    {
+﻿namespace PHmiClient.Utils {
+    public interface IClipboardHelper {
         string GetText();
+
         void SetText(string text);
     }
 }

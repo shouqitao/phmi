@@ -1,7 +1,3 @@
-﻿
-namespace PHmiConfigurator.Modules.Collection.Selectable
-{
-    public class SelectableCollectionService : CollectionService, ISelectableCollectionService
-    {
-    }
+﻿namespace PHmiConfigurator.Modules.Collection.Selectable {
+    public class SelectableCollectionService : CollectionService, ISelectableCollectionService { }
 }

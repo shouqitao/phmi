@@ -1,12 +1,10 @@
-﻿using PHmiClient.Logs;
-using System;
+﻿using System;
 using System.Runtime.Serialization;
+using PHmiClient.Logs;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    public sealed class RemapLogResult
-    {
+    public sealed class RemapLogResult {
         [DataMember]
         public DateTime SaveResult { get; set; }
 

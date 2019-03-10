@@ -1,7 +1,9 @@
-﻿namespace PHmiIoDevice.Modbus
-{
-    public enum ConfigType
-    {
-        Tcp, Rtu, RtuViaTcp, Ascii, AsciiViaTcp
+﻿namespace PHmiIoDevice.Modbus {
+    public enum ConfigType {
+        Tcp,
+        Rtu,
+        RtuViaTcp,
+        Ascii,
+        AsciiViaTcp
     }
 }

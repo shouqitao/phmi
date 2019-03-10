@@ -2,29 +2,12 @@
 using PHmiTools.Utils;
 using PHmiTools.Utils.Npg;
 
-namespace PHmiTools.Dialogs.Project
-{
-    public class OpenProjectDialogService : ProjectDialogService, IOpenProjectDialogService
-    {
-        private readonly INpgHelper _npgHelper = new NpgHelper();
+namespace PHmiTools.Dialogs.Project {
+    public class OpenProjectDialogService : ProjectDialogService, IOpenProjectDialogService {
+        public INpgHelper NpgHelper { get; } = new NpgHelper();
 
-        private readonly IActionHelper _actionHelper = new ActionHelper();
+        public IActionHelper ActionHelper { get; } = new ActionHelper();
 
-        private readonly IPHmiDatabaseHelper _databaseHelper = new PHmiDatabaseHelper();
-
-        public INpgHelper NpgHelper
-        {
-            get { return _npgHelper; }
-        }
-
-        public IActionHelper ActionHelper
-        {
-            get { return _actionHelper; }
-        }
-
-        public IPHmiDatabaseHelper DatabaseHelper
-        {
-            get { return _databaseHelper; }
-        }
+        public IPHmiDatabaseHelper DatabaseHelper { get; } = new PHmiDatabaseHelper();
     }
 }

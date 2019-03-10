@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="PHmiIoDevice.Modbus.ModbusOptionsEditor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:converters="clr-namespace:PHmiClient.Converters;assembly=PHmiClient"
              xmlns:collections="clr-namespace:System.Collections;assembly=mscorlib"
@@ -9,9 +9,11 @@
              xmlns:local="clr-namespace:PHmiIoDevice.Modbus"
              xmlns:ports="clr-namespace:System.IO.Ports;assembly=System"
              xmlns:bytesConverters="clr-namespace:PHmiIoDevice.Modbus.BytesConverters"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid DataContext="{Binding Path=ViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:ModbusOptionsEditor}}}" Grid.IsSharedSizeScope="True">
+    <Grid
+        DataContext="{Binding Path=ViewModel, RelativeSource={RelativeSource AncestorType={x:Type local:ModbusOptionsEditor}}}"
+        Grid.IsSharedSizeScope="True">
         <Grid.Resources>
             <collections:ArrayList x:Key="ConfigTypes">
                 <controls:DisplayItem>
@@ -60,46 +62,52 @@
                 </controls:DisplayItem>
             </collections:ArrayList>
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="4"/>
-                <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="HorizontalAlignment" Value="Right"/>
+                <Setter Property="Margin" Value="4" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
             </Style>
             <Style TargetType="ComboBox">
-                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Margin" Value="4" />
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="true">
-                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        <Setter Property="ToolTip"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
             <Style TargetType="TextBox">
-                <Setter Property="Margin" Value="4"/>
+                <Setter Property="Margin" Value="4" />
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="true">
-                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                        <Setter Property="ToolTip"
+                                Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" SharedSizeGroup="Column1"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Type"/>
-        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Source={StaticResource ConfigTypes}}" SelectedValue="{Binding Path=ConfigType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" SelectedValuePath="Value" DisplayMemberPath="DisplayValue"/>
-        <Button Grid.Row="0" Grid.Column="2" Margin="0,4,4,4" BorderBrush="Transparent" Background="Transparent" Command="{Binding Path=ShowDocCommand}">
-            <Image Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="/PHmiIoDevice.Modbus;component/Images/pdf_document.png" />
+        <TextBlock Text="Type" />
+        <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Source={StaticResource ConfigTypes}}"
+                  SelectedValue="{Binding Path=ConfigType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                  SelectedValuePath="Value" DisplayMemberPath="DisplayValue" />
+        <Button Grid.Row="0" Grid.Column="2" Margin="0,4,4,4" BorderBrush="Transparent"
+                Background="Transparent" Command="{Binding Path=ShowDocCommand}">
+            <Image Width="16" Height="16" RenderOptions.BitmapScalingMode="NearestNeighbor"
+                   Source="/PHmiIoDevice.Modbus;component/Images/pdf_document.png" />
         </Button>
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
@@ -108,24 +116,26 @@
                     <Binding.Converter>
                         <converters:FalseToCollapsedConverter>
                             <converters:InvertConverter>
-                                <converters:EqualityConverter/>
+                                <converters:EqualityConverter />
                             </converters:InvertConverter>
                         </converters:FalseToCollapsedConverter>
                     </Binding.Converter>
                 </Binding>
             </Grid.Visibility>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Column1"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Text="Address"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=EnetConfig.Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Port"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=EnetConfig.Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
+            <TextBlock Text="Address" />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding Path=EnetConfig.Address, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Port" />
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Text="{Binding Path=EnetConfig.Port, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
         </Grid>
 
         <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
@@ -134,7 +144,7 @@
                     <Binding.Converter>
                         <converters:FalseToCollapsedConverter>
                             <converters:InvertConverter>
-                                <converters:EqualityConverter/>
+                                <converters:EqualityConverter />
                             </converters:InvertConverter>
                         </converters:FalseToCollapsedConverter>
                     </Binding.Converter>
@@ -201,37 +211,54 @@
                 </collections:ArrayList>
             </Grid.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" SharedSizeGroup="Column1"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Column1" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Port name"/>
-            <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" Text="{Binding Path=ComConfig.PortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" ItemsSource="{Binding Path=ComPorts}"/>
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Baud rate, bps"/>
-            <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True" Text="{Binding Path=ComConfig.BaudRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" ItemsSource="{Binding Path=BaudRates}"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="Data bits"/>
-            <ComboBox Grid.Row="2" Grid.Column="1" IsEditable="True" Text="{Binding Path=ComConfig.DataBits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" ItemsSource="{Binding Path=DataBits}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Parity"/>
-            <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Source={StaticResource Parities}}" SelectedValue="{Binding Path=ComConfig.Parity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" SelectedValuePath="Value" DisplayMemberPath="DisplayValue"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Stop bits"/>
-            <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Source={StaticResource StopBits}}" SelectedValue="{Binding Path=ComConfig.StopBits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" SelectedValuePath="Value" DisplayMemberPath="DisplayValue"/>
+            <TextBlock Text="Port name" />
+            <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True"
+                      Text="{Binding Path=ComConfig.PortName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                      ItemsSource="{Binding Path=ComPorts}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Baud rate, bps" />
+            <ComboBox Grid.Row="1" Grid.Column="1" IsEditable="True"
+                      Text="{Binding Path=ComConfig.BaudRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                      ItemsSource="{Binding Path=BaudRates}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Data bits" />
+            <ComboBox Grid.Row="2" Grid.Column="1" IsEditable="True"
+                      Text="{Binding Path=ComConfig.DataBits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                      ItemsSource="{Binding Path=DataBits}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Parity" />
+            <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Source={StaticResource Parities}}"
+                      SelectedValue="{Binding Path=ComConfig.Parity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                      SelectedValuePath="Value" DisplayMemberPath="DisplayValue" />
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Stop bits" />
+            <ComboBox Grid.Row="4" Grid.Column="1" ItemsSource="{Binding Source={StaticResource StopBits}}"
+                      SelectedValue="{Binding Path=ComConfig.StopBits, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                      SelectedValuePath="Value" DisplayMemberPath="DisplayValue" />
         </Grid>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="Timeout, ms"/>
-        <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Path=Config.Timeout, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="Try count"/>
-        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Path=Config.TryCount, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Message end timeout, ms"/>
-        <TextBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Text="{Binding Path=Config.MessageEndTimeout, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="Default address"/>
-        <TextBox Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Text="{Binding Path=Config.DefaultAddress, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"/>
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="Bytes order"/>
-        <ComboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource BytesOrders}}" SelectedValue="{Binding Path=Config.BytesOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" SelectedValuePath="Value" DisplayMemberPath="DisplayValue"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Timeout, ms" />
+        <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2"
+                 Text="{Binding Path=Config.Timeout, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Try count" />
+        <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                 Text="{Binding Path=Config.TryCount, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Message end timeout, ms" />
+        <TextBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2"
+                 Text="{Binding Path=Config.MessageEndTimeout, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Default address" />
+        <TextBox Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2"
+                 Text="{Binding Path=Config.DefaultAddress, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}" />
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="Bytes order" />
+        <ComboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
+                  ItemsSource="{Binding Source={StaticResource BytesOrders}}"
+                  SelectedValue="{Binding Path=Config.BytesOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=True}"
+                  SelectedValuePath="Value" DisplayMemberPath="DisplayValue" />
     </Grid>
 </UserControl>

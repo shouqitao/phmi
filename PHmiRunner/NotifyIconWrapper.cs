@@ -1,15 +1,18 @@
-﻿using PHmiResources.Loc;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows;
+using PHmiResources.Loc;
 
-namespace PHmiRunner
-{
-    public partial class NotifyIconWrapper : Component
-    {
-        public NotifyIconWrapper(Window window, WindowState showState)
-        {
+namespace PHmiRunner {
+    public partial class NotifyIconWrapper : Component {
+        private readonly WindowState _showState;
+
+        private readonly Window _window;
+
+        private int _lastImageIndex = -1;
+
+        public NotifyIconWrapper(Window window, WindowState showState) {
             InitializeComponent();
             _window = window;
             notifyIcon.Text = _window.Title;
@@ -22,51 +25,38 @@ namespace PHmiRunner
             toolStripMenuItemClose.Click += ToolStripMenuItemCloseClick;
         }
 
-        private readonly Window _window;
-        private readonly WindowState _showState;
-        
-        public void SetGreenIcon()
-        {
+        public NotifyIconWrapper(IContainer container) {
+            container.Add(this);
+
+            InitializeComponent();
+        }
+
+        public void SetGreenIcon() {
             SetImageIndex(0);
         }
 
-        public void SetGrayIcon()
-        {
+        public void SetGrayIcon() {
             SetImageIndex(1);
         }
 
-        public void SetRedIcon()
-        {
+        public void SetRedIcon() {
             SetImageIndex(2);
         }
 
-        private int _lastImageIndex = -1;
-
-        private void SetImageIndex(int index)
-        {
-            if (index != _lastImageIndex)
-            {
-                notifyIcon.Icon = Icon.FromHandle(((Bitmap)imageList.Images[index]).GetHicon());
+        private void SetImageIndex(int index) {
+            if (index != _lastImageIndex) {
+                notifyIcon.Icon = Icon.FromHandle(((Bitmap) imageList.Images[index]).GetHicon());
                 _lastImageIndex = index;
             }
         }
 
-        private void ToolStripMenuItemCloseClick(object sender, EventArgs e)
-        {
+        private void ToolStripMenuItemCloseClick(object sender, EventArgs e) {
             _window.WindowState = _showState;
             _window.Close();
         }
 
-        private void ToolStripMenuItemShowClick(object sender, EventArgs e)
-        {
+        private void ToolStripMenuItemShowClick(object sender, EventArgs e) {
             _window.WindowState = _showState;
-        }
-
-        public NotifyIconWrapper(IContainer container)
-        {
-            container.Add(this);
-
-            InitializeComponent();
         }
     }
 }

@@ -6,180 +6,161 @@ using PHmiClient.Utils;
 using PHmiResources;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(DigTagMetadata))]
     [Table("dig_tags", Schema = "public")]
-    public class DigTag : NamedEntity
-    {
-        public DigTag()
-        {
+    public class DigTag : NamedEntity {
+        public DigTag() {
             CanRead = true;
         }
 
-        public class DigTagMetadata : EntityMetadataBase
-        {
-            private string _name;
-            private string _device;
-            private string _description;
+        public string FullName {
+            get { return IoDevice.Name + "." + Name; }
+        }
+
+        public class DigTagMetadata : EntityMetadataBase {
             private bool _canRead;
+            private string _description;
+            private string _device;
+            private string _name;
 
             [LocDisplayName("Name", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Name
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Name {
                 get { return _name; }
-                set
-                {
+                set {
                     _name = value;
                     OnPropertyChanged(this, i => i.Name);
                 }
             }
 
             [LocDisplayName("AddressInDevice", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Device
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Device {
                 get { return _device; }
-                set
-                {
+                set {
                     _device = value;
                     OnPropertyChanged(this, i => i.Device);
                 }
             }
 
             [LocDisplayName("Description", ResourceType = typeof(Res))]
-            public string Description
-            {
+            public string Description {
                 get { return _description; }
-                set
-                {
+                set {
                     _description = value;
                     OnPropertyChanged(this, i => i.Description);
                 }
             }
 
             [LocDisplayName("CanRead", ResourceType = typeof(Res))]
-            public bool CanRead
-            {
+            public bool CanRead {
                 get { return _canRead; }
-                set
-                {
+                set {
                     _canRead = value;
                     OnPropertyChanged(this, i => i.CanRead);
                 }
             }
         }
 
-        public string FullName { get { return IoDevice.Name + "." + Name; } }
-
         #region RefIoDevice
 
         private int _refIoDevice;
 
         [Column("ref_io_devices")]
-        public int RefIoDevice
-        {
+        public int RefIoDevice {
             get { return _refIoDevice; }
-            set
-            {
-                _refIoDevice = value; 
+            set {
+                _refIoDevice = value;
                 OnPropertyChanged(this, e => e.RefIoDevice);
             }
         }
 
-        #endregion
+        #endregion RefIoDevice
 
         #region Device
 
         private string _device;
 
         [Column("device")]
-        public string Device
-        {
+        public string Device {
             get { return _device; }
-            set
-            {
-                _device = value; 
+            set {
+                _device = value;
                 OnPropertyChanged(this, e => e.Device);
             }
         }
 
-        #endregion
+        #endregion Device
 
         #region Description
 
         private string _description;
 
         [Column("description")]
-        public string Description
-        {
+        public string Description {
             get { return _description; }
-            set
-            {
-                _description = value; 
+            set {
+                _description = value;
                 OnPropertyChanged(this, e => e.Description);
             }
         }
 
-        #endregion
+        #endregion Description
 
         #region CanRead
 
         private bool _canRead;
 
         [Column("can_read")]
-        public bool CanRead
-        {
+        public bool CanRead {
             get { return _canRead; }
-            set
-            {
-                _canRead = value; 
+            set {
+                _canRead = value;
                 OnPropertyChanged(this, e => e.CanRead);
             }
         }
 
-        #endregion
+        #endregion CanRead
 
         #region AlarmTags
 
         private ICollection<AlarmTag> _alarmTags;
 
-        public virtual ICollection<AlarmTag> AlarmTags
-        {
+        public virtual ICollection<AlarmTag> AlarmTags {
             get { return _alarmTags ?? (_alarmTags = new ObservableCollection<AlarmTag>()); }
             set { _alarmTags = value; }
         }
 
-        #endregion
+        #endregion AlarmTags
 
         #region IoDevice
 
         private IoDevice _ioDevice;
 
-        public virtual IoDevice IoDevice
-        {
+        public virtual IoDevice IoDevice {
             get { return _ioDevice; }
-            set
-            {
+            set {
                 _ioDevice = value;
                 OnPropertyChanged(this, e => e.IoDevice);
             }
         }
-        
-        #endregion
+
+        #endregion IoDevice
 
         #region TrendTags
 
         private ICollection<TrendTag> _trendTags;
 
-        public virtual ICollection<TrendTag> TrendTags
-        {
+        public virtual ICollection<TrendTag> TrendTags {
             get { return _trendTags ?? (_trendTags = new ObservableCollection<TrendTag>()); }
             set { _trendTags = value; }
         }
 
-        #endregion
+        #endregion TrendTags
     }
 }

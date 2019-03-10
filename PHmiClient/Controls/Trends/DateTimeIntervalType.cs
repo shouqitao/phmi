@@ -1,7 +1,5 @@
-﻿namespace PHmiClient.Controls.Trends
-{
-    public enum DateTimeIntervalType
-    {
+﻿namespace PHmiClient.Controls.Trends {
+    public enum DateTimeIntervalType {
         Milliseconds,
         Seconds,
         Minutes,

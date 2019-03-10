@@ -5,36 +5,31 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace PHmiClient.Utils
-{
-    public static class Validator
-    {
-        private static readonly Dictionary<Type, Dictionary<string, Func<IDataErrorInfo, object>>> PropertyGetters
-            = new Dictionary<Type, Dictionary<string, Func<IDataErrorInfo, object>>>();
+namespace PHmiClient.Utils {
+    public static class Validator {
+        private static readonly Dictionary<Type, Dictionary<string, Func<IDataErrorInfo, object>>>
+            PropertyGetters
+                = new Dictionary<Type, Dictionary<string, Func<IDataErrorInfo, object>>>();
 
         private static readonly Dictionary<Type, Dictionary<string, ValidationAttribute[]>> Validators
             = new Dictionary<Type, Dictionary<string, ValidationAttribute[]>>();
 
-        private static ValidationAttribute[] GetValidationAttrs(ICustomAttributeProvider provider)
-        {
-            return (ValidationAttribute[])provider
+        private static ValidationAttribute[] GetValidationAttrs(ICustomAttributeProvider provider) {
+            return (ValidationAttribute[]) provider
                 .GetCustomAttributes(typeof(ValidationAttribute), true);
         }
 
-        private static Func<IDataErrorInfo, object> GetValueGetter(PropertyInfo property)
-        {
+        private static Func<IDataErrorInfo, object> GetValueGetter(PropertyInfo property) {
             return viewmodel => property.GetValue(viewmodel, null);
         }
 
-        private static IEnumerable<Type> GetMetadataTypes(Type type)
-        {
-            return ((MetadataTypeAttribute[])type
-                .GetCustomAttributes(typeof(MetadataTypeAttribute), true))
+        private static IEnumerable<Type> GetMetadataTypes(Type type) {
+            return ((MetadataTypeAttribute[]) type
+                    .GetCustomAttributes(typeof(MetadataTypeAttribute), true))
                 .Select(a => a.MetadataClassType);
         }
 
-        private static IEnumerable<PropertyInfo> GetMetadataTypeProperties(Type type)
-        {
+        private static IEnumerable<PropertyInfo> GetMetadataTypeProperties(Type type) {
             var metProps = GetMetadataTypes(type)
                 .SelectMany(t => t.GetProperties())
                 .Where(p => GetValidationAttrs(p).Any())
@@ -42,8 +37,7 @@ namespace PHmiClient.Utils
             return metProps;
         }
 
-        private static Dictionary<string, Func<IDataErrorInfo, object>> GetPropertyGetters(Type type)
-        {
+        private static Dictionary<string, Func<IDataErrorInfo, object>> GetPropertyGetters(Type type) {
             Dictionary<string, Func<IDataErrorInfo, object>> propertyGetters;
             if (PropertyGetters.TryGetValue(type, out propertyGetters))
                 return propertyGetters;
@@ -56,8 +50,7 @@ namespace PHmiClient.Utils
             return propertyGetters;
         }
 
-        private static Dictionary<string, ValidationAttribute[]> GetValidators(Type type)
-        {
+        private static Dictionary<string, ValidationAttribute[]> GetValidators(Type type) {
             Dictionary<string, ValidationAttribute[]> validators;
             if (Validators.TryGetValue(type, out validators))
                 return validators;
@@ -79,29 +72,25 @@ namespace PHmiClient.Utils
         }
 
         public static IEnumerable<string> GetErrorMessages(ValidationAttribute[] attributes,
-            object value, ValidationContext context)
-        {
+            object value, ValidationContext context) {
             var errorMessages = attributes
-                    .Select(v => v.GetValidationResult(value, context))
-                    .Where(r => r != null)
-                    .Select(r => r.ErrorMessage)
-                    .Where(e => !string.IsNullOrEmpty(e));
+                .Select(v => v.GetValidationResult(value, context))
+                .Where(r => r != null)
+                .Select(r => r.ErrorMessage)
+                .Where(e => !string.IsNullOrEmpty(e));
             return errorMessages;
         }
 
-        public static string GetError(this IDataErrorInfo obj, string propertyName)
-        {
-            var type = obj.GetType();
+        public static string GetError(this IDataErrorInfo obj, string propertyName) {
+            Type type = obj.GetType();
             var propertyGetters = GetPropertyGetters(type);
             var validators = GetValidators(type);
-            if (validators.ContainsKey(propertyName) && propertyGetters.ContainsKey(propertyName))
-            {
-                var context = new ValidationContext(obj, null, null)
-                {
+            if (validators.ContainsKey(propertyName) && propertyGetters.ContainsKey(propertyName)) {
+                var context = new ValidationContext(obj, null, null) {
                     MemberName = propertyName,
                     DisplayName = ReflectionHelper.GetDisplayName(obj, propertyName)
                 };
-                var propertyValue = propertyGetters[propertyName](obj);
+                object propertyValue = propertyGetters[propertyName](obj);
                 var errorMessages = GetErrorMessages(validators[propertyName], propertyValue, context);
                 return string.Join(Environment.NewLine, errorMessages);
             }
@@ -109,19 +98,16 @@ namespace PHmiClient.Utils
             return string.Empty;
         }
 
-        public static string GetError(this IDataErrorInfo obj)
-        {
-            var type = obj.GetType();
+        public static string GetError(this IDataErrorInfo obj) {
+            Type type = obj.GetType();
             var propertyGetters = GetPropertyGetters(type);
             var errors = propertyGetters
                 .Keys.Select(k => GetError(obj, k))
                 .Where(e => !string.IsNullOrEmpty(e));
             var validators = GetValidators(type);
             if (validators.ContainsKey(string.Empty))
-            {
                 errors = errors.Concat(
                     GetErrorMessages(validators[string.Empty], obj, new ValidationContext(obj, null, null)));
-            }
             return string.Join(Environment.NewLine, errors);
         }
     }

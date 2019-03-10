@@ -3,11 +3,9 @@ using PHmiClient.Users;
 using PHmiClient.Utils.Pagination;
 using PHmiClient.Wcf.ServiceTypes;
 
-namespace PHmiClient.Wcf
-{
+namespace PHmiClient.Wcf {
     [ServiceContract]
-    internal interface IService
-    {
+    internal interface IService {
         [OperationContract]
         UpdateStatusResult UpdateStatus();
 

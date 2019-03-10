@@ -1,11 +1,8 @@
 ﻿using System.Windows;
 
-namespace PHmiConfigurator
-{
+namespace PHmiConfigurator {
     /// <summary>
-    /// Interaction logic for App.xaml
+    ///     Interaction logic for App.xaml
     /// </summary>
-    public partial class App : Application
-    {
-    }
+    public class App : Application { }
 }

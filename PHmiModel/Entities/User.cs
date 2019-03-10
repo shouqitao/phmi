@@ -3,101 +3,85 @@ using System.ComponentModel.DataAnnotations.Schema;
 using PHmiClient.Utils;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(UserMetadata))]
     [Table("users", Schema = "public")]
-    public class User : NamedEntity
-    {
-        public User()
-        {
+    public class User : NamedEntity {
+        public User() {
             Enabled = true;
         }
 
-        public class UserMetadata : EntityMetadataBase
-        {
-            private string _name;
-            private byte[] _photo;
-            private string _description;
-            private int? _privilege;
+        public class UserMetadata : EntityMetadataBase {
             private bool _canChange;
+            private string _description;
             private bool _enabled;
+            private string _name;
             private string _password;
+            private byte[] _photo;
+            private int? _privilege;
 
             [LocDisplayName("Name", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Name
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Name {
                 get { return _name; }
-                set
-                {
+                set {
                     _name = value;
                     OnPropertyChanged(this, m => m.Name);
                 }
             }
 
             [LocDisplayName("Photo", ResourceType = typeof(Res))]
-            public byte[] Photo
-            {
+            public byte[] Photo {
                 get { return _photo; }
-                set
-                {
+                set {
                     _photo = value;
                     OnPropertyChanged(this, m => m.Photo);
                 }
             }
 
             [LocDisplayName("Description", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Description
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Description {
                 get { return _description; }
-                set
-                {
+                set {
                     _description = value;
                     OnPropertyChanged(this, m => m.Description);
                 }
             }
 
             [LocDisplayName("Password", ResourceType = typeof(Res))]
-            public string Password
-            {
+            public string Password {
                 get { return _password; }
-                set
-                {
+                set {
                     _password = value;
                     OnPropertyChanged(this, m => m.Password);
                 }
             }
 
             [LocDisplayName("UserEnabled", ResourceType = typeof(Res))]
-            public bool Enabled
-            {
+            public bool Enabled {
                 get { return _enabled; }
-                set
-                {
+                set {
                     _enabled = value;
                     OnPropertyChanged(this, m => m.Enabled);
                 }
             }
 
             [LocDisplayName("CanChange", ResourceType = typeof(Res))]
-            public bool CanChange
-            {
+            public bool CanChange {
                 get { return _canChange; }
-                set
-                {
+                set {
                     _canChange = value;
                     OnPropertyChanged(this, m => m.CanChange);
                 }
             }
 
             [LocDisplayName("Privilege", ResourceType = typeof(Res))]
-            public int? Privilege
-            {
+            public int? Privilege {
                 get { return _privilege; }
-                set
-                {
+                set {
                     _privilege = value;
                     OnPropertyChanged(this, m => m.Privilege);
                 }
@@ -109,101 +93,89 @@ namespace PHmiModel.Entities
         private string _description;
 
         [Column("description")]
-        public string Description
-        {
+        public string Description {
             get { return _description; }
-            set
-            {
-                _description = value; 
+            set {
+                _description = value;
                 OnPropertyChanged(this, e => e.Description);
             }
         }
 
-        #endregion
+        #endregion Description
 
         #region Photo
 
         private byte[] _photo;
 
         [Column("photo")]
-        public byte[] Photo
-        {
+        public byte[] Photo {
             get { return _photo; }
-            set
-            {
-                _photo = value; 
+            set {
+                _photo = value;
                 OnPropertyChanged(this, e => e.Photo);
             }
         }
 
-        #endregion
+        #endregion Photo
 
         #region Password
 
         private string _password;
 
         [Column("password")]
-        public string Password
-        {
+        public string Password {
             get { return _password; }
-            set
-            {
+            set {
                 _password = value;
                 OnPropertyChanged(this, e => e.Password);
             }
         }
 
-        #endregion
+        #endregion Password
 
         #region Enabled
 
         private bool _enabled;
 
         [Column("enabled")]
-        public bool Enabled
-        {
+        public bool Enabled {
             get { return _enabled; }
-            set
-            {
+            set {
                 _enabled = value;
                 OnPropertyChanged(this, e => e.Enabled);
             }
         }
 
-        #endregion
+        #endregion Enabled
 
         #region CanChange
 
         private bool _canChange;
 
         [Column("can_change")]
-        public bool CanChange
-        {
+        public bool CanChange {
             get { return _canChange; }
-            set
-            {
+            set {
                 _canChange = value;
                 OnPropertyChanged(this, e => e.CanChange);
             }
         }
 
-        #endregion
+        #endregion CanChange
 
         #region Privilege
 
         private int? _privilege;
 
         [Column("privilege")]
-        public int? Privilege
-        {
+        public int? Privilege {
             get { return _privilege; }
-            set
-            {
+            set {
                 _privilege = value;
                 OnPropertyChanged(this, e => e.Privilege);
             }
         }
 
-        #endregion
+        #endregion Privilege
     }
 }

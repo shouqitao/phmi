@@ -3,43 +3,16 @@ using PHmiModel;
 using PHmiModel.Interfaces;
 using PHmiTools.Utils;
 
-namespace PHmiConfigurator.Modules
-{
-    public class ModuleService : IModuleService
-    {
-        private readonly IDialogHelper _dialogHelper = new DialogHelper();
+namespace PHmiConfigurator.Modules {
+    public class ModuleService : IModuleService {
+        public IDialogHelper DialogHelper { get; } = new DialogHelper();
 
-        private readonly IModelContextFactory _contextFactory = new PHmiModelContextFactory();
+        public IModelContextFactory ContextFactory { get; } = new PHmiModelContextFactory();
 
-        private readonly IEditorHelper _editorHelper = new EditorHelper();
+        public IEditorHelper EditorHelper { get; } = new EditorHelper();
 
-        private readonly IClipboardHelper _clipboardHelper = new ClipboardHelper();
+        public IClipboardHelper ClipboardHelper { get; } = new ClipboardHelper();
 
-        private readonly IActionHelper _actionHelper = new ActionHelper();
-
-        public IDialogHelper DialogHelper
-        {
-            get { return _dialogHelper; }
-        }
-
-        public IModelContextFactory ContextFactory
-        {
-            get { return _contextFactory; }
-        }
-
-        public IEditorHelper EditorHelper
-        {
-            get { return _editorHelper; }
-        }
-
-        public IClipboardHelper ClipboardHelper
-        {
-            get { return _clipboardHelper; }
-        }
-
-        public IActionHelper ActionHelper
-        {
-            get { return _actionHelper; }
-        }
+        public IActionHelper ActionHelper { get; } = new ActionHelper();
     }
 }

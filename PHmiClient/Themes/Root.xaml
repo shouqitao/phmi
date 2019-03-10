@@ -11,7 +11,7 @@
         <ResourceDictionary Source="pack://application:,,,/PHmiClient;component/Styles/AllStyles.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="{x:Type controls:Root}">
-        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:Root}">
@@ -35,7 +35,8 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate>
-                                                    <Rectangle Width="1" VerticalAlignment="Stretch" Margin="2" Fill="Gray"/>
+                                                    <Rectangle Width="1" VerticalAlignment="Stretch"
+                                                               Margin="2" Fill="Gray" />
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
@@ -54,59 +55,81 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Style="{StaticResource BackButtonStyle}" Command="{Binding Path=BackCommand, RelativeSource={RelativeSource TemplatedParent}}" ToolTip="{x:Static loc:Res.Backward}"/>
-                                        <Button Style="{StaticResource ForwardButtonStyle}" Command="{Binding Path=ForwardCommand, RelativeSource={RelativeSource TemplatedParent}}" ToolTip="{x:Static loc:Res.Forward}"/>
+                                        <Button Style="{StaticResource BackButtonStyle}"
+                                                Command="{Binding Path=BackCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                                ToolTip="{x:Static loc:Res.Backward}" />
+                                        <Button Style="{StaticResource ForwardButtonStyle}"
+                                                Command="{Binding Path=ForwardCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                                ToolTip="{x:Static loc:Res.Forward}" />
                                         <Separator />
-                                        <Button ToolTip="{x:Static loc:Res.Home}" Command="{Binding Path=HomeCommand, RelativeSource={RelativeSource TemplatedParent}}">
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/home.png" />
+                                        <Button ToolTip="{x:Static loc:Res.Home}"
+                                                Command="{Binding Path=HomeCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/home.png" />
                                         </Button>
                                     </StackPanel>
                                 </Grid>
 
                                 <StackPanel Orientation="Horizontal" Grid.Column="1">
-                                    <Separator/>
-                                    <Button ToolTip="{x:Static loc:Res.LogOn}" Command="{Binding Path=LogOnCommand, RelativeSource={RelativeSource TemplatedParent}}">
-                                        <Image Source="pack://application:,,,/PHmiClient;component/Images/24/log_on.png" />
+                                    <Separator />
+                                    <Button ToolTip="{x:Static loc:Res.LogOn}"
+                                            Command="{Binding Path=LogOnCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Image
+                                            Source="pack://application:,,,/PHmiClient;component/Images/24/log_on.png" />
                                     </Button>
                                     <StackPanel Orientation="Horizontal">
                                         <StackPanel.IsEnabled>
                                             <Binding Path="Users.Current" ConverterParameter="{x:Null}">
                                                 <Binding.Converter>
                                                     <converters:InvertConverter>
-                                                        <converters:EqualityConverter/>
+                                                        <converters:EqualityConverter />
                                                     </converters:InvertConverter>
                                                 </Binding.Converter>
                                             </Binding>
                                         </StackPanel.IsEnabled>
-                                        <Button ToolTip="{x:Static loc:Res.LogOff}" Command="{Binding Path=LogOffCommand, RelativeSource={RelativeSource TemplatedParent}}">
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/log_off.png" />
+                                        <Button ToolTip="{x:Static loc:Res.LogOff}"
+                                                Command="{Binding Path=LogOffCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/log_off.png" />
                                         </Button>
-                                        <Button ToolTip="{x:Static loc:Res.ChangePassword}" Command="{Binding Path=ChangePasswordCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <Button ToolTip="{x:Static loc:Res.ChangePassword}"
+                                                Command="{Binding Path=ChangePasswordCommand, RelativeSource={RelativeSource TemplatedParent}}">
                                             <Button.IsEnabled>
-                                                <Binding Path="Users.Current.CanChange"/>
+                                                <Binding Path="Users.Current.CanChange" />
                                             </Button.IsEnabled>
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/change_password.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/change_password.png" />
                                         </Button>
-                                        <Button ToolTip="{x:Static loc:Res.EditUsers}" Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{x:Type pages:UsersPage}" controls:PHmiControls.Privilege="31">
+                                        <Button ToolTip="{x:Static loc:Res.EditUsers}"
+                                                Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                                CommandParameter="{x:Type pages:UsersPage}"
+                                                controls:PHmiControls.Privilege="31">
                                             <Button.Visibility>
                                                 <MultiBinding>
                                                     <MultiBinding.Converter>
-                                                        <multiValueConverters:NotPrivilegedToCollapsedConverter/>
+                                                        <multiValueConverters:NotPrivilegedToCollapsedConverter />
                                                     </MultiBinding.Converter>
-                                                    <Binding Path="(controls:PHmiControls.Privilege)" RelativeSource="{RelativeSource Self}" />
+                                                    <Binding Path="(controls:PHmiControls.Privilege)"
+                                                             RelativeSource="{RelativeSource Self}" />
                                                     <Binding Path="Users.Current" />
                                                 </MultiBinding>
                                             </Button.Visibility>
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/users.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/users.png" />
                                         </Button>
                                     </StackPanel>
-                                    <Separator/>
-                                    <Button ToolTip="{x:Static loc:Res.SystemMessages}" Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{x:Type pages:SystemMessagesPage}">
-                                        <controls:Animator Animate="{Binding Path=Reporter.ContainsActiveNotifications}">
+                                    <Separator />
+                                    <Button ToolTip="{x:Static loc:Res.SystemMessages}"
+                                            Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                            CommandParameter="{x:Type pages:SystemMessagesPage}">
+                                        <controls:Animator
+                                            Animate="{Binding Path=Reporter.ContainsActiveNotifications}">
                                             <controls:Animator.DefaultContent>
                                                 <Grid>
-                                                    <Image Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning_gray.png" />
-                                                    <Image Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning.png">
+                                                    <Image
+                                                        Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning_gray.png" />
+                                                    <Image
+                                                        Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning.png">
                                                         <Image.Visibility>
                                                             <Binding Path="Reporter.Notifications.Count">
                                                                 <Binding.ConverterParameter>
@@ -115,7 +138,7 @@
                                                                 <Binding.Converter>
                                                                     <converters:FalseToCollapsedConverter>
                                                                         <converters:InvertConverter>
-                                                                            <converters:EqualityConverter/>
+                                                                            <converters:EqualityConverter />
                                                                         </converters:InvertConverter>
                                                                     </converters:FalseToCollapsedConverter>
                                                                 </Binding.Converter>
@@ -124,37 +147,50 @@
                                                     </Image>
                                                 </Grid>
                                             </controls:Animator.DefaultContent>
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning.png" />
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning_gray.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/system_warning_gray.png" />
                                         </controls:Animator>
                                     </Button>
-                                    <Button ToolTip="{x:Static loc:Res.Alarms}" Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{x:Type pages:AlarmsPage}">
-                                        <controls:Animator Animate="{Binding Path=CommonAlarms.HasUnacknowledged}">
+                                    <Button ToolTip="{x:Static loc:Res.Alarms}"
+                                            Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                            CommandParameter="{x:Type pages:AlarmsPage}">
+                                        <controls:Animator
+                                            Animate="{Binding Path=CommonAlarms.HasUnacknowledged}">
                                             <controls:Animator.DefaultContent>
                                                 <Grid>
-                                                    <Image Source="pack://application:,,,/PHmiClient;component/Images/24/no_alarms_gray.png" />
-                                                    <Image Source="pack://application:,,,/PHmiClient;component/Images/24/alarms.png">
+                                                    <Image
+                                                        Source="pack://application:,,,/PHmiClient;component/Images/24/no_alarms_gray.png" />
+                                                    <Image
+                                                        Source="pack://application:,,,/PHmiClient;component/Images/24/alarms.png">
                                                         <Image.Visibility>
                                                             <Binding Path="CommonAlarms.HasActive">
                                                                 <Binding.Converter>
-                                                                    <converters:FalseToCollapsedConverter/>
+                                                                    <converters:FalseToCollapsedConverter />
                                                                 </Binding.Converter>
                                                             </Binding>
                                                         </Image.Visibility>
                                                     </Image>
                                                 </Grid>
                                             </controls:Animator.DefaultContent>
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/alarms.png" />
-                                            <Image Source="pack://application:,,,/PHmiClient;component/Images/24/alarms_gray.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/alarms.png" />
+                                            <Image
+                                                Source="pack://application:,,,/PHmiClient;component/Images/24/alarms_gray.png" />
                                         </controls:Animator>
                                     </Button>
-                                    <Button ToolTip="{x:Static loc:Res.AlarmHistory}" Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}" CommandParameter="{x:Type pages:AlarmHistoryPage}">
-                                        <Image Source="pack://application:,,,/PHmiClient;component/Images/24/alarm_history.png" />
+                                    <Button ToolTip="{x:Static loc:Res.AlarmHistory}"
+                                            Command="{Binding Path=ShowCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                            CommandParameter="{x:Type pages:AlarmHistoryPage}">
+                                        <Image
+                                            Source="pack://application:,,,/PHmiClient;component/Images/24/alarm_history.png" />
                                     </Button>
                                 </StackPanel>
                             </Grid>
-                            <ContentPresenter Grid.Row="1"/>
-                            <Grid Grid.Row="2" Background="#FF293955" Height="35" TextBlock.Foreground="White">
+                            <ContentPresenter Grid.Row="1" />
+                            <Grid Grid.Row="2" Background="#FF293955" Height="35"
+                                  TextBlock.Foreground="White">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="VerticalAlignment" Value="Center" />
@@ -166,7 +202,10 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Grid ToolTip="{x:Static loc:Res.PageName}" Background="Transparent">
-                                    <ContentControl Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content.PageName}" MinWidth="50" VerticalAlignment="Center" Margin="4,0" IsTabStop="False"/>
+                                    <ContentControl
+                                        Content="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content.PageName}"
+                                        MinWidth="50" VerticalAlignment="Center" Margin="4,0"
+                                        IsTabStop="False" />
                                 </Grid>
                                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                                     <StackPanel.Resources>
@@ -174,7 +213,8 @@
                                             <Setter Property="Template">
                                                 <Setter.Value>
                                                     <ControlTemplate>
-                                                        <Rectangle Width="1" VerticalAlignment="Stretch" Margin="2" Fill="Gray"/>
+                                                        <Rectangle Width="1" VerticalAlignment="Stretch"
+                                                                   Margin="2" Fill="Gray" />
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>
@@ -184,23 +224,28 @@
                                         </Style>
                                     </StackPanel.Resources>
                                     <Separator />
-                                    <Grid ToolTip="{x:Static loc:Res.User}" DataContext="{Binding Path=Users.Current}">
+                                    <Grid ToolTip="{x:Static loc:Res.User}"
+                                          DataContext="{Binding Path=Users.Current}">
                                         <Grid.Resources>
-                                            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+                                            <converters:ByteArrayToImageSourceConverter
+                                                x:Key="ByteArrayToImageSourceConverter" />
                                         </Grid.Resources>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <Image Margin="1" Source="{Binding Path=Photo, Converter={StaticResource ByteArrayToImageSourceConverter}}" RenderOptions.BitmapScalingMode="Fant"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Path=Description}" VerticalAlignment="Center" Width="200" TextWrapping="Wrap" />
+                                        <Image Margin="1"
+                                               Source="{Binding Path=Photo, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                               RenderOptions.BitmapScalingMode="Fant" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Path=Description}"
+                                                   VerticalAlignment="Center" Width="200" TextWrapping="Wrap" />
                                     </Grid>
                                     <Separator />
                                     <Grid ToolTip="{x:Static loc:Res.Time}">
                                         <Grid.DataContext>
                                             <Binding Path="Time">
                                                 <Binding.Converter>
-                                                    <converters:UniversalToLocalTimeConverter/>
+                                                    <converters:UniversalToLocalTimeConverter />
                                                 </Binding.Converter>
                                             </Binding>
                                         </Grid.DataContext>
@@ -208,8 +253,10 @@
                                             <RowDefinition />
                                             <RowDefinition />
                                         </Grid.RowDefinitions>
-                                        <TextBlock Text="{Binding StringFormat=T}" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                        <TextBlock Grid.Row="1" Text="{Binding StringFormat=D}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding StringFormat=T}" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center" />
+                                        <TextBlock Grid.Row="1" Text="{Binding StringFormat=D}"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
                                     </Grid>
                                 </StackPanel>
                             </Grid>

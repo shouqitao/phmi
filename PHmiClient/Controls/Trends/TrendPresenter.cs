@@ -8,17 +8,16 @@ using System.Windows.Data;
 using System.Windows.Media;
 using PHmiClient.Trends;
 
-namespace PHmiClient.Controls.Trends
-{
-    public class TrendPresenter : FrameworkElement
-    {
-        private readonly Pen _pen = new Pen(Brushes.Black, 1)
-            {
-                LineJoin = PenLineJoin.Round,
-                StartLineCap = PenLineCap.Round,
-                EndLineCap = PenLineCap.Round
-            };
+namespace PHmiClient.Controls.Trends {
+    public class TrendPresenter : FrameworkElement {
         private readonly object _lockObject = new object();
+
+        private readonly Pen _pen = new Pen(Brushes.Black, 1) {
+            LineJoin = PenLineJoin.Round,
+            StartLineCap = PenLineCap.Round,
+            EndLineCap = PenLineCap.Round
+        };
+
         private readonly TrendPen _trendPen;
         private long _endTime = DateTime.Now.Ticks;
         private int _maxPoints = 170;
@@ -27,130 +26,7 @@ namespace PHmiClient.Controls.Trends
         private long _startTime = DateTime.Now.Ticks - TimeSpan.TicksPerMinute;
         private KeyValuePair<long, double>[] _values;
 
-        #region Query
-
-        private readonly Timer _queryTimer = new Timer(200);
-
-        private Action<Tuple<DateTime, double>[]> _queryCallback;
-
-        private Tuple<DateTime, DateTime?, int> _queryParameters;
-
-        private void QueryTimerElapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (_lockObject)
-            {
-                if (!_queryTimer.Enabled)
-                    return;
-                _queryTimer.Stop();
-                if (_queryParameters == null || _queryCallback == null)
-                    return;
-                ShowProgressBar();
-                TrendTag.GetSamples(_queryParameters.Item1, _queryParameters.Item2, _queryParameters.Item3, _queryCallback);
-            }
-        }
-
-        private void ShowProgressBar()
-        {
-            Dispatcher.Invoke(new Action(() => { _trendPen.WaitingSamples = true; }));
-        }
-
-        private void HideProgressBar()
-        {
-            Dispatcher.Invoke(new Action(() => { _trendPen.WaitingSamples = false; }));
-        }
-
-        #endregion
-        
-        public Brush LineBrush
-        {
-            get { return _pen.Brush; }
-            set
-            {
-                _pen.Brush = value;
-                InvalidateVisual();
-            }
-        }
-
-        public double LineThickness
-        {
-            get { return _pen.Thickness; }
-            set
-            {
-                _pen.Thickness = value;
-                InvalidateVisual();
-            }
-        }
-        
-        #region CursorCoordinate
-
-        public static readonly DependencyProperty CursorCoordinateProperty =
-            DependencyProperty.Register("CursorCoordinate", typeof (double?), typeof (TrendPresenter));
-
-        public double? CursorCoordinate
-        {
-            get { return (double?) GetValue(CursorCoordinateProperty); }
-            set { SetValue(CursorCoordinateProperty, value); }
-        }
-
-        #endregion
-
-        #region Scale
-
-        #region MinValue
-        
-        public double? MinValue
-        {
-            get { return (double?)GetValue(MinValueProperty); }
-            set { SetValue(MinValueProperty, value); }
-        }
-
-        public static readonly DependencyProperty MinValueProperty =
-            DependencyProperty.Register("MinValue", typeof(double?), typeof(TrendPresenter), new PropertyMetadata(OnScaleValueChanged));
-        
-        #endregion
-
-        #region MaxValue
-        
-        public double? MaxValue
-        {
-            get { return (double?)GetValue(MaxValueProperty); }
-            set { SetValue(MaxValueProperty, value); }
-        }
-
-        public static readonly DependencyProperty MaxValueProperty =
-            DependencyProperty.Register("MaxValue", typeof(double?), typeof(TrendPresenter), new PropertyMetadata(OnScaleValueChanged));
-        
-        #endregion
-
-        private static void OnScaleValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var trendPresenter = (TrendPresenter) d;
-            trendPresenter.InvalidateVisual();
-        }
-
-        #endregion
-
-        #region ShowPoints
-
-        public bool ShowPoints
-        {
-            get { return (bool)GetValue(ShowPointsProperty); }
-            set { SetValue(ShowPointsProperty, value); }
-        }
-
-        public static readonly DependencyProperty ShowPointsProperty =
-            DependencyProperty.Register(
-            "ShowPoints", typeof(bool), typeof(TrendPresenter), new PropertyMetadata(OnShowPointsChanged));
-
-        private static void OnShowPointsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((TrendPresenter)d).InvalidateVisual();
-        }
-
-        #endregion
-
-        public TrendPresenter(TrendPen trendPen)
-        {
+        public TrendPresenter(TrendPen trendPen) {
             _trendPen = trendPen;
             TrendTag = trendPen.TrendTag;
             LineThickness = trendPen.Thickness;
@@ -160,23 +36,35 @@ namespace PHmiClient.Controls.Trends
             Unloaded += TrendPresenterUnloaded;
         }
 
-        public ITrendTag TrendTag { get; private set; }
+        public Brush LineBrush {
+            get { return _pen.Brush; }
+            set {
+                _pen.Brush = value;
+                InvalidateVisual();
+            }
+        }
 
-        public double SliderOffset
-        {
+        public double LineThickness {
+            get { return _pen.Thickness; }
+            set {
+                _pen.Thickness = value;
+                InvalidateVisual();
+            }
+        }
+
+        public ITrendTag TrendTag { get; }
+
+        public double SliderOffset {
             get { return _sliderOffset; }
-            set
-            {
+            set {
                 _sliderOffset = value;
                 UpdateCursor();
             }
         }
 
-        public int MaxPoints
-        {
+        public int MaxPoints {
             get { return _maxPoints; }
-            set
-            {
+            set {
                 if (_maxPoints == value)
                     return;
                 _maxPoints = value;
@@ -184,15 +72,13 @@ namespace PHmiClient.Controls.Trends
             }
         }
 
-        private void TrendPresenterLoaded(object sender, RoutedEventArgs e)
-        {
+        private void TrendPresenterLoaded(object sender, RoutedEventArgs e) {
             var minValueBinding = new Binding("MinValue") {Source = _trendPen};
             SetBinding(MinValueProperty, minValueBinding);
             var maxValueBinding = new Binding("MaxValue") {Source = _trendPen};
             SetBinding(MaxValueProperty, maxValueBinding);
 
-            var visibilityBinding = new Binding("Visible")
-            {
+            var visibilityBinding = new Binding("Visible") {
                 Source = _trendPen,
                 Mode = BindingMode.OneWay,
                 Converter = new BooleanToVisibilityConverter()
@@ -201,67 +87,54 @@ namespace PHmiClient.Controls.Trends
             _trendPen.IsVisibleChanged += TrendPenIsVisibleChanged;
         }
 
-        private void TrendPenIsVisibleChanged(object sender, EventArgs e)
-        {
+        private void TrendPenIsVisibleChanged(object sender, EventArgs e) {
             ShowTrend(_startTime, _endTime);
         }
 
-        private void TrendPresenterUnloaded(object sender, RoutedEventArgs e)
-        {
+        private void TrendPresenterUnloaded(object sender, RoutedEventArgs e) {
             BindingOperations.ClearBinding(this, MinValueProperty);
             BindingOperations.ClearBinding(this, MaxValueProperty);
             BindingOperations.ClearBinding(this, VisibilityProperty);
             _trendPen.IsVisibleChanged -= TrendPenIsVisibleChanged;
         }
 
-        private void RedrawTrend()
-        {
-            if (_values != null)
-            {
-                ShowTrend(_startTime, _endTime);
-            }
+        private void RedrawTrend() {
+            if (_values != null) ShowTrend(_startTime, _endTime);
         }
 
-        private void UpdateCursor()
-        {
-            var ticks = _startTime + (long) ((_endTime - _startTime)*_sliderOffset/ActualWidth);
+        private void UpdateCursor() {
+            long ticks = _startTime + (long) ((_endTime - _startTime) * _sliderOffset / ActualWidth);
             if (ticks < 0)
                 return;
             var nearest = FindNearestValue(ticks, _values);
-            var time = ticks;
+            long time = ticks;
             double? value = null;
             if (nearest.HasValue)
-            {
-                if (Math.Abs(nearest.Value.Key - ticks) <= TrendTag.Category.Period.Ticks * (long)Math.Pow(2, _rarerer))
-                {
+                if (Math.Abs(nearest.Value.Key - ticks) <=
+                    TrendTag.Category.Period.Ticks * (long) Math.Pow(2, _rarerer)) {
                     time = nearest.Value.Key;
                     value = nearest.Value.Value;
                 }
-            }
-            
-            Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    _trendPen.CursorTime = new DateTime(time);
-                    _trendPen.CursorValue = value;
-                    if (value == null)
-                    {
-                        CursorCoordinate = null;
-                    }
-                    else
-                    {
-                        CursorCoordinate = Math.Max(0, Math.Min(
-                            ActualHeight,
-                            ActualHeight - (value.Value - _trendPen.MinScale)*ActualHeight/(_trendPen.MaxScale - _trendPen.MinScale)));
-                    }
-                }));
+
+            Dispatcher.BeginInvoke(new Action(() => {
+                _trendPen.CursorTime = new DateTime(time);
+                _trendPen.CursorValue = value;
+                if (value == null)
+                    CursorCoordinate = null;
+                else
+                    CursorCoordinate = Math.Max(0, Math.Min(
+                        ActualHeight,
+                        ActualHeight - (value.Value - _trendPen.MinScale) * ActualHeight /
+                        (_trendPen.MaxScale - _trendPen.MinScale)));
+            }));
         }
 
-        private static KeyValuePair<long, double>? FindNearestValue(long time, KeyValuePair<long, double>[] values)
-        {
+        private static KeyValuePair<long, double>? FindNearestValue(long time,
+            KeyValuePair<long, double>[] values) {
             if (values == null || values.Length == 0)
                 return null;
             var from = 0;
-            var to = values.Length - 1;
+            int to = values.Length - 1;
             if (to < from)
                 return null;
 
@@ -270,72 +143,58 @@ namespace PHmiClient.Controls.Trends
             if (time < values[from].Key)
                 return values[from];
 
-            while (true)
-            {
-                if (to - from <= 1)
-                {
+            while (true) {
+                if (to - from <= 1) {
                     var vFrom = values[from];
                     var vTo = values[to];
                     return time - vFrom.Key > vTo.Key - time ? vTo : vFrom;
                 }
-                var middle = from + (to - from) / 2;
+
+                int middle = from + (to - from) / 2;
                 if (time > values[middle].Key)
-                {
                     from = middle;
-                }
                 else if (time < values[middle].Key)
-                {
                     to = middle;
-                }
                 else
-                {
                     return values[middle];
-                }
             }
         }
-        
-        public void ShowTrend(long startTime, long endTime)
-        {
-            lock (_lockObject)
-            {
+
+        public void ShowTrend(long startTime, long endTime) {
+            lock (_lockObject) {
                 _startTime = startTime;
                 _endTime = endTime;
                 if (!_trendPen.IsVisible)
                     return;
 
-                var rarererNotLog = (int) ((endTime - startTime)/TrendTag.Category.Period.Ticks/_maxPoints) + 1;
+                int rarererNotLog =
+                    (int) ((endTime - startTime) / TrendTag.Category.Period.Ticks / _maxPoints) + 1;
                 if (rarererNotLog < 1)
                     return;
-                var popravka = TrendTag.Category.Period.Ticks * rarererNotLog;
+                long popravka = TrendTag.Category.Period.Ticks * rarererNotLog;
 
-                var rarerer = (int) Math.Max(Math.Min(Math.Log(rarererNotLog, 2), TrendsService.MaxRarerer), 0);
+                var rarerer = (int) Math.Max(Math.Min(Math.Log(rarererNotLog, 2), TrendsService.MaxRarerer),
+                    0);
 
-                if (_values != null)
-                {
+                if (_values != null) {
                     var values = (from v in _values
-                                  where v.Key >= startTime && v.Key <= endTime
-                                  select v).ToList();
-                    if (values.Any())
-                    {
-                        if (values.First().Key > startTime)
-                        {
+                        where v.Key >= startTime && v.Key <= endTime
+                        select v).ToList();
+                    if (values.Any()) {
+                        if (values.First().Key > startTime) {
                             var firstValue = _values.Where(v => v.Key < startTime).LastOrDefault();
-                            if (_values.Contains(firstValue))
-                            {
-                                values.Insert(0, firstValue);
-                            }
+                            if (_values.Contains(firstValue)) values.Insert(0, firstValue);
                         }
-                        if (values.Last().Key < endTime)
-                        {
+
+                        if (values.Last().Key < endTime) {
                             var lastValue = _values.Where(v => v.Key > endTime).FirstOrDefault();
-                            if (_values.Contains(lastValue))
-                            {
-                                values.Add(lastValue);
-                            }
+                            if (_values.Contains(lastValue)) values.Add(lastValue);
                         }
                     }
+
                     _values = values.ToArray();
                 }
+
                 InvalidateVisual();
 
                 _queryTimer.Stop();
@@ -346,84 +205,64 @@ namespace PHmiClient.Controls.Trends
             }
         }
 
-        private void QueryCallback(long startTime, long endTime, int rarerer, IEnumerable<Tuple<DateTime, double>> results)
-        {
-            lock (_lockObject)
-            {
-                if (startTime != _startTime || endTime != _endTime)
-                {
-                    return;
-                }
+        private void QueryCallback(long startTime, long endTime, int rarerer,
+            IEnumerable<Tuple<DateTime, double>> results) {
+            lock (_lockObject) {
+                if (startTime != _startTime || endTime != _endTime) return;
                 HideProgressBar();
                 _rarerer = rarerer;
-                _values = results.Select(r => new KeyValuePair<long, double>(r.Item1.Ticks, r.Item2)).ToArray();
+                _values = results.Select(r => new KeyValuePair<long, double>(r.Item1.Ticks, r.Item2))
+                    .ToArray();
                 Dispatcher.Invoke(new Action(InvalidateVisual));
             }
         }
 
-        private static DateTime? NullableLongToDateTime(long? value)
-        {
+        private static DateTime? NullableLongToDateTime(long? value) {
             if (value.HasValue)
                 return new DateTime(value.Value);
             return null;
         }
 
-        protected override void OnRender(DrawingContext drawingContext)
-        {
+        protected override void OnRender(DrawingContext drawingContext) {
             var values = _values;
-            var start = _startTime;
-            var end = _endTime;
+            long start = _startTime;
+            long end = _endTime;
 
-            if (MinValue.HasValue)
-            {
+            if (MinValue.HasValue) {
                 _trendPen.MinScale = MinValue.Value;
-            }
-            else
-            {
+            } else {
                 var min = 0.0;
-                if (values != null)
-                {
-                    min = values.OrderBy(k => k.Value).Select(k => k.Value).FirstOrDefault();
-                }
+                if (values != null) min = values.OrderBy(k => k.Value).Select(k => k.Value).FirstOrDefault();
                 _trendPen.MinScale = min;
             }
-            var minValue = _trendPen.MinScale;
 
-            if (MaxValue.HasValue)
-            {
+            double minValue = _trendPen.MinScale;
+
+            if (MaxValue.HasValue) {
                 _trendPen.MaxScale = MaxValue.Value;
-            }
-            else
-            {
+            } else {
                 var max = 1.0;
                 if (values != null)
-                {
                     max = values.OrderByDescending(k => k.Value).Select(k => k.Value).FirstOrDefault();
-                }
-                if (max.Equals(minValue))
-                {
-                    max = minValue + 1;
-                }
+                if (max.Equals(minValue)) max = minValue + 1;
                 _trendPen.MaxScale = max;
             }
-            var maxValue = _trendPen.MaxScale;
 
-            var delta = end - start;
-            var valueDelta = maxValue - minValue;
-            var pointRadius = _pen.Thickness * 1.5;
-            var maxPeriod = TrendTag.Category.Period.Ticks * (long)Math.Pow(2, _rarerer) * 3;
-            if (!valueDelta.Equals(0.0) && values != null)
-            {
-                var lastIndex = values.Length - 2;
-                for (var i = 0; i <= lastIndex; i++)
-                {
+            double maxValue = _trendPen.MaxScale;
+
+            long delta = end - start;
+            double valueDelta = maxValue - minValue;
+            double pointRadius = _pen.Thickness * 1.5;
+            long maxPeriod = TrendTag.Category.Period.Ticks * (long) Math.Pow(2, _rarerer) * 3;
+            if (!valueDelta.Equals(0.0) && values != null) {
+                int lastIndex = values.Length - 2;
+                for (var i = 0; i <= lastIndex; i++) {
                     var first = values[i];
-                    var firstStart = first.Key;
-                    var firstValue = first.Value;
+                    long firstStart = first.Key;
+                    double firstValue = first.Value;
 
                     var showLine = true;
-                    if (values[i + 1].Key - firstStart >= maxPeriod)
-                    {
+                    if (values[i + 1].Key - firstStart >= maxPeriod) {
                         if (!ShowPoints)
                             continue;
                         showLine = false;
@@ -431,38 +270,40 @@ namespace PHmiClient.Controls.Trends
 
                     if (!ShowPoints && first.Value.Equals(values[i + 1].Value))
                         while (i + 2 < values.Length
-                            && first.Value.Equals(values[i + 2].Value)
-                            && values[i + 2].Key - values[i + 1].Key < maxPeriod)
-                        {
+                               && first.Value.Equals(values[i + 2].Value)
+                               && values[i + 2].Key - values[i + 1].Key < maxPeriod)
                             i++;
-                        }
                     var second = values[i + 1];
-                    var secondStart = second.Key;
-                    var secondValue = second.Value;
+                    long secondStart = second.Key;
+                    double secondValue = second.Value;
 
-                    if (firstStart <= start && secondStart <= start || firstStart >= end && secondStart >= end)
+                    if (firstStart <= start && secondStart <= start ||
+                        firstStart >= end && secondStart >= end)
                         continue;
                     var showPoint0 = true;
-                    if (firstStart < start)
-                    {
-                        firstValue = (start - firstStart) * (secondValue - firstValue) / (secondStart - firstStart) + firstValue;
+                    if (firstStart < start) {
+                        firstValue =
+                            (start - firstStart) * (secondValue - firstValue) / (secondStart - firstStart) +
+                            firstValue;
                         firstStart = start;
                         showPoint0 = false;
                     }
+
                     var showPoint1 = true;
-                    if (secondStart > end)
-                    {
-                        secondValue = (end - firstStart) * (secondValue - firstValue) / (secondStart - firstStart) + firstValue;
+                    if (secondStart > end) {
+                        secondValue =
+                            (end - firstStart) * (secondValue - firstValue) / (secondStart - firstStart) +
+                            firstValue;
                         secondStart = end;
                         showPoint1 = false;
                     }
-                    if (!double.IsNaN(firstValue) && !double.IsNaN(secondValue))
-                    {
+
+                    if (!double.IsNaN(firstValue) && !double.IsNaN(secondValue)) {
                         var point0 = new Point(
-                        (firstStart - start) * ActualWidth / delta,
-                        Math.Max(0, Math.Min(
-                            ActualHeight,
-                            ActualHeight - (firstValue - minValue) * ActualHeight / valueDelta)));
+                            (firstStart - start) * ActualWidth / delta,
+                            Math.Max(0, Math.Min(
+                                ActualHeight,
+                                ActualHeight - (firstValue - minValue) * ActualHeight / valueDelta)));
                         var point1 = new Point(
                             (secondStart - start) * ActualWidth / delta,
                             Math.Max(0, Math.Min(
@@ -471,28 +312,120 @@ namespace PHmiClient.Controls.Trends
                                 (secondValue - minValue) * ActualHeight / valueDelta)));
                         if (showLine)
                             drawingContext.DrawLine(_pen, point0, point1);
-                        if (ShowPoints)
-                        {
+                        if (ShowPoints) {
                             if (showPoint0)
-                            {
-                                drawingContext.DrawEllipse(_pen.Brush, _pen, point0, pointRadius, pointRadius);
-                            }
+                                drawingContext.DrawEllipse(_pen.Brush, _pen, point0, pointRadius,
+                                    pointRadius);
                             if (i == lastIndex && showPoint1)
-                            {
-                                drawingContext.DrawEllipse(_pen.Brush, _pen, point1, pointRadius, pointRadius);
-                            }
+                                drawingContext.DrawEllipse(_pen.Brush, _pen, point1, pointRadius,
+                                    pointRadius);
                         }
                     }
                 }
-                
             }
+
             UpdateCursor();
             base.OnRender(drawingContext);
         }
 
-        public KeyValuePair<long, double>[] GetValues()
-        {
+        public KeyValuePair<long, double>[] GetValues() {
             return _values;
         }
+
+        #region Query
+
+        private readonly Timer _queryTimer = new Timer(200);
+
+        private Action<Tuple<DateTime, double>[]> _queryCallback;
+
+        private Tuple<DateTime, DateTime?, int> _queryParameters;
+
+        private void QueryTimerElapsed(object sender, ElapsedEventArgs e) {
+            lock (_lockObject) {
+                if (!_queryTimer.Enabled)
+                    return;
+                _queryTimer.Stop();
+                if (_queryParameters == null || _queryCallback == null)
+                    return;
+                ShowProgressBar();
+                TrendTag.GetSamples(_queryParameters.Item1, _queryParameters.Item2, _queryParameters.Item3,
+                    _queryCallback);
+            }
+        }
+
+        private void ShowProgressBar() {
+            Dispatcher.Invoke(new Action(() => { _trendPen.WaitingSamples = true; }));
+        }
+
+        private void HideProgressBar() {
+            Dispatcher.Invoke(new Action(() => { _trendPen.WaitingSamples = false; }));
+        }
+
+        #endregion Query
+
+        #region CursorCoordinate
+
+        public static readonly DependencyProperty CursorCoordinateProperty =
+            DependencyProperty.Register("CursorCoordinate", typeof(double?), typeof(TrendPresenter));
+
+        public double? CursorCoordinate {
+            get { return (double?) GetValue(CursorCoordinateProperty); }
+            set { SetValue(CursorCoordinateProperty, value); }
+        }
+
+        #endregion CursorCoordinate
+
+        #region Scale
+
+        #region MinValue
+
+        public double? MinValue {
+            get { return (double?) GetValue(MinValueProperty); }
+            set { SetValue(MinValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty MinValueProperty =
+            DependencyProperty.Register("MinValue", typeof(double?), typeof(TrendPresenter),
+                new PropertyMetadata(OnScaleValueChanged));
+
+        #endregion MinValue
+
+        #region MaxValue
+
+        public double? MaxValue {
+            get { return (double?) GetValue(MaxValueProperty); }
+            set { SetValue(MaxValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty MaxValueProperty =
+            DependencyProperty.Register("MaxValue", typeof(double?), typeof(TrendPresenter),
+                new PropertyMetadata(OnScaleValueChanged));
+
+        #endregion MaxValue
+
+        private static void OnScaleValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            var trendPresenter = (TrendPresenter) d;
+            trendPresenter.InvalidateVisual();
+        }
+
+        #endregion Scale
+
+        #region ShowPoints
+
+        public bool ShowPoints {
+            get { return (bool) GetValue(ShowPointsProperty); }
+            set { SetValue(ShowPointsProperty, value); }
+        }
+
+        public static readonly DependencyProperty ShowPointsProperty =
+            DependencyProperty.Register(
+                "ShowPoints", typeof(bool), typeof(TrendPresenter),
+                new PropertyMetadata(OnShowPointsChanged));
+
+        private static void OnShowPointsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            ((TrendPresenter) d).InvalidateVisual();
+        }
+
+        #endregion ShowPoints
     }
 }

@@ -1,25 +1,20 @@
 ﻿using System.Windows;
 
-namespace PHmiTools.Dialogs.Project
-{
+namespace PHmiTools.Dialogs.Project {
     /// <summary>
-    /// Interaction logic for ImportProjectDialog.xaml
+    ///     Interaction logic for ImportProjectDialog.xaml
     /// </summary>
-    public partial class ImportProjectDialog
-    {
-        public ImportProjectDialog()
-        {
+    public partial class ImportProjectDialog {
+        public ImportProjectDialog() {
             InitializeComponent();
             Loaded += ImportProjectDialogLoaded;
         }
 
-        public ImportProjectDialogViewModel ViewModel
-        {
-            get { return (ImportProjectDialogViewModel)Resources["ViewModel"]; }
+        public ImportProjectDialogViewModel ViewModel {
+            get { return (ImportProjectDialogViewModel) Resources["ViewModel"]; }
         }
 
-        private void ImportProjectDialogLoaded(object sender, RoutedEventArgs e)
-        {
+        private void ImportProjectDialogLoaded(object sender, RoutedEventArgs e) {
             ViewModel.ShowChooseDialog(true);
             Loaded -= ImportProjectDialogLoaded;
             pbPasswrod.Password = ViewModel.ConnectionParameters.Password;
@@ -36,8 +31,7 @@ namespace PHmiTools.Dialogs.Project
                 tbDatabase.Focus();
         }
 
-        private void PbPasswrodPasswordChanged(object sender, RoutedEventArgs e)
-        {
+        private void PbPasswrodPasswordChanged(object sender, RoutedEventArgs e) {
             ViewModel.ConnectionParameters.Password = pbPasswrod.Password;
         }
     }

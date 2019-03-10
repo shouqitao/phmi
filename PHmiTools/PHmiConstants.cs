@@ -1,7 +1,5 @@
-﻿namespace PHmiTools
-{
-    public static class PHmiConstants
-    {
+﻿namespace PHmiTools {
+    public static class PHmiConstants {
         public const string PHmiConfiguratorName = "PHmiConfigurator";
         public const string PHmiConnectionStringName = "PHmi";
         public const string PHmiGuid = "e6eb070b-edf7-4936-9bd2-8164e5a76d9e";

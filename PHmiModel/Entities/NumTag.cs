@@ -8,419 +8,368 @@ using PHmiClient.Utils.ValidationAttributes;
 using PHmiResources;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(NumTagMetadata))]
     [Table("num_tags", Schema = "public")]
-    public class NumTag : NamedEntity
-    {
-        public NumTag()
-        {
+    public class NumTag : NamedEntity {
+        public NumTag() {
             CanRead = true;
         }
 
-        public class NumTagMetadata : EntityMetadataBase
-        {
-            private string _name;
-            private string _device;
-            private string _description;
+        public string FullName {
+            get { return IoDevice.Name + "." + Name; }
+        }
+
+        public Type TagType {
+            get {
+                switch (NumTagType.Name) {
+                    case "Int16":
+                        return typeof(short);
+
+                    case "Int32":
+                        return typeof(int);
+
+                    case "UInt16":
+                        return typeof(ushort);
+
+                    case "UInt32":
+                        return typeof(uint);
+
+                    case "Single":
+                        return typeof(float);
+
+                    case "Double":
+                        return typeof(double);
+                }
+
+                throw new NotSupportedException(string.Format(Res.TypeNotSupportedMessage, NumTagType.Name));
+            }
+        }
+
+        public class NumTagMetadata : EntityMetadataBase {
             private bool _canRead;
-            private string _engUnit;
-            private NumTagType _numTagType;
-            private string _format;
-            private string _rawMin;
-            private string _rawMax;
-            private string _engMin;
+            private string _description;
+            private string _device;
             private string _engMax;
+            private string _engMin;
+            private string _engUnit;
+            private string _format;
+            private string _name;
+            private NumTagType _numTagType;
+            private string _rawMax;
+            private string _rawMin;
 
             [LocDisplayName("Name", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Name
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Name {
                 get { return _name; }
-                set
-                {
+                set {
                     _name = value;
                     OnPropertyChanged(this, i => i.Name);
                 }
             }
 
             [LocDisplayName("AddressInDevice", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Device
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Device {
                 get { return _device; }
-                set
-                {
+                set {
                     _device = value;
                     OnPropertyChanged(this, i => i.Device);
                 }
             }
 
             [LocDisplayName("Description", ResourceType = typeof(Res))]
-            public string Description
-            {
+            public string Description {
                 get { return _description; }
-                set
-                {
+                set {
                     _description = value;
                     OnPropertyChanged(this, i => i.Description);
                 }
             }
 
             [LocDisplayName("CanRead", ResourceType = typeof(Res))]
-            public bool CanRead
-            {
+            public bool CanRead {
                 get { return _canRead; }
-                set
-                {
+                set {
                     _canRead = value;
                     OnPropertyChanged(this, i => i.CanRead);
                 }
             }
 
             [LocDisplayName("TagType", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public NumTagType NumTagType
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public NumTagType NumTagType {
                 get { return _numTagType; }
-                set
-                {
+                set {
                     _numTagType = value;
                     OnPropertyChanged(this, i => i.NumTagType);
                 }
             }
 
             [LocDisplayName("Format", ResourceType = typeof(Res))]
-            public string Format
-            {
+            public string Format {
                 get { return _format; }
-                set
-                {
+                set {
                     _format = value;
                     OnPropertyChanged(this, i => i.Format);
                 }
             }
 
             [LocDisplayName("EngUnit", ResourceType = typeof(Res))]
-            public string EngUnit
-            {
+            public string EngUnit {
                 get { return _engUnit; }
-                set
-                {
+                set {
                     _engUnit = value;
                     OnPropertyChanged(this, i => i.EngUnit);
                 }
             }
 
             [LocDisplayName("RawMin", ResourceType = typeof(Res))]
-            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage", ErrorMessageResourceType = typeof(Res))]
-            public string RawMin
-            {
+            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string RawMin {
                 get { return _rawMin; }
-                set
-                {
+                set {
                     _rawMin = value;
                     OnPropertyChanged(this, i => i.RawMin);
                 }
             }
 
             [LocDisplayName("RawMax", ResourceType = typeof(Res))]
-            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage", ErrorMessageResourceType = typeof(Res))]
-            public string RawMax
-            {
+            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string RawMax {
                 get { return _rawMax; }
-                set
-                {
+                set {
                     _rawMax = value;
                     OnPropertyChanged(this, i => i.RawMax);
                 }
             }
 
             [LocDisplayName("EngMin", ResourceType = typeof(Res))]
-            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage", ErrorMessageResourceType = typeof(Res))]
-            public string EngMin
-            {
+            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string EngMin {
                 get { return _engMin; }
-                set
-                {
+                set {
                     _engMin = value;
                     OnPropertyChanged(this, i => i.EngMin);
                 }
             }
 
             [LocDisplayName("EngMax", ResourceType = typeof(Res))]
-            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage", ErrorMessageResourceType = typeof(Res))]
-            public string EngMax
-            {
+            [ValidDouble(AllowNull = true, ErrorMessageResourceName = "InvalidDoubleMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string EngMax {
                 get { return _engMax; }
-                set
-                {
+                set {
                     _engMax = value;
                     OnPropertyChanged(this, i => i.EngMax);
                 }
             }
         }
 
-        public string FullName { get { return IoDevice.Name + "." + Name; } }
-
         #region RawMin
 
         private string _rawMin;
 
         [NotMapped]
-        public string RawMin
-        {
+        public string RawMin {
             get { return _rawMin; }
-            set
-            {
+            set {
                 _rawMin = value;
-                if (string.IsNullOrEmpty(_rawMin))
-                {
+                if (string.IsNullOrEmpty(_rawMin)) {
                     RawMinDb = null;
                     return;
                 }
+
                 double d;
                 if (double.TryParse(_rawMin, out d))
-                {
                     RawMinDb = d;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.RawMin);
-                }
             }
         }
 
-        #endregion
+        #endregion RawMin
 
         #region RawMax
 
         private string _rawMax;
 
         [NotMapped]
-        public string RawMax
-        {
+        public string RawMax {
             get { return _rawMax; }
-            set
-            {
+            set {
                 _rawMax = value;
-                if (string.IsNullOrEmpty(_rawMax))
-                {
+                if (string.IsNullOrEmpty(_rawMax)) {
                     RawMaxDb = null;
                     return;
                 }
+
                 double d;
                 if (double.TryParse(_rawMax, out d))
-                {
                     RawMaxDb = d;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.RawMax);
-                }
             }
         }
 
-        #endregion
+        #endregion RawMax
 
         #region EngMin
 
         private string _engMin;
 
         [NotMapped]
-        public string EngMin
-        {
+        public string EngMin {
             get { return _engMin; }
-            set
-            {
+            set {
                 _engMin = value;
-                if (string.IsNullOrEmpty(_engMin))
-                {
+                if (string.IsNullOrEmpty(_engMin)) {
                     EngMinDb = null;
                     return;
                 }
+
                 double d;
                 if (double.TryParse(_engMin, out d))
-                {
                     EngMinDb = d;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.EngMin);
-                }
             }
         }
 
-        #endregion
+        #endregion EngMin
 
         #region EngMax
 
         private string _engMax;
 
         [NotMapped]
-        public string EngMax
-        {
+        public string EngMax {
             get { return _engMax; }
-            set
-            {
+            set {
                 _engMax = value;
-                if (string.IsNullOrEmpty(_engMax))
-                {
+                if (string.IsNullOrEmpty(_engMax)) {
                     EngMaxDb = null;
                     return;
                 }
+
                 double d;
                 if (double.TryParse(_engMax, out d))
-                {
                     EngMaxDb = d;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.EngMax);
-                }
             }
         }
 
-        #endregion
-
-        public Type TagType
-        {
-            get
-            {
-                switch (NumTagType.Name)
-                {
-                    case "Int16":
-                        return typeof(Int16);
-                    case "Int32":
-                        return typeof(Int32);
-                    case "UInt16":
-                        return typeof(UInt16);
-                    case "UInt32":
-                        return typeof(UInt32);
-                    case "Single":
-                        return typeof(Single);
-                    case "Double":
-                        return typeof(Double);
-                }
-                throw new NotSupportedException(string.Format(Res.TypeNotSupportedMessage, NumTagType.Name));
-            }
-        }
+        #endregion EngMax
 
         #region RefIoDevice
 
         private int _refIoDevice;
 
         [Column("ref_io_devices")]
-        public int RefIoDevice
-        {
+        public int RefIoDevice {
             get { return _refIoDevice; }
-            set
-            {
+            set {
                 _refIoDevice = value;
                 OnPropertyChanged(this, e => e.RefIoDevice);
             }
         }
 
-        #endregion
+        #endregion RefIoDevice
 
         #region RefTagType
 
         private int _refTagType;
 
         [Column("ref_tag_types")]
-        public int RefTagType
-        {
+        public int RefTagType {
             get { return _refTagType; }
-            set
-            {
+            set {
                 _refTagType = value;
                 OnPropertyChanged(this, e => e.NumTagType);
                 OnPropertyChanged(this, e => e.RefTagType);
             }
         }
 
-        #endregion
+        #endregion RefTagType
 
         #region Device
 
         private string _device;
 
         [Column("device")]
-        public string Device
-        {
+        public string Device {
             get { return _device; }
-            set
-            {
-                _device = value; 
+            set {
+                _device = value;
                 OnPropertyChanged(this, e => e.Device);
             }
         }
 
-        #endregion
+        #endregion Device
 
         #region Description
 
         private string _description;
-        
+
         [Column("description")]
-        public string Description
-        {
+        public string Description {
             get { return _description; }
-            set
-            {
+            set {
                 _description = value;
                 OnPropertyChanged(this, e => e.Description);
             }
         }
 
-        #endregion
+        #endregion Description
 
         #region CanRead
 
         private bool _canRead;
 
         [Column("can_read")]
-        public bool CanRead
-        {
+        public bool CanRead {
             get { return _canRead; }
-            set
-            {
+            set {
                 _canRead = value;
                 OnPropertyChanged(this, e => e.CanRead);
             }
         }
 
-        #endregion
+        #endregion CanRead
 
         #region EngUnit
 
         private string _engUnit;
 
         [Column("eng_unit")]
-        public string EngUnit
-        {
+        public string EngUnit {
             get { return _engUnit; }
-            set
-            {
+            set {
                 _engUnit = value;
                 OnPropertyChanged(this, e => e.EngUnit);
             }
         }
 
-        #endregion
+        #endregion EngUnit
 
         #region RawMinDb
 
         private double? _rawMinDb;
 
         [Column("raw_min")]
-        public double? RawMinDb
-        {
+        public double? RawMinDb {
             get { return _rawMinDb; }
-            set
-            {
+            set {
                 _rawMinDb = value;
                 _rawMin = string.Format("{0}", RawMinDb);
                 OnPropertyChanged(this, e => e.RawMin);
@@ -428,18 +377,16 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion RawMinDb
 
         #region RawMaxDb
 
         private double? _rawMaxDb;
 
         [Column("raw_max")]
-        public double? RawMaxDb
-        {
+        public double? RawMaxDb {
             get { return _rawMaxDb; }
-            set
-            {
+            set {
                 _rawMaxDb = value;
                 _rawMax = string.Format("{0}", RawMaxDb);
                 OnPropertyChanged(this, e => e.RawMax);
@@ -447,18 +394,16 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion RawMaxDb
 
         #region EngMinDb
 
         private double? _engMinDb;
 
         [Column("eng_min")]
-        public double? EngMinDb
-        {
+        public double? EngMinDb {
             get { return _engMinDb; }
-            set
-            {
+            set {
                 _engMinDb = value;
                 _engMin = string.Format("{0}", EngMinDb);
                 OnPropertyChanged(this, e => e.EngMin);
@@ -466,18 +411,16 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion EngMinDb
 
         #region EngMaxDb
 
         private double? _engMaxDb;
 
         [Column("eng_max")]
-        public double? EngMaxDb
-        {
+        public double? EngMaxDb {
             get { return _engMaxDb; }
-            set
-            {
+            set {
                 _engMaxDb = value;
                 _engMax = string.Format("{0}", EngMaxDb);
                 OnPropertyChanged(this, e => e.EngMax);
@@ -485,67 +428,60 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion EngMaxDb
 
         #region Format
 
         private string _format;
 
         [Column("format")]
-        public string Format
-        {
+        public string Format {
             get { return _format; }
-            set
-            {
+            set {
                 _format = value;
                 OnPropertyChanged(this, e => e.Format);
             }
         }
 
-        #endregion
+        #endregion Format
 
         #region IoDevice
 
         private IoDevice _ioDevice;
 
-        public virtual IoDevice IoDevice
-        {
+        public virtual IoDevice IoDevice {
             get { return _ioDevice; }
-            set
-            {
+            set {
                 _ioDevice = value;
                 OnPropertyChanged(this, e => e.IoDevice);
             }
         }
 
-        #endregion
+        #endregion IoDevice
 
         #region NumTagType
 
         private NumTagType _numTagType;
 
-        public virtual NumTagType NumTagType
-        {
+        public virtual NumTagType NumTagType {
             get { return _numTagType; }
-            set
-            {
+            set {
                 _numTagType = value;
                 OnPropertyChanged(this, e => e.NumTagType);
             }
         }
 
-        #endregion
+        #endregion NumTagType
 
         #region TrendTags
 
         private ICollection<TrendTag> _trendTags;
 
-        public virtual ICollection<TrendTag> TrendTags
-        {
+        public virtual ICollection<TrendTag> TrendTags {
             get { return _trendTags ?? (_trendTags = new ObservableCollection<TrendTag>()); }
             set { _trendTags = value; }
         }
 
-        #endregion
+        #endregion TrendTags
     }
 }

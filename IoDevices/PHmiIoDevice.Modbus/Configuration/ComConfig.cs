@@ -4,80 +4,63 @@ using System.IO.Ports;
 using System.Linq;
 using System.Xml;
 
-namespace PHmiIoDevice.Modbus.Configuration
-{
-    public class ComConfig : Config
-    {
-        private string _portName;
+namespace PHmiIoDevice.Modbus.Configuration {
+    public class ComConfig : Config {
         private int _baudRate = 9600;
         private int _dataBits = 7;
         private Parity _parity = Parity.Even;
+        private string _portName;
         private StopBits _stopBits = StopBits.One;
 
-        public ComConfig(string name) : base(name)
-        {
-            try
-            {
+        public ComConfig(string name) : base(name) {
+            try {
                 _portName = SerialPort.GetPortNames().OrderBy(p => p).First();
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 _portName = "COM1";
             }
         }
 
-        public string PortName
-        {
+        public string PortName {
             get { return _portName; }
-            set
-            {
+            set {
                 _portName = value;
                 OnPropertyChanged("PortName");
             }
         }
 
-        public int BaudRate
-        {
+        public int BaudRate {
             get { return _baudRate; }
-            set
-            {
+            set {
                 _baudRate = value;
                 OnPropertyChanged("BaudRate");
             }
         }
 
-        public int DataBits
-        {
+        public int DataBits {
             get { return _dataBits; }
-            set
-            {
+            set {
                 _dataBits = value;
                 OnPropertyChanged("DataBits");
             }
         }
 
-        public Parity Parity
-        {
+        public Parity Parity {
             get { return _parity; }
-            set
-            {
+            set {
                 _parity = value;
                 OnPropertyChanged("Parity");
             }
         }
 
-        public StopBits StopBits
-        {
+        public StopBits StopBits {
             get { return _stopBits; }
-            set
-            {
+            set {
                 _stopBits = value;
                 OnPropertyChanged("StopBits");
             }
         }
 
-        protected override void GetXml(XmlDocument document, XmlNode rootElement)
-        {
+        protected override void GetXml(XmlDocument document, XmlNode rootElement) {
             base.GetXml(document, rootElement);
             AddElement(document, rootElement, "PortName", PortName);
             AddElement(document, rootElement, "BaudRate", BaudRate.ToString(CultureInfo.InvariantCulture));
@@ -86,14 +69,13 @@ namespace PHmiIoDevice.Modbus.Configuration
             AddElement(document, rootElement, "StopBits", StopBits.ToString());
         }
 
-        protected override void SetXml(XmlNode rootElement)
-        {
+        protected override void SetXml(XmlNode rootElement) {
             base.SetXml(rootElement);
             PortName = GetString(rootElement, "PortName");
             BaudRate = GetInt(rootElement, "BaudRate");
             DataBits = GetInt(rootElement, "DataBits");
-            Parity = (Parity) Enum.Parse(typeof (Parity), GetString(rootElement, "Parity"));
-            StopBits = (StopBits) Enum.Parse(typeof (StopBits), GetString(rootElement, "StopBits"));
+            Parity = (Parity) Enum.Parse(typeof(Parity), GetString(rootElement, "Parity"));
+            StopBits = (StopBits) Enum.Parse(typeof(StopBits), GetString(rootElement, "StopBits"));
         }
     }
 }

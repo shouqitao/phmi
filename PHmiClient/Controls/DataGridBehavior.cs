@@ -8,271 +8,223 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace PHmiClient.Controls
-{
-    public static class DataGridBehavior
-    {
+namespace PHmiClient.Controls {
+    public static class DataGridBehavior {
         #region RowNumbers property
 
         public static readonly DependencyProperty RowNumbersProperty =
             DependencyProperty.RegisterAttached("RowNumbers", typeof(bool), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(false, OnRowNumbersChanged));
+                new FrameworkPropertyMetadata(false, OnRowNumbersChanged));
 
-        private static void OnRowNumbersChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnRowNumbersChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
-            if ((bool)args.NewValue)
-            {
+            if ((bool) args.NewValue) {
                 grid.LoadingRow += OnGridLoadingRow;
                 grid.UnloadingRow += OnGridUnloadingRow;
-            }
-            else
-            {
+            } else {
                 grid.LoadingRow -= OnGridLoadingRow;
                 grid.UnloadingRow -= OnGridUnloadingRow;
             }
         }
 
-        private static void RefreshDataGridRowNumbers(object sender)
-        {
+        private static void RefreshDataGridRowNumbers(object sender) {
             var grid = sender as DataGrid;
             if (grid == null)
                 return;
 
-            foreach (var item in grid.Items)
-            {
-                var row = (DataGridRow)grid.ItemContainerGenerator.ContainerFromItem(item);
+            foreach (object item in grid.Items) {
+                var row = (DataGridRow) grid.ItemContainerGenerator.ContainerFromItem(item);
                 if (row != null)
                     row.Header = row.GetIndex() + 1;
             }
         }
 
-        private static void OnGridUnloadingRow(object sender, DataGridRowEventArgs e)
-        {
+        private static void OnGridUnloadingRow(object sender, DataGridRowEventArgs e) {
             RefreshDataGridRowNumbers(sender);
         }
 
-        private static void OnGridLoadingRow(object sender, DataGridRowEventArgs e)
-        {
+        private static void OnGridLoadingRow(object sender, DataGridRowEventArgs e) {
             RefreshDataGridRowNumbers(sender);
         }
 
-        public static void SetRowNumbers(DependencyObject element, bool value)
-        {
+        public static void SetRowNumbers(DependencyObject element, bool value) {
             element.SetValue(RowNumbersProperty, value);
         }
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static bool GetRowNumbers(DependencyObject element)
-        {
-            return (bool)element.GetValue(RowNumbersProperty);
+        public static bool GetRowNumbers(DependencyObject element) {
+            return (bool) element.GetValue(RowNumbersProperty);
         }
 
-        #endregion
+        #endregion RowNumbers property
 
         #region SupportIDataErrorInfo
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static bool GetSupportIDataErrorInfo(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(SupportIDataErrorInfoProperty);
+        public static bool GetSupportIDataErrorInfo(DependencyObject obj) {
+            return (bool) obj.GetValue(SupportIDataErrorInfoProperty);
         }
 
-        public static void SetSupportIDataErrorInfo(DependencyObject obj, bool value)
-        {
+        public static void SetSupportIDataErrorInfo(DependencyObject obj, bool value) {
             obj.SetValue(SupportIDataErrorInfoProperty, value);
         }
 
         public static readonly DependencyProperty SupportIDataErrorInfoProperty =
-            DependencyProperty.RegisterAttached("SupportIDataErrorInfo", typeof(bool), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(false, OnSupportIDataErrorInfoChanged));
+            DependencyProperty.RegisterAttached("SupportIDataErrorInfo", typeof(bool),
+                typeof(DataGridBehavior),
+                new FrameworkPropertyMetadata(false, OnSupportIDataErrorInfoChanged));
 
-        private static void OnSupportIDataErrorInfoChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnSupportIDataErrorInfoChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
-            if ((bool)args.NewValue)
-            {
-                grid.RowValidationRules.Add(new DataErrorInfoValidationRule {ValidationStep = ValidationStep.UpdatedValue});
-            }
-            else
-            {
-                var rules = grid.RowValidationRules.Where(r => r.GetType() == typeof (DataErrorInfoValidationRule)).ToArray();
-                foreach (var r in rules)
-                {
-                    grid.RowValidationRules.Remove(r);
-                }
+            if ((bool) args.NewValue) {
+                grid.RowValidationRules.Add(new DataErrorInfoValidationRule
+                    {ValidationStep = ValidationStep.UpdatedValue});
+            } else {
+                var rules = grid.RowValidationRules
+                    .Where(r => r.GetType() == typeof(DataErrorInfoValidationRule)).ToArray();
+                foreach (ValidationRule r in rules) grid.RowValidationRules.Remove(r);
             }
         }
 
-        #endregion
+        #endregion SupportIDataErrorInfo
 
         #region SelectedItems
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static IList GetSelectedItems(DependencyObject obj)
-        {
-            return (IList)obj.GetValue(SelectedItemsProperty);
+        public static IList GetSelectedItems(DependencyObject obj) {
+            return (IList) obj.GetValue(SelectedItemsProperty);
         }
 
-        public static void SetSelectedItems(DependencyObject obj, IList value)
-        {
+        public static void SetSelectedItems(DependencyObject obj, IList value) {
             obj.SetValue(SelectedItemsProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for SelectedItems.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedItemsProperty =
-            DependencyProperty.RegisterAttached("SelectedItems", typeof (IList), typeof (DataGridBehavior),
-            new FrameworkPropertyMetadata(OnSelectedItemsPropertyChanged));
+            DependencyProperty.RegisterAttached("SelectedItems", typeof(IList), typeof(DataGridBehavior),
+                new FrameworkPropertyMetadata(OnSelectedItemsPropertyChanged));
 
-        private static void OnSelectedItemsPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnSelectedItemsPropertyChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
             if (args.OldValue != null && args.NewValue == null)
-            {
                 grid.SelectionChanged -= GridSelectedItemsSelectionChanged;
-            }
-            if (args.OldValue == null && args.NewValue != null)
-            {
+            if (args.OldValue == null && args.NewValue != null) {
                 grid.SelectionChanged += GridSelectedItemsSelectionChanged;
                 UpdateSelectedItems(grid);
             }
         }
 
-        private static void GridSelectedItemsSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private static void GridSelectedItemsSelectionChanged(object sender, SelectionChangedEventArgs e) {
             var grid = (DataGrid) sender;
             UpdateSelectedItems(grid);
         }
 
-        private static void UpdateSelectedItems(MultiSelector grid)
-        {
-            var list = GetSelectedItems(grid);
+        private static void UpdateSelectedItems(MultiSelector grid) {
+            IList list = GetSelectedItems(grid);
             var i = 0;
-            for (; i < grid.SelectedItems.Count; i++)
-            {
-                var gridItem = grid.SelectedItems[i];
-                while (list.Count > i && !AreEqual(gridItem, list[i]))
-                {
-                    list.RemoveAt(i);
-                }
+            for (; i < grid.SelectedItems.Count; i++) {
+                object gridItem = grid.SelectedItems[i];
+                while (list.Count > i && !AreEqual(gridItem, list[i])) list.RemoveAt(i);
                 if (list.Count <= i || !AreEqual(gridItem, list[i]))
                     list.Insert(i, gridItem);
             }
-            while (list.Count > i)
-            {
-                list.RemoveAt(i);
-            }
+
+            while (list.Count > i) list.RemoveAt(i);
         }
 
-        private static bool AreEqual(object obj1, object obj2)
-        {
+        private static bool AreEqual(object obj1, object obj2) {
             if (obj1 == null)
                 return obj2 == null;
             return obj1.Equals(obj2);
         }
-        
-        #endregion
+
+        #endregion SelectedItems
 
         #region ScrollToSelected
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static bool GetScrollToSelected(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(ScrollToSelectedProperty);
+        public static bool GetScrollToSelected(DependencyObject obj) {
+            return (bool) obj.GetValue(ScrollToSelectedProperty);
         }
 
-        public static void SetScrollToSelected(DependencyObject obj, bool value)
-        {
+        public static void SetScrollToSelected(DependencyObject obj, bool value) {
             obj.SetValue(ScrollToSelectedProperty, value);
         }
 
         public static readonly DependencyProperty ScrollToSelectedProperty =
             DependencyProperty.RegisterAttached("ScrollToSelected", typeof(bool), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(false, OnScrollToSelectedChanged));
+                new FrameworkPropertyMetadata(false, OnScrollToSelectedChanged));
 
-        private static void OnScrollToSelectedChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnScrollToSelectedChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
-            if ((bool)args.NewValue)
-            {
+            if ((bool) args.NewValue)
                 grid.SelectionChanged += GridScrollToSelectedSelectionChanged;
-            }
             else
-            {
                 grid.SelectionChanged -= GridScrollToSelectedSelectionChanged;
-            }
         }
 
-        private static void GridScrollToSelectedSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        private static void GridScrollToSelectedSelectionChanged(object sender, SelectionChangedEventArgs e) {
             var grid = (DataGrid) sender;
             if (grid.SelectedItem != null)
                 grid.ScrollIntoView(grid.SelectedItem);
         }
-        
-        #endregion
+
+        #endregion ScrollToSelected
 
         #region ThreeStateSrorting
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static bool GetThreeStateSorting(DependencyObject obj)
-        {
-            return (bool)obj.GetValue(ThreeStateSortingProperty);
+        public static bool GetThreeStateSorting(DependencyObject obj) {
+            return (bool) obj.GetValue(ThreeStateSortingProperty);
         }
 
-        public static void SetThreeStateSorting(DependencyObject obj, bool value)
-        {
+        public static void SetThreeStateSorting(DependencyObject obj, bool value) {
             obj.SetValue(ThreeStateSortingProperty, value);
         }
 
         public static readonly DependencyProperty ThreeStateSortingProperty =
             DependencyProperty.RegisterAttached("ThreeStateSorting", typeof(bool), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(false, OnThreeStateSortingChanged));
-        
-        private static void OnThreeStateSortingChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+                new FrameworkPropertyMetadata(false, OnThreeStateSortingChanged));
+
+        private static void OnThreeStateSortingChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
-            if ((bool)args.NewValue)
-            {
+            if ((bool) args.NewValue)
                 grid.Sorting += GridSorting;
-            }
             else
-            {
                 grid.Sorting -= GridSorting;
-            }
         }
 
-        private static void GridSorting(object sender, DataGridSortingEventArgs e)
-        {
+        private static void GridSorting(object sender, DataGridSortingEventArgs e) {
             var dataGrid = (DataGrid) sender;
 
-            var sortPropertyName = GetSortMemberPath(e.Column);
+            string sortPropertyName = GetSortMemberPath(e.Column);
             if (!string.IsNullOrEmpty(sortPropertyName))
-            {
-                // sorting is cleared when the previous state is Descending
-                if (e.Column.SortDirection.HasValue && e.Column.SortDirection.Value == ListSortDirection.Descending)
-                {
-                    var index = FindSortDescription(dataGrid.Items.SortDescriptions, sortPropertyName);
-                    if (index != -1)
-                    {
+                if (e.Column.SortDirection.HasValue &&
+                    e.Column.SortDirection.Value == ListSortDirection.Descending) {
+                    int index = FindSortDescription(dataGrid.Items.SortDescriptions, sortPropertyName);
+                    if (index != -1) {
                         e.Column.SortDirection = null;
 
                         // remove the sort description
                         dataGrid.Items.SortDescriptions.RemoveAt(index);
                         dataGrid.Items.Refresh();
 
-                        if ((Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift)
-                        {
+                        if ((Keyboard.Modifiers & ModifierKeys.Shift) != ModifierKeys.Shift) {
                             // clear any other sort descriptions for the multisorting case
                             dataGrid.Items.SortDescriptions.Clear();
                             dataGrid.Items.Refresh();
@@ -282,29 +234,19 @@ namespace PHmiClient.Controls
                         e.Handled = true;
                     }
                 }
-            }
         }
 
-        private static string GetSortMemberPath(DataGridColumn column)
-        {
+        private static string GetSortMemberPath(DataGridColumn column) {
             // find the sortmemberpath
-            var sortPropertyName = column.SortMemberPath;
-            if (string.IsNullOrEmpty(sortPropertyName))
-            {
+            string sortPropertyName = column.SortMemberPath;
+            if (string.IsNullOrEmpty(sortPropertyName)) {
                 var boundColumn = column as DataGridBoundColumn;
-                if (boundColumn != null)
-                {
+                if (boundColumn != null) {
                     var binding = boundColumn.Binding as Binding;
-                    if (binding != null)
-                    {
+                    if (binding != null) {
                         if (!string.IsNullOrEmpty(binding.XPath))
-                        {
                             sortPropertyName = binding.XPath;
-                        }
-                        else if (binding.Path != null)
-                        {
-                            sortPropertyName = binding.Path.Path;
-                        }
+                        else if (binding.Path != null) sortPropertyName = binding.Path.Path;
                     }
                 }
             }
@@ -312,43 +254,41 @@ namespace PHmiClient.Controls
             return sortPropertyName;
         }
 
-        private static int FindSortDescription(IEnumerable<SortDescription> sortDescriptions, string sortPropertyName)
-        {
-            var index = -1;
+        private static int FindSortDescription(IEnumerable<SortDescription> sortDescriptions,
+            string sortPropertyName) {
+            int index = -1;
             var i = 0;
-            foreach (var sortDesc in sortDescriptions)
-            {
-                if (System.String.CompareOrdinal(sortDesc.PropertyName, sortPropertyName) == 0)
-                {
+            foreach (SortDescription sortDesc in sortDescriptions) {
+                if (string.CompareOrdinal(sortDesc.PropertyName, sortPropertyName) == 0) {
                     index = i;
                     break;
                 }
+
                 i++;
             }
+
             return index;
         }
-        
-        #endregion
+
+        #endregion ThreeStateSrorting
 
         #region ControlCCommand
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static ICommand GetControlCCommand(DependencyObject obj)
-        {
-            return (ICommand)obj.GetValue(ControlCCommandProperty);
+        public static ICommand GetControlCCommand(DependencyObject obj) {
+            return (ICommand) obj.GetValue(ControlCCommandProperty);
         }
 
-        public static void SetControlCCommand(DependencyObject obj, ICommand value)
-        {
+        public static void SetControlCCommand(DependencyObject obj, ICommand value) {
             obj.SetValue(ControlCCommandProperty, value);
         }
 
         public static readonly DependencyProperty ControlCCommandProperty =
             DependencyProperty.RegisterAttached("ControlCCommand", typeof(ICommand), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(null, OnControlCCommandChanged));
+                new FrameworkPropertyMetadata(null, OnControlCCommandChanged));
 
-        private static void OnControlCCommandChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnControlCCommandChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
@@ -358,44 +298,39 @@ namespace PHmiClient.Controls
                 grid.PreviewKeyDown -= GridControlCCommandPreviewKeyDown;
         }
 
-        private static void GridControlCCommandPreviewKeyDown(object sender, KeyEventArgs e)
-        {
+        private static void GridControlCCommandPreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.OriginalSource != null
                 && e.OriginalSource.GetType() == typeof(DataGridCell)
                 && e.Key == Key.C
-                && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
+                && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) {
                 var grid = (DataGrid) sender;
                 var command = grid.GetValue(ControlCCommandProperty) as ICommand;
-                if (command != null && command.CanExecute(null))
-                {
+                if (command != null && command.CanExecute(null)) {
                     command.Execute(null);
                     e.Handled = true;
                 }
             }
         }
 
-        #endregion
+        #endregion ControlCCommand
 
         #region ControVCommand
 
         [AttachedPropertyBrowsableForType(typeof(DataGrid))]
-        public static ICommand GetControlVCommand(DependencyObject obj)
-        {
-            return (ICommand)obj.GetValue(ControlVCommandProperty);
+        public static ICommand GetControlVCommand(DependencyObject obj) {
+            return (ICommand) obj.GetValue(ControlVCommandProperty);
         }
 
-        public static void SetControlVCommand(DependencyObject obj, ICommand value)
-        {
+        public static void SetControlVCommand(DependencyObject obj, ICommand value) {
             obj.SetValue(ControlVCommandProperty, value);
         }
 
         public static readonly DependencyProperty ControlVCommandProperty =
             DependencyProperty.RegisterAttached("ControlVCommand", typeof(ICommand), typeof(DataGridBehavior),
-            new FrameworkPropertyMetadata(null, OnControlVCommandChanged));
+                new FrameworkPropertyMetadata(null, OnControlVCommandChanged));
 
-        private static void OnControlVCommandChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
-        {
+        private static void OnControlVCommandChanged(DependencyObject source,
+            DependencyPropertyChangedEventArgs args) {
             var grid = source as DataGrid;
             if (grid == null)
                 return;
@@ -405,23 +340,20 @@ namespace PHmiClient.Controls
                 grid.PreviewKeyDown -= GridControlVCommandPreviewKeyDown;
         }
 
-        private static void GridControlVCommandPreviewKeyDown(object sender, KeyEventArgs e)
-        {
+        private static void GridControlVCommandPreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.OriginalSource != null
                 && e.OriginalSource.GetType() == typeof(DataGridCell)
                 && e.Key == Key.V
-                && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                var grid = (DataGrid)sender;
+                && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) {
+                var grid = (DataGrid) sender;
                 var command = grid.GetValue(ControlVCommandProperty) as ICommand;
-                if (command != null && command.CanExecute(null))
-                {
+                if (command != null && command.CanExecute(null)) {
                     command.Execute(null);
                     e.Handled = true;
                 }
             }
         }
 
-        #endregion
+        #endregion ControVCommand
     }
 }

@@ -11,7 +11,7 @@
     d:DataContext="{d:DesignInstance Type=PHmiClientSample:PHmi, IsDesignTimeCreatable=True}">
     <Grid>
         <Trends:TrendViewer>
-            <Trends:TrendPen TrendTag="{Binding Path=Trends.Trend}"/>
+            <Trends:TrendPen TrendTag="{Binding Path=Trends.Trend}" />
         </Trends:TrendViewer>
     </Grid>
 </UserControl>

@@ -7,62 +7,50 @@ using PHmiClient.Controls.Pages;
 using PHmiClient.Logs;
 using PHmiClient.Utils.Pagination;
 
-namespace PHmiClientSample.Pages
-{
+namespace PHmiClientSample.Pages {
     /// <summary>
-    /// Interaction logic for LogPage.xaml
+    ///     Interaction logic for LogPage.xaml
     /// </summary>
-    public partial class LogPage : IPage
-    {
-        private LogAbstract _log;
+    public partial class LogPage : IPage {
         private readonly ObservableCollection<LogItem> _logs = new ObservableCollection<LogItem>();
+        private LogAbstract _log;
 
-        public LogPage()
-        {
+        public LogPage() {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             lb.ItemsSource = _logs;
         }
 
-        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
+        public IRoot Root { get; set; }
+
+        public object PageName {
+            get { return "Log"; }
+        }
+
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e) {
             var pHmi = (PHmi) DataContext;
             if (pHmi != null)
                 _log = pHmi.Log;
         }
 
-        public IRoot Root { get; set; }
-
-        public object PageName
-        {
-            get { return "Log"; }
-        }
-
-        private void BSaveClick(object sender, RoutedEventArgs e)
-        {
+        private void BSaveClick(object sender, RoutedEventArgs e) {
             var item = new LogItem {Text = tbMessage.Text};
             item.SetToBytes(tbMessage2.Text);
             _log.Save(item);
             _logs.Add(item);
         }
 
-        private void BRefreshClick(object sender, RoutedEventArgs e)
-        {
-            _log.GetItems(CriteriaType.DownFromInfinity, new DateTime(), 1000, true, items => 
+        private void BRefreshClick(object sender, RoutedEventArgs e) {
+            _log.GetItems(CriteriaType.DownFromInfinity, new DateTime(), 1000, true, items =>
                 Dispatcher.Invoke(new Action(() => Draw(items))));
         }
 
-        private void Draw(IEnumerable<LogItem> items)
-        {
+        private void Draw(IEnumerable<LogItem> items) {
             _logs.Clear();
-            foreach (var logItem in items)
-            {
-                _logs.Add(logItem);
-            }
+            foreach (LogItem logItem in items) _logs.Add(logItem);
         }
 
-        private void BUpdateClick(object sender, RoutedEventArgs e)
-        {
+        private void BUpdateClick(object sender, RoutedEventArgs e) {
             var logItem = lb.SelectedItem as LogItem;
             if (logItem == null)
                 return;
@@ -71,8 +59,7 @@ namespace PHmiClientSample.Pages
             _log.Save(logItem);
         }
 
-        private void BDeleteClick(object sender, RoutedEventArgs e)
-        {
+        private void BDeleteClick(object sender, RoutedEventArgs e) {
             var logItem = lb.SelectedItem as LogItem;
             if (logItem == null)
                 return;

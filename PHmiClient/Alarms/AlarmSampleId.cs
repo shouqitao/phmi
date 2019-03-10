@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace PHmiClient.Alarms
-{
+namespace PHmiClient.Alarms {
     [DataContract]
-    public sealed class AlarmSampleId
-    {
-        public AlarmSampleId(DateTime startTime, int alarmId)
-        {
+    public sealed class AlarmSampleId {
+        public AlarmSampleId(DateTime startTime, int alarmId) {
             StartTime = startTime;
             AlarmId = alarmId;
         }
@@ -20,16 +17,14 @@ namespace PHmiClient.Alarms
         [DataMember]
         public int AlarmId { get; private set; }
 
-        public override bool Equals(object obj)
-        {
+        public override bool Equals(object obj) {
             var a = obj as AlarmSampleId;
             if (a == null)
                 return false;
             return StartTime.Equals(a.StartTime) && AlarmId.Equals(a.AlarmId);
         }
 
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() {
             return StartTime.GetHashCode() ^ AlarmId.GetHashCode();
         }
     }

@@ -7,51 +7,41 @@ using PHmiTools.Dialogs.Project;
 using PHmiTools.Utils;
 using PHmiTools.Utils.Npg;
 
-namespace PHmiUnitTests.Tools.Dialogs.Project
-{
+namespace PHmiUnitTests.Tools.Dialogs.Project {
     [TestFixture]
-    public class OpenProjectDialogViewModelTests
-    {
-        #region Stubs
+    public class OpenProjectDialogViewModelTests {
+        [SetUp]
+        public void SetUp() {
+            _service = new Service();
+            _windowStub = new Mock<IWindow>();
+            _viewModel = new OpenProjectDialogViewModel(_service) {View = _windowStub.Object};
+        }
 
-        public class Service : ProjectDialogViewModelTests.Service, IOpenProjectDialogService
-        {
+        public class Service : ProjectDialogViewModelTests.Service, IOpenProjectDialogService {
+            public readonly Mock<IPHmiDatabaseHelper> DatabaseHelperStub = new Mock<IPHmiDatabaseHelper>();
             public readonly Mock<INpgHelper> NpgHelperStub = new Mock<INpgHelper>();
 
-            private readonly IActionHelper _actionHelper = new ActionHelperStub();
-
-            public readonly Mock<IPHmiDatabaseHelper> DatabaseHelperStub = new Mock<IPHmiDatabaseHelper>();
-
-            public INpgHelper NpgHelper
-            {
+            public INpgHelper NpgHelper {
                 get { return NpgHelperStub.Object; }
             }
 
-            public IActionHelper ActionHelper
-            {
-                get { return _actionHelper; }
-            }
+            public IActionHelper ActionHelper { get; } = new ActionHelperStub();
 
-            public IPHmiDatabaseHelper DatabaseHelper
-            {
+            public IPHmiDatabaseHelper DatabaseHelper {
                 get { return DatabaseHelperStub.Object; }
             }
         }
-        
-        private class ActionHelperStub : IActionHelper
-        {
-            public void Async(Action action)
-            {
+
+        private class ActionHelperStub : IActionHelper {
+            public void Async(Action action) {
                 action.Invoke();
             }
 
-            public void Dispatch(Action action)
-            {
+            public void Dispatch(Action action) {
                 action.Invoke();
             }
 
-            public void DispatchAsync(Action action)
-            {
+            public void DispatchAsync(Action action) {
                 throw new NotImplementedException();
             }
         }
@@ -60,30 +50,10 @@ namespace PHmiUnitTests.Tools.Dialogs.Project
         private Mock<IWindow> _windowStub;
         private OpenProjectDialogViewModel _viewModel;
 
-        #endregion
-
-        [SetUp]
-        public void SetUp()
-        {
-            _service = new Service();
-            _windowStub = new Mock<IWindow>();
-            _viewModel = new OpenProjectDialogViewModel(_service) {View = _windowStub.Object};
-        }
-
         [Test]
-        public void OkCommandExecuted()
-        {
-            _service.DatabaseHelperStub.Setup(helper => helper.IsPHmiDatabase(_service.ConnectionParameters)).Returns(true);
-            _viewModel.OkCommand.Execute(null);
-            _service.DatabaseHelperStub.Verify();
-            _windowStub.VerifySet(w => w.DialogResult = true, Times.Once());
-        }
-
-        [Test]
-        public void LoadDatabasesCommandExecuted()
-        {
+        public void LoadDatabasesCommandExecuted() {
             _service.NpgHelperStub.Setup(h => h.GetDatabases(_viewModel.ConnectionParameters))
-                .Returns(new [] {"database1", "database2", "database3"});
+                .Returns(new[] {"database1", "database2", "database3"});
             _service.DatabaseHelperStub
                 .Setup(helper => helper.IsPHmiDatabase(
                     _viewModel.ConnectionParameters.ConnectionStringWithoutDatabase, "database1"))
@@ -102,6 +72,15 @@ namespace PHmiUnitTests.Tools.Dialogs.Project
             Assert.AreEqual(2, _viewModel.Databases.Count);
             Assert.AreEqual("database1", _viewModel.Databases[0]);
             Assert.AreEqual("database3", _viewModel.Databases[1]);
+        }
+
+        [Test]
+        public void OkCommandExecuted() {
+            _service.DatabaseHelperStub.Setup(helper => helper.IsPHmiDatabase(_service.ConnectionParameters))
+                .Returns(true);
+            _viewModel.OkCommand.Execute(null);
+            _service.DatabaseHelperStub.Verify();
+            _windowStub.VerifySet(w => w.DialogResult = true, Times.Once());
         }
     }
 }

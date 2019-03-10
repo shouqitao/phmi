@@ -14,26 +14,31 @@
     </Window.InputBindings>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Image x:Name="iMessage" Width="32" Height="32" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,10"/>
-        <TextBox Grid.Column="1" x:Name="tb" IsReadOnly="True" Margin="8" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" BorderThickness="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Margin="4">
+        <Image x:Name="iMessage" Width="32" Height="32" VerticalAlignment="Center"
+               HorizontalAlignment="Center" Margin="10,10,0,10" />
+        <TextBox Grid.Column="1" x:Name="tb" IsReadOnly="True" Margin="8" VerticalAlignment="Center"
+                 HorizontalAlignment="Center" TextWrapping="Wrap" BorderThickness="0"
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" HorizontalAlignment="Right"
+                    Margin="4">
             <StackPanel.Resources>
                 <Style TargetType="Button">
                     <Setter Property="MinWidth" Value="70" />
                     <Setter Property="Margin" Value="4" />
                 </Style>
             </StackPanel.Resources>
-            <Button x:Name="bOk" Content="{x:Static Loc:Res.Ok}" Command="{Binding Path=PositiveCommand}"/>
-            <Button x:Name="bYes" Content="{x:Static Loc:Res.Yes}" Command="{Binding Path=PositiveCommand}"/>
-            <Button x:Name="bNo" Content="{x:Static Loc:Res.No}" Command="{Binding Path=NegativeCommand}"/>
-            <Button x:Name="bCancel" Content="{x:Static Loc:Res.Cancel}" Command="{Binding Path=NeutralCommand}"/>
+            <Button x:Name="bOk" Content="{x:Static Loc:Res.Ok}" Command="{Binding Path=PositiveCommand}" />
+            <Button x:Name="bYes" Content="{x:Static Loc:Res.Yes}" Command="{Binding Path=PositiveCommand}" />
+            <Button x:Name="bNo" Content="{x:Static Loc:Res.No}" Command="{Binding Path=NegativeCommand}" />
+            <Button x:Name="bCancel" Content="{x:Static Loc:Res.Cancel}"
+                    Command="{Binding Path=NeutralCommand}" />
         </StackPanel>
     </Grid>
 </Window>

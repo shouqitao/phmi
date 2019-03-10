@@ -3,24 +3,14 @@ using NUnit.Framework;
 using PHmiClient.Tags;
 using PHmiClient.Utils;
 
-namespace PHmiClientUnitTests.Client.Tags
-{
-    public class WhenUsingTag : Specification
-    {
+namespace PHmiClientUnitTests.Client.Tags {
+    public class WhenUsingTag : Specification {
+        protected Func<string> DescriptionGetter;
         protected int Id;
         protected string Name;
-        protected Func<string> DescriptionGetter;
-        internal Tag<Int32?> Tag;
+        internal Tag<int?> Tag;
 
-        private class TagStub : Tag<Int32?>
-        {
-            public TagStub(int id, string name, Func<string> descriptionGetter) : base(new DispatcherService(), id, name, descriptionGetter)
-            {
-            }
-        }
-
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
             Id = RandomGenerator.GetRandomInt32();
             Name = "Name";
@@ -28,209 +18,172 @@ namespace PHmiClientUnitTests.Client.Tags
             Tag = new TagStub(Id, Name, DescriptionGetter);
         }
 
-        public class ThenIdReturns : WhenUsingTag
-        {
+        private class TagStub : Tag<int?> {
+            public TagStub(int id, string name, Func<string> descriptionGetter) : base(
+                new DispatcherService(), id, name, descriptionGetter) { }
+        }
+
+        public class ThenIdReturns : WhenUsingTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(Tag.Id, Is.EqualTo(Id));
             }
         }
 
-        public class ThenNameReturns : WhenUsingTag
-        {
+        public class ThenNameReturns : WhenUsingTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(Tag.Name, Is.EqualTo(Name));
             }
         }
 
-        public class ThenDescriptionReturns : WhenUsingTag
-        {
+        public class ThenDescriptionReturns : WhenUsingTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(Tag.Description, Is.EqualTo(DescriptionGetter.Invoke()));
             }
         }
 
-        public class AndValuePropertyChangedRaises : WhenUsingTag
-        {
+        public class AndValuePropertyChangedRaises : WhenUsingTag {
             protected int RaisedCount;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 RaisedCount = 0;
-                Tag.PropertyChanged += (sender, args) =>
-                    {
-                        if (args.PropertyName == "Value")
-                            RaisedCount++;
-                    };
+                Tag.PropertyChanged += (sender, args) => {
+                    if (args.PropertyName == "Value")
+                        RaisedCount++;
+                };
             }
 
-            private void Verify()
-            {
+            private void Verify() {
                 Assert.That(RaisedCount, Is.EqualTo(1));
             }
 
-            public class IfValueIsSet : AndValuePropertyChangedRaises
-            {
+            public class IfValueIsSet : AndValuePropertyChangedRaises {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Tag.Value = RandomGenerator.GetRandomInt32();
                     Verify();
                 }
             }
 
-            public class IfUpdateValueIsSet : AndValuePropertyChangedRaises
-            {
+            public class IfUpdateValueIsSet : AndValuePropertyChangedRaises {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Tag.UpdateValue(RandomGenerator.GetRandomInt32());
                     Verify();
                 }
             }
         }
 
-        public class ThenValueIsNull : WhenUsingTag
-        {
+        public class ThenValueIsNull : WhenUsingTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(Tag.Value, Is.Null);
             }
         }
 
-        public class AndUpdateValueInvoked : WhenUsingTag
-        {
-            protected Int32 ValueForUpdate;
+        public class AndUpdateValueInvoked : WhenUsingTag {
+            protected int ValueForUpdate;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 ValueForUpdate = RandomGenerator.GetRandomInt32();
                 Tag.UpdateValue(ValueForUpdate);
             }
 
-            public class ThenValueIsUpdated : AndUpdateValueInvoked
-            {
+            public class ThenValueIsUpdated : AndUpdateValueInvoked {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(Tag.Value, Is.EqualTo(ValueForUpdate));
                 }
             }
         }
 
-        public class AndValueIsSet : WhenUsingTag
-        {
-            protected Int32 SettedValue;
+        public class AndValueIsSet : WhenUsingTag {
+            protected int SettedValue;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 SettedValue = RandomGenerator.GetRandomInt32();
                 Tag.Value = SettedValue;
             }
 
-            public class ThenValueIsSet : AndValueIsSet
-            {
+            public class ThenValueIsSet : AndValueIsSet {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(Tag.Value, Is.EqualTo(SettedValue));
                 }
             }
 
-            public class AndUpdateValueInvoked1 : AndValueIsSet
-            {
-                protected Int32 ValueForUpdate;
+            public class AndUpdateValueInvoked1 : AndValueIsSet {
+                protected int ValueForUpdate;
 
-                protected override void EstablishContext()
-                {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     ValueForUpdate = SettedValue > 0 ? SettedValue - 1 : 1;
                     Tag.UpdateValue(ValueForUpdate);
                 }
 
-                public class ThenValueIsNotUpdated : AndUpdateValueInvoked1
-                {
+                public class ThenValueIsNotUpdated : AndUpdateValueInvoked1 {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(Tag.Value, Is.Not.EqualTo(ValueForUpdate));
                     }
                 }
             }
 
-            public class AndIsWrittenIsGotten : AndValueIsSet
-            {
+            public class AndIsWrittenIsGotten : AndValueIsSet {
                 protected bool IsWritten;
 
-                protected override void EstablishContext()
-                {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     IsWritten = Tag.IsWritten;
                 }
 
-                public class ThenIsWrittenIsTrue : AndIsWrittenIsGotten
-                {
+                public class ThenIsWrittenIsTrue : AndIsWrittenIsGotten {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(IsWritten, Is.True);
                     }
                 }
             }
 
-            public class AndGetWrittenValueInvoked : AndValueIsSet
-            {
-                protected Int32? WrittenValue;
+            public class AndGetWrittenValueInvoked : AndValueIsSet {
+                protected int? WrittenValue;
 
-                protected override void EstablishContext()
-                {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     WrittenValue = Tag.GetWrittenValue();
                 }
 
-                public class ThenIsWrittenIsFalse : AndGetWrittenValueInvoked
-                {
+                public class ThenIsWrittenIsFalse : AndGetWrittenValueInvoked {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(Tag.IsWritten, Is.False);
                     }
                 }
 
-                public class ThenValueReturned : AndGetWrittenValueInvoked
-                {
+                public class ThenValueReturned : AndGetWrittenValueInvoked {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(WrittenValue, Is.EqualTo(Tag.Value));
                     }
                 }
 
-                public class AndUpdateValueInvoked2 : AndGetWrittenValueInvoked
-                {
-                    protected Int32? ValueForUpdate;
+                public class AndUpdateValueInvoked2 : AndGetWrittenValueInvoked {
+                    protected int? ValueForUpdate;
 
-                    protected override void EstablishContext()
-                    {
+                    protected override void EstablishContext() {
                         base.EstablishContext();
                         ValueForUpdate = SettedValue > 0 ? SettedValue - 1 : 1;
                         Tag.UpdateValue(ValueForUpdate);
                     }
 
-                    public class ThenValueUpdated : AndUpdateValueInvoked2
-                    {
+                    public class ThenValueUpdated : AndUpdateValueInvoked2 {
                         [Test]
-                        public void Test()
-                        {
+                        public void Test() {
                             Assert.That(Tag.Value, Is.EqualTo(ValueForUpdate));
                         }
                     }
@@ -238,48 +191,38 @@ namespace PHmiClientUnitTests.Client.Tags
             }
         }
 
-        public class AndValueIsGotten : WhenUsingTag
-        {
-            protected Int32? GottenValue;
+        public class AndValueIsGotten : WhenUsingTag {
+            protected int? GottenValue;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 GottenValue = Tag.Value;
             }
 
-            public class AndIsReadGotten : AndValueIsGotten
-            {
+            public class AndIsReadGotten : AndValueIsGotten {
                 protected bool IsRead;
 
-                protected override void EstablishContext()
-                {
+                protected override void EstablishContext() {
                     base.EstablishContext();
                     IsRead = Tag.IsRead;
                 }
 
-                public class ThenIsReadIsTrue : AndIsReadGotten
-                {
+                public class ThenIsReadIsTrue : AndIsReadGotten {
                     [Test]
-                    public void Test()
-                    {
+                    public void Test() {
                         Assert.That(IsRead, Is.True);
-                    } 
+                    }
                 }
 
-                public class AndIsReadGottenAgain : AndIsReadGotten
-                {
-                    protected override void EstablishContext()
-                    {
+                public class AndIsReadGottenAgain : AndIsReadGotten {
+                    protected override void EstablishContext() {
                         base.EstablishContext();
                         IsRead = Tag.IsRead;
                     }
 
-                    public class ThenIsReadIsFalse : AndIsReadGottenAgain
-                    {
+                    public class ThenIsReadIsFalse : AndIsReadGottenAgain {
                         [Test]
-                        public void Test()
-                        {
+                        public void Test() {
                             Assert.That(IsRead, Is.False);
                         }
                     }

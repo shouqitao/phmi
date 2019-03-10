@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace PHmiConfigurator.Utils
-{
-    public interface IResourceBuilder : IDisposable
-    {
+namespace PHmiConfigurator.Utils {
+    public interface IResourceBuilder : IDisposable {
         string Add(string resource);
+
         void Build();
     }
 }

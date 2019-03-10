@@ -1,18 +1,13 @@
 ﻿using System;
 using PHmiClient.Utils.Pagination;
 
-namespace PHmiClient.Trends
-{
-    public class TrendTag : TrendTagAbstract
-    {
+namespace PHmiClient.Trends {
+    public class TrendTag : TrendTagAbstract {
         private readonly TrendsCategoryAbstract _category;
-        private readonly int _id;
-        private readonly string _name;
         private readonly Func<string> _descriptionGetter;
-        private readonly Func<string> _formatGetter; 
         private readonly Func<string> _engUnitGetter;
-        private readonly double? _minValue;
-        private readonly double? _maxValue;
+        private readonly Func<string> _formatGetter;
+        private readonly int _id;
 
         internal TrendTag(
             TrendsCategoryAbstract category,
@@ -22,66 +17,51 @@ namespace PHmiClient.Trends
             Func<string> formatGetter,
             Func<string> engUnitGetter,
             double? minValue,
-            double? maxValue)
-        {
+            double? maxValue) {
             _category = category;
             _id = id;
-            _name = name;
+            Name = name;
             _descriptionGetter = descriptionGetter;
             _formatGetter = formatGetter;
             _engUnitGetter = engUnitGetter;
-            _minValue = minValue;
-            _maxValue = maxValue;
+            MinValue = minValue;
+            MaxValue = maxValue;
         }
 
-        public override TrendsCategoryAbstract Category
-        {
+        public override TrendsCategoryAbstract Category {
             get { return _category; }
         }
 
-        public override string Format
-        {
+        public override string Format {
             get { return _formatGetter(); }
         }
 
-        internal override int Id
-        {
+        internal override int Id {
             get { return _id; }
         }
 
-        public override string Name
-        {
-            get { return _name; }
-        }
+        public override string Name { get; }
 
-        public override string Description
-        {
+        public override string Description {
             get { return _descriptionGetter(); }
         }
-        
-        public override string EngUnit
-        {
+
+        public override string EngUnit {
             get { return _engUnitGetter(); }
         }
 
-        public override void GetSamples(DateTime startTime, DateTime? endTime, int rarerer, Action<Tuple<DateTime, double>[]> callback)
-        {
+        public override double? MinValue { get; }
+
+        public override double? MaxValue { get; }
+
+        public override void GetSamples(DateTime startTime, DateTime? endTime, int rarerer,
+            Action<Tuple<DateTime, double>[]> callback) {
             _category.GetSamples(_id, startTime, endTime, rarerer, callback);
         }
 
-        public override void GetPage(CriteriaType criteriaType, DateTime criteria, int maxCount, Action<Tuple<DateTime, double>[]> callback)
-        {
+        public override void GetPage(CriteriaType criteriaType, DateTime criteria, int maxCount,
+            Action<Tuple<DateTime, double>[]> callback) {
             _category.GetPage(_id, criteriaType, criteria, maxCount, callback);
-        }
-
-        public override double? MinValue
-        {
-            get { return _minValue; }
-        }
-
-        public override double? MaxValue
-        {
-            get { return _maxValue; }
         }
     }
 }

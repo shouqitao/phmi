@@ -33,9 +33,12 @@
                                 </LinearGradientBrush>
                             </Ellipse.Stroke>
                         </Ellipse>
-                        <Path RenderTransformOrigin="0.5,0.5" Data="M0.37,7.69L5.74,14.2A1.5,1.5,0,1,0,10.26,12.27L8.42,10.42 14.9,10.39A1.5,1.5,0,1,0,14.92,5.87L8.44,5.9 10.31,4.03A1.5,1.5,0,1,0,5.79,1.77z" HorizontalAlignment="Center" Name="Arrow" VerticalAlignment="Center" StrokeThickness="0.75">
+                        <Path RenderTransformOrigin="0.5,0.5"
+                              Data="M0.37,7.69L5.74,14.2A1.5,1.5,0,1,0,10.26,12.27L8.42,10.42 14.9,10.39A1.5,1.5,0,1,0,14.92,5.87L8.44,5.9 10.31,4.03A1.5,1.5,0,1,0,5.79,1.77z"
+                              HorizontalAlignment="Center" Name="Arrow" VerticalAlignment="Center"
+                              StrokeThickness="0.75">
                             <Path.RenderTransform>
-                                <RotateTransform Angle="90"/>
+                                <RotateTransform Angle="90" />
                             </Path.RenderTransform>
                             <Path.Fill>
                                 <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">

@@ -1,116 +1,90 @@
 ﻿using System;
 
-namespace PHmiClient.Utils.Configuration
-{
-    public class Settings : ISettings
-    {
+namespace PHmiClient.Utils.Configuration {
+    public class Settings : ISettings {
         private readonly IStringKeeper _stringKeeper;
 
-        public Settings(IStringKeeper stringKeeper)
-        {
+        public Settings(IStringKeeper stringKeeper) {
             _stringKeeper = stringKeeper;
         }
 
-        public Settings(string settingsPrefix)
-        {
+        public Settings(string settingsPrefix) {
             _stringKeeper = new StringKeeper(settingsPrefix);
         }
 
-        public void Reload()
-        {
+        public void Reload() {
             _stringKeeper.Reload();
         }
 
-        public void Save()
-        {
+        public void Save() {
             _stringKeeper.Save();
         }
 
-        public string GetString(string key)
-        {
+        public string GetString(string key) {
             return _stringKeeper.Get(key);
         }
 
-        public void SetString(string key, string value)
-        {
+        public void SetString(string key, string value) {
             _stringKeeper.Set(key, value);
         }
-        
-        public void Set<T>(string key, T value, Func<T, byte[]> convertFunc) where T : new()
-        {
+
+        public void Set<T>(string key, T value, Func<T, byte[]> convertFunc) where T : new() {
             var bytes = convertFunc.Invoke(value);
-            var str = ByteConverter.BytesToString(bytes);
+            string str = ByteConverter.BytesToString(bytes);
             SetString(key, str);
         }
 
-        public T Get<T>(string key, Func<byte[], T> convertFunc) where T : new()
-        {
-            var str = GetString(key);
-            if (str == null)
-            {
-                return default(T);
-            }
+        public T Get<T>(string key, Func<byte[], T> convertFunc) where T : new() {
+            string str = GetString(key);
+            if (str == null) return default(T);
             byte[] bytes;
-            try
-            {
+            try {
                 bytes = ByteConverter.StringToBytes(str);
-            }
-            catch (FormatException)
-            {
+            } catch (FormatException) {
                 return default(T);
             }
-            try
-            {
+
+            try {
                 return convertFunc.Invoke(bytes);
-            }
-            catch (Exception)
-            {
+            } catch (Exception) {
                 return default(T);
             }
         }
 
-        public void SetDouble(string key, Double? value)
-        {
-            Set(key, value, 
+        public void SetDouble(string key, double? value) {
+            Set(key, value,
                 val => val.HasValue ? BitConverter.GetBytes(val.Value) : null);
         }
 
-        public Double? GetDouble(string key)
-        {
-            return Get<Double?>(key, bytes => BitConverter.ToDouble(bytes, 0));
+        public double? GetDouble(string key) {
+            return Get<double?>(key, bytes => BitConverter.ToDouble(bytes, 0));
         }
 
-        public void SetBoolean(string key, Boolean? value)
-        {
-            Set(key, value, 
+        public void SetBoolean(string key, bool? value) {
+            Set(key, value,
                 boolean => boolean.HasValue ? BitConverter.GetBytes(boolean.Value) : null);
         }
 
-        public Boolean? GetBoolean(string key)
-        {
-            return Get<Boolean?>(key, bytes => BitConverter.ToBoolean(bytes, 0));
+        public bool? GetBoolean(string key) {
+            return Get<bool?>(key, bytes => BitConverter.ToBoolean(bytes, 0));
         }
 
-        public void SetInt32(string key, Int32? value)
-        {
+        public void SetInt32(string key, int? value) {
             Set(key, value,
                 i => i.HasValue ? BitConverter.GetBytes(i.Value) : null);
         }
 
-        public Int32? GetInt32(string key)
-        {
-            return Get<Int32?>(key, bytes => BitConverter.ToInt32(bytes, 0));
+        public int? GetInt32(string key) {
+            return Get<int?>(key, bytes => BitConverter.ToInt32(bytes, 0));
         }
 
-        public void SetInt64(string key, Int64? value)
-        {
+        public void SetInt64(string key, long? value) {
             Set(key, value,
                 i => i.HasValue ? BitConverter.GetBytes(i.Value) : null);
         }
 
-        public Int64? GetInt64(string key)
-        {
-            return Get<Int64?>(key, bytes => BitConverter.ToInt64(bytes, 0));
+        public long? GetInt64(string key) {
+            return Get<long?>(key, bytes => BitConverter.ToInt64(bytes, 0));
         }
     }
 }

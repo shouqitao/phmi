@@ -9,56 +9,55 @@ using PHmiModel.Interfaces;
 using PHmiResources;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(TrendCategoryMetadata))]
     [Table("trend_categories", Schema = "public")]
-    public class TrendCategory : NamedEntity, IRepository
-    {
-        public TrendCategory()
-        {
+    public class TrendCategory : NamedEntity, IRepository {
+        public TrendCategory() {
             TimeToStoreDb = TimeSpan.FromDays(31).Ticks;
             PeriodDb = TimeSpan.FromSeconds(5).Ticks;
         }
 
-        public class TrendCategoryMetadata : EntityMetadataBase
-        {
+        public ICollection<T> GetRepository<T>() {
+            if (typeof(T) == typeof(TrendTag)) return TrendTags as ICollection<T>;
+            throw new NotSupportedException();
+        }
+
+        public class TrendCategoryMetadata : EntityMetadataBase {
             private string _name;
-            private string _timeToStore;
             private string _period;
+            private string _timeToStore;
 
             [LocDisplayName("Name", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Name
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Name {
                 get { return _name; }
-                set
-                {
+                set {
                     _name = value;
                     OnPropertyChanged(this, m => m.Name);
                 }
             }
 
             [LocDisplayName("Period", ResourceType = typeof(Res))]
-            [ValidTimeSpan(AllowNull = false, ErrorMessageResourceName = "InvalidTimeSpanMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Period
-            {
+            [ValidTimeSpan(AllowNull = false, ErrorMessageResourceName = "InvalidTimeSpanMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Period {
                 get { return _period; }
-                set
-                {
+                set {
                     _period = value;
                     OnPropertyChanged(this, m => m.Period);
                 }
             }
 
             [LocDisplayName("TimeToStore", ResourceType = typeof(Res))]
-            [ValidTimeSpan(AllowNull = true, ErrorMessageResourceName = "InvalidTimeSpanMessage", ErrorMessageResourceType = typeof(Res))]
-            public string TimeToStore
-            {
+            [ValidTimeSpan(AllowNull = true, ErrorMessageResourceName = "InvalidTimeSpanMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string TimeToStore {
                 get { return _timeToStore; }
-                set
-                {
+                set {
                     _timeToStore = value;
                     OnPropertyChanged(this, m => m.TimeToStore);
                 }
@@ -70,75 +69,52 @@ namespace PHmiModel.Entities
         private string _periodStr;
 
         [NotMapped]
-        public string Period
-        {
+        public string Period {
             get { return _periodStr; }
-            set
-            {
+            set {
                 _periodStr = value;
                 TimeSpan d;
                 if (TimeSpan.TryParse(_periodStr, out d))
-                {
                     PeriodDb = d.Ticks;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.Period);
-                }
             }
         }
 
-        #endregion
+        #endregion Period
 
         #region TimeToStore
 
         private string _timeToStore;
 
         [NotMapped]
-        public string TimeToStore
-        {
+        public string TimeToStore {
             get { return _timeToStore; }
-            set
-            {
+            set {
                 _timeToStore = value;
-                if (string.IsNullOrEmpty(_timeToStore))
-                {
+                if (string.IsNullOrEmpty(_timeToStore)) {
                     TimeToStoreDb = null;
                     return;
                 }
+
                 TimeSpan d;
                 if (TimeSpan.TryParse(_timeToStore, out d))
-                {
                     TimeToStoreDb = d.Ticks;
-                }
                 else
-                {
                     OnPropertyChanged(this, e => e.TimeToStore);
-                }
             }
         }
 
-        #endregion
-
-        public ICollection<T> GetRepository<T>()
-        {
-            if (typeof(T) == typeof(TrendTag))
-            {
-                return TrendTags as ICollection<T>;
-            }
-            throw new NotSupportedException();
-        }
+        #endregion TimeToStore
 
         #region TimeToStoreDb
 
         private long? _timeToStoreDb;
 
         [Column("time_to_store")]
-        public long? TimeToStoreDb
-        {
+        public long? TimeToStoreDb {
             get { return _timeToStoreDb; }
-            set
-            {
+            set {
                 _timeToStoreDb = value;
                 _timeToStore = TimeToStoreDb.HasValue ? new TimeSpan(TimeToStoreDb.Value).ToString() : null;
                 OnPropertyChanged(this, e => e.TimeToStore);
@@ -146,18 +122,16 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion TimeToStoreDb
 
         #region PeriodDb
 
         private long _periodDb;
 
         [Column("period")]
-        public long PeriodDb
-        {
+        public long PeriodDb {
             get { return _periodDb; }
-            set
-            {
+            set {
                 _periodDb = value;
                 _periodStr = new TimeSpan(PeriodDb).ToString();
                 OnPropertyChanged(this, e => e.Period);
@@ -165,18 +139,17 @@ namespace PHmiModel.Entities
             }
         }
 
-        #endregion
+        #endregion PeriodDb
 
         #region TrendTags
 
         private ICollection<TrendTag> _trendTags;
 
-        public virtual ICollection<TrendTag> TrendTags
-        {
+        public virtual ICollection<TrendTag> TrendTags {
             get { return _trendTags ?? (_trendTags = new ObservableCollection<TrendTag>()); }
             set { _trendTags = value; }
         }
 
-        #endregion
+        #endregion TrendTags
     }
 }

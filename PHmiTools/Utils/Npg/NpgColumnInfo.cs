@@ -1,7 +1,5 @@
-﻿namespace PHmiTools.Utils.Npg
-{
-    public class NpgColumnInfo
-    {
+﻿namespace PHmiTools.Utils.Npg {
+    public class NpgColumnInfo {
         public string Name { get; set; }
 
         public NpgDataType DataType { get; set; }

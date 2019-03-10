@@ -4,61 +4,53 @@ using PHmiClient.Utils;
 using PHmiResources;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(TrendTagMetadata))]
     [Table("trend_tags", Schema = "public")]
-    public class TrendTag : NamedEntity
-    {
-        public class TrendTagMetadata : EntityMetadataBase
-        {
+    public class TrendTag : NamedEntity {
+        public class TrendTagMetadata : EntityMetadataBase {
+            private string _description;
             private string _name;
             private NumTag _numTag;
             private DigTag _trigger;
-            private string _description;
 
             [LocDisplayName("Name", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Name
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            [RegularExpression(RegexPatterns.VariableName, ErrorMessageResourceName = "DotNetNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Name {
                 get { return _name; }
-                set
-                {
+                set {
                     _name = value;
                     OnPropertyChanged(this, m => m.Name);
                 }
             }
 
             [LocDisplayName("NumericTag", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            public NumTag NumTag
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public NumTag NumTag {
                 get { return _numTag; }
-                set
-                {
+                set {
                     _numTag = value;
                     OnPropertyChanged(this, m => m.NumTag);
                 }
             }
 
             [LocDisplayName("Trigger", ResourceType = typeof(Res))]
-            public DigTag Trigger
-            {
+            public DigTag Trigger {
                 get { return _trigger; }
-                set
-                {
+                set {
                     _trigger = value;
                     OnPropertyChanged(this, m => m.Trigger);
                 }
             }
 
             [LocDisplayName("Description", ResourceType = typeof(Res))]
-            public string Description
-            {
+            public string Description {
                 get { return _description; }
-                set
-                {
+                set {
                     _description = value;
                     OnPropertyChanged(this, m => m.Description);
                 }
@@ -70,117 +62,103 @@ namespace PHmiModel.Entities
         private int _refNumTag;
 
         [Column("ref_num_tags")]
-        public int RefNumTag
-        {
+        public int RefNumTag {
             get { return _refNumTag; }
-            set
-            {
+            set {
                 _refNumTag = value;
                 OnPropertyChanged(this, t => t.NumTag);
                 OnPropertyChanged(this, e => e.RefNumTag);
             }
         }
 
-        #endregion
+        #endregion RefNumTag
 
         #region Description
 
         private string _description;
-        
+
         [Column("description")]
-        public string Description
-        {
+        public string Description {
             get { return _description; }
-            set
-            {
+            set {
                 _description = value;
                 OnPropertyChanged(this, e => e.Description);
             }
         }
 
-        #endregion
+        #endregion Description
 
         #region RefCategory
 
         private int _refCategory;
 
         [Column("ref_categories")]
-        public int RefCategory
-        {
+        public int RefCategory {
             get { return _refCategory; }
-            set
-            {
+            set {
                 _refCategory = value;
                 OnPropertyChanged(this, e => e.RefCategory);
             }
         }
 
-        #endregion
+        #endregion RefCategory
 
         #region RefTrigger
 
         private int? _refTrigger;
 
         [Column("ref_triggers")]
-        public int? RefTrigger
-        {
+        public int? RefTrigger {
             get { return _refTrigger; }
-            set
-            {
+            set {
                 _refTrigger = value;
                 OnPropertyChanged(this, t => t.Trigger);
                 OnPropertyChanged(this, e => e.RefTrigger);
             }
         }
 
-        #endregion
+        #endregion RefTrigger
 
         #region Trigger
 
         private DigTag _trigger;
 
-        public virtual DigTag Trigger
-        {
+        public virtual DigTag Trigger {
             get { return _trigger; }
-            set
-            {
+            set {
                 _trigger = value;
                 OnPropertyChanged(this, e => e.Trigger);
             }
         }
 
-        #endregion
+        #endregion Trigger
 
         #region NumTag
 
         private NumTag _numTag;
 
-        public virtual NumTag NumTag
-        {
+        public virtual NumTag NumTag {
             get { return _numTag; }
-            set
-            {
+            set {
                 _numTag = value;
                 OnPropertyChanged(this, e => e.NumTag);
             }
         }
 
-        #endregion
+        #endregion NumTag
 
         #region TrendCategory
 
         private TrendCategory _trendCategory;
 
-        public virtual TrendCategory TrendCategory
-        {
+        public virtual TrendCategory TrendCategory {
             get { return _trendCategory; }
-            set
-            {
+            set {
                 _trendCategory = value;
                 OnPropertyChanged(this, e => e.TrendCategory);
             }
         }
 
-        #endregion
+        #endregion TrendCategory
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System.Windows.Input;
 
-namespace PHmiConfigurator.Modules.Collection
-{
-    public interface ICollectionViewModel : IModuleViewModel
-    {
+namespace PHmiConfigurator.Modules.Collection {
+    public interface ICollectionViewModel : IModuleViewModel {
         ICommand AddCommand { get; }
         ICommand EditCommand { get; }
         ICommand DeleteCommand { get; }

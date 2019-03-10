@@ -1,10 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    internal sealed class RemapTagsParameter
-    {
+    internal sealed class RemapTagsParameter {
         [DataMember]
         public int IoDeviceId { get; set; }
 

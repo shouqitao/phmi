@@ -2,15 +2,14 @@
 using Npgsql;
 using PHmiTools.Utils.Npg.WhereOps;
 
-namespace PHmiTools.Utils.Npg
-{
-    public interface INpgQueryHelper
-    {
+namespace PHmiTools.Utils.Npg {
+    public interface INpgQueryHelper {
         NpgQuery CreateTable(NpgTableInfo tableInfo);
 
         NpgQuery CreateColumn(string table, NpgColumnInfo column);
 
-        NpgQuery CreateIndex(string table, NpgIndexType indexType = NpgIndexType.Btree, bool unique = false, params string[] columns);
+        NpgQuery CreateIndex(string table, NpgIndexType indexType = NpgIndexType.Btree, bool unique = false,
+            params string[] columns);
 
         NpgQuery Select(
             string table, string[] columnsToReturn,

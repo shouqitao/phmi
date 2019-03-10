@@ -8,7 +8,7 @@
     <Grid>
         <Controls:Root HomePage="{x:Type Pages:HomePage}">
             <Controls:Root.DataContext>
-                <PHmiClientSample:PHmi/>
+                <PHmiClientSample:PHmi />
             </Controls:Root.DataContext>
         </Controls:Root>
     </Grid>

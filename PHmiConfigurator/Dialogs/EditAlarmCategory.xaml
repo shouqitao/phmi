@@ -10,7 +10,7 @@
     SizeToContent="WidthAndHeight"
     ResizeMode="NoResize">
     <Window.Resources>
-        <Dialog:EditAlarmCategoryViewModel x:Key="ViewModel"/>
+        <Dialog:EditAlarmCategoryViewModel x:Key="ViewModel" />
     </Window.Resources>
     <Window.DataContext>
         <Binding Source="{StaticResource ViewModel}" />
@@ -21,16 +21,16 @@
     </Window.InputBindings>
     <Grid Style="{StaticResource EditorRootPanelStyle}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid DataContext="{Binding Path=Entity}">
             <Grid.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource EditorTextBlockStyle}"/>
-                <Style TargetType="TextBox" BasedOn="{StaticResource EditorTextBoxStyle}"/>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource EditorTextBlockStyle}" />
+                <Style TargetType="TextBox" BasedOn="{StaticResource EditorTextBoxStyle}" />
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -39,20 +39,24 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock Text="{x:Static Loc:Res.Name}" />
-            <TextBox Grid.Column="1" x:Name="tbName" Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="1"  Text="{x:Static Loc:Res.Description}" />
-            <TextBox Grid.Row="1"  Grid.Column="1" Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="2"  Text="{x:Static Loc:Res.TimeToStore}" />
-            <TextBox Grid.Row="2"  Grid.Column="1" Text="{Binding Path=TimeToStore, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Column="1" x:Name="tbName"
+                     Text="{Binding Path=Name, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Description}" />
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Text="{Binding Path=Description, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="2" Text="{x:Static Loc:Res.TimeToStore}" />
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Text="{Binding Path=TimeToStore, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <StackPanel.Resources>
                 <Style TargetType="Button">
-                    <Setter Property="MinWidth" Value="70"/>
+                    <Setter Property="MinWidth" Value="70" />
                 </Style>
             </StackPanel.Resources>
             <Button Content="{x:Static Loc:Res.Ok}" Margin="0,4,4,4" Command="{Binding Path=OkCommand}" />
-            <Button Content="{x:Static Loc:Res.Cancel}" Margin="4,4,0,4"  Command="{Binding Path=CancelCommand}" />
+            <Button Content="{x:Static Loc:Res.Cancel}" Margin="4,4,0,4"
+                    Command="{Binding Path=CancelCommand}" />
         </StackPanel>
     </Grid>
 </Window>

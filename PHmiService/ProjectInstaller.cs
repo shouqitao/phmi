@@ -1,19 +1,14 @@
-﻿using PHmiService.Utils;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Configuration.Install;
+using PHmiService.Utils;
 
-namespace PHmiService
-{
+namespace PHmiService {
     [RunInstaller(true)]
-    public partial class ProjectInstaller : System.Configuration.Install.Installer
-    {
-        public ProjectInstaller()
-        {
+    public partial class ProjectInstaller : Installer {
+        public ProjectInstaller() {
             InitializeComponent();
             var postgresNames = ServiceHelper.GetServiceNames("postgresql");
-            if (postgresNames != null)
-            {
-                serviceInstaller1.ServicesDependedOn = postgresNames;
-            } 
+            if (postgresNames != null) serviceInstaller1.ServicesDependedOn = postgresNames;
         }
     }
 }

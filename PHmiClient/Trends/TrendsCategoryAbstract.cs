@@ -2,10 +2,8 @@
 using PHmiClient.Utils.Pagination;
 using PHmiClient.Wcf.ServiceTypes;
 
-namespace PHmiClient.Trends
-{
-    public abstract class TrendsCategoryAbstract
-    {
+namespace PHmiClient.Trends {
+    public abstract class TrendsCategoryAbstract {
         internal abstract int Id { get; }
 
         public abstract string Name { get; }

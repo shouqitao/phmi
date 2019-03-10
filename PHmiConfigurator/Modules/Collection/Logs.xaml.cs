@@ -1,12 +1,9 @@
-﻿namespace PHmiConfigurator.Modules.Collection
-{
+﻿namespace PHmiConfigurator.Modules.Collection {
     /// <summary>
-    /// Interaction logic for Logs.xaml
+    ///     Interaction logic for Logs.xaml
     /// </summary>
-    public partial class Logs
-    {
-        public Logs()
-        {
+    public partial class Logs {
+        public Logs() {
             InitializeComponent();
         }
     }

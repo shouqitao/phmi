@@ -1,10 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PHmiClient.Wcf.ServiceTypes
-{
+namespace PHmiClient.Wcf.ServiceTypes {
     [DataContract]
-    internal sealed class RemapTagsResult
-    {
+    internal sealed class RemapTagsResult {
         [DataMember]
         public WcfNotification[] Notifications { get; set; }
 

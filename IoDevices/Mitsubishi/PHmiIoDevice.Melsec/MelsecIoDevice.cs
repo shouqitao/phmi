@@ -8,76 +8,71 @@ using PHmiIoDevice.Melsec.Implementation;
 using PHmiIoDevice.Melsec.WriteInfos;
 using PHmiIoDeviceTools;
 
-namespace PHmiIoDevice.Melsec
-{
-    public class MelsecIoDevice : IIoDevice
-    {
+namespace PHmiIoDevice.Melsec {
+    public class MelsecIoDevice : IIoDevice {
+        private const string Pattern = @"(^[a-zA-Z]+)([\d]+)$";
         private readonly IMelsec _melsec;
         private readonly int _tryCount;
 
-        public MelsecIoDevice(string options)
-        {
+        public MelsecIoDevice(string options) {
             _tryCount = 1;
-            var config = ConfigHelper.GetConfig(options);
-            if (config is FxComConfig)
-            {
+            Config config = ConfigHelper.GetConfig(options);
+            if (config is FxComConfig) {
                 var comConfig = (FxComConfig) config;
                 _tryCount = comConfig.TryCount;
-                var port = new SerialPort(comConfig.PortName)
-                {
+                var port = new SerialPort(comConfig.PortName) {
                     BaudRate = comConfig.BaudRate,
                     DataBits = comConfig.DataBits,
                     Parity = comConfig.Parity,
                     StopBits = comConfig.StopBits
                 };
                 _melsec = new FxCom(port, comConfig.Timeout, comConfig.MessageEndTimeout);
-            }
-            else if (config is FxEnetConfig)
-            {
+            } else if (config is FxEnetConfig) {
                 var enetConfig = (FxEnetConfig) config;
-                _melsec = new FxEnet(enetConfig.Address, enetConfig.Port, enetConfig.Timeout, enetConfig.MessageEndTimeout);
-            }
-            else if (config is QConfig)
-            {
+                _melsec = new FxEnet(enetConfig.Address, enetConfig.Port, enetConfig.Timeout,
+                    enetConfig.MessageEndTimeout);
+            } else if (config is QConfig) {
                 var qConfig = (QConfig) config;
                 _melsec = new Q(qConfig.Address, qConfig.Port, qConfig.PcNumber, qConfig.NetworkNumber,
                     qConfig.Timeout, qConfig.MessageEndTimeout);
-            }
-            else
-            {
-                throw new NotSupportedException(string.Format("Config \"{0}\" is not supported", config.ConfigName));
+            } else {
+                throw new NotSupportedException(string.Format("Config \"{0}\" is not supported",
+                    config.ConfigName));
             }
         }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             _melsec.Dispose();
         }
 
-        public void Open()
-        {
+        public void Open() {
             _melsec.Open();
         }
 
-        public object[] Read(ReadParameter[] readParameters)
-        {
+        public object[] Read(ReadParameter[] readParameters) {
             for (var i = 1; i <= _tryCount; i++)
-            {
-                try
-                {
+                try {
                     return ReadOnce(readParameters);
-                }
-                catch
-                {
+                } catch {
                     if (i >= _tryCount)
                         throw;
                 }
-            }
+
             throw new NotSupportedException();
         }
 
-        private object[] ReadOnce(ReadParameter[] readParameters)
-        {
+        public void Write(WriteParameter[] writeParameters) {
+            for (var i = 1; i <= _tryCount; i++)
+                try {
+                    WriteOnce(writeParameters);
+                    return;
+                } catch {
+                    if (i >= _tryCount)
+                        throw;
+                }
+        }
+
+        private object[] ReadOnce(ReadParameter[] readParameters) {
             if (readParameters == null)
                 return null;
             var values = new List<object>();
@@ -89,74 +84,63 @@ namespace PHmiIoDevice.Melsec
             var registers = new List<KeyValuePair<int, int>>();
             var registerParameters = new Dictionary<ReadParameter, KeyValuePair<int, int>>();
 
-            foreach (var parameter in readParameters)
-            {
+            foreach (ReadParameter parameter in readParameters) {
                 var regex = new Regex(Pattern);
-                var match = regex.Match(parameter.Address);
-                if (!match.Success)
-                {
-                    throw new Exception(parameter.Address + " is not a valid device address");
-                }
+                Match match = regex.Match(parameter.Address);
+                if (!match.Success) throw new Exception(parameter.Address + " is not a valid device address");
 
                 #region Get device address
 
-                var letter = match.Groups[1].ToString().ToUpper();
-                var index = int.Parse(match.Groups[2].ToString());
+                string letter = match.Groups[1].ToString().ToUpper();
+                int index = int.Parse(match.Groups[2].ToString());
 
                 int? length;
-                if (parameter.ValueType == typeof(bool))
-                {
+                if (parameter.ValueType == typeof(bool)) {
                     if (letter != "M" && letter != "L")
-                    {
-                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" +
+                                            parameter.Address);
                     length = 1;
-                }
-                else
-                {
+                } else {
                     if (letter != "D")
-                    {
-                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" +
+                                            parameter.Address);
                     length = TypeToRegistersCount(parameter.ValueType);
                     if (length == null)
-                    {
-                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.ValueType.Name + " is not supported for" +
+                                            parameter.Address);
                 }
 
-                #endregion
+                #endregion Get device address
 
                 #region Check device index
 
-                var deviceLastIndex = length.Value + index - 1;
-                if ((letter == "M" && deviceLastIndex >= _melsec.MCount)
+                int deviceLastIndex = length.Value + index - 1;
+                if (letter == "M" && deviceLastIndex >= _melsec.MCount
                     ||
-                    (letter == "L" && deviceLastIndex >= _melsec.LCount)
+                    letter == "L" && deviceLastIndex >= _melsec.LCount
                     ||
-                    (letter == "D" && deviceLastIndex >= _melsec.DCount))
-                {
+                    letter == "D" && deviceLastIndex >= _melsec.DCount)
                     throw new Exception(parameter.Address + ": device index is out of range");
-                }
 
-                #endregion
+                #endregion Check device index
 
                 #region Fill ReadInfo
 
-                switch (letter)
-                {
+                switch (letter) {
                     case "M":
                         if (!merkers.Contains(index))
                             merkers.Add(index);
                         if (!merkerParameters.ContainsKey(parameter))
                             merkerParameters.Add(parameter, index);
                         break;
+
                     case "L":
                         if (!lMerkers.Contains(index))
                             lMerkers.Add(index);
                         if (!lMerkerParameters.ContainsKey(parameter))
                             lMerkerParameters.Add(parameter, index);
                         break;
+
                     case "D":
                         var ir = new KeyValuePair<int, int>(index, length.Value);
                         if (!registers.Contains(ir))
@@ -166,7 +150,7 @@ namespace PHmiIoDevice.Melsec
                         break;
                 }
 
-                #endregion
+                #endregion Fill ReadInfo
             }
 
             #region Sort
@@ -175,7 +159,7 @@ namespace PHmiIoDevice.Melsec
             lMerkers = lMerkers.OrderBy(index => index).ToList();
             registers = registers.OrderBy(r => r.Key).ThenByDescending(r => r.Value).ToList();
 
-            #endregion
+            #endregion Sort
 
             var merkersData = new Dictionary<int, bool>(merkers.Count);
             ReadBits(merkers, merkersData, _melsec.ReadMerkers, "M");
@@ -184,36 +168,28 @@ namespace PHmiIoDevice.Melsec
             var registersData = new Dictionary<KeyValuePair<int, int>, byte[]>(registers.Count);
             ReadRegisters(registers, registersData, _melsec.ReadRegisters);
 
-            foreach (var parameter in readParameters)
-            {
+            foreach (ReadParameter parameter in readParameters) {
                 int merkerIndex;
                 int lMerkerIndex;
                 KeyValuePair<int, int> registerAddr;
-                if (merkerParameters.TryGetValue(parameter, out merkerIndex))
-                {
+                if (merkerParameters.TryGetValue(parameter, out merkerIndex)) {
                     bool value;
                     if (merkersData.TryGetValue(merkerIndex, out value))
                         values.Add(value);
                     else
                         values.Add(null);
-                }
-                else if (lMerkerParameters.TryGetValue(parameter, out lMerkerIndex))
-                {
+                } else if (lMerkerParameters.TryGetValue(parameter, out lMerkerIndex)) {
                     bool value;
                     if (lMerkersData.TryGetValue(lMerkerIndex, out value))
                         values.Add(value);
                     else
                         values.Add(null);
-                }
-                else if (registerParameters.TryGetValue(parameter, out registerAddr))
-                {
+                } else if (registerParameters.TryGetValue(parameter, out registerAddr)) {
                     byte[] value;
                     values.Add(registersData.TryGetValue(registerAddr, out value)
-                                   ? GetValue(value, parameter.ValueType)
-                                   : null);
-                }
-                else
-                {
+                        ? GetValue(value, parameter.ValueType)
+                        : null);
+                } else {
                     values.Add(null);
                 }
             }
@@ -221,200 +197,128 @@ namespace PHmiIoDevice.Melsec
             return values.ToArray();
         }
 
-        private const string Pattern = @"(^[a-zA-Z]+)([\d]+)$";
-
-        private static object GetValue(byte[] bytes, Type type)
-        {
-            if (type == typeof(short))
-            {
-                return BitConverter.ToInt16(bytes, 0);
-            }
-            if (type == typeof(int))
-            {
-                return BitConverter.ToInt32(bytes, 0);
-            }
-            if (type == typeof(float))
-            {
-                return BitConverter.ToSingle(bytes, 0);
-            }
-            if (type == typeof(ushort))
-            {
-                return BitConverter.ToUInt16(bytes, 0);
-            }
-            if (type == typeof(uint))
-            {
-                return BitConverter.ToUInt32(bytes, 0);
-            }
-            if (type == typeof(double))
-            {
-                return BitConverter.ToDouble(bytes, 0);
-            }
+        private static object GetValue(byte[] bytes, Type type) {
+            if (type == typeof(short)) return BitConverter.ToInt16(bytes, 0);
+            if (type == typeof(int)) return BitConverter.ToInt32(bytes, 0);
+            if (type == typeof(float)) return BitConverter.ToSingle(bytes, 0);
+            if (type == typeof(ushort)) return BitConverter.ToUInt16(bytes, 0);
+            if (type == typeof(uint)) return BitConverter.ToUInt32(bytes, 0);
+            if (type == typeof(double)) return BitConverter.ToDouble(bytes, 0);
             return null;
         }
 
-        private delegate List<byte> ReadDelegate(int address, int length);
-        
         private void ReadBits(
-            IEnumerable<int> bitsAddresses, IDictionary<int, bool> bitsData, ReadDelegate readDel, string label)
-        {
+            IEnumerable<int> bitsAddresses, IDictionary<int, bool> bitsData, ReadDelegate readDel,
+            string label) {
             var readStart = 0;
             var length = 0;
-            var addresses = new List<int>(_melsec.MaxReadLength*16);
-            foreach (var address in bitsAddresses)
-            {
-                if (length == 0)
-                {
-                    readStart = address/16*16;
+            var addresses = new List<int>(_melsec.MaxReadLength * 16);
+            foreach (int address in bitsAddresses)
+                if (length == 0) {
+                    readStart = address / 16 * 16;
                     length = 16;
                     addresses.Add(address);
-                }
-                else
-                {
-                    if (address >= readStart && address < readStart + length)
-                    {
+                } else {
+                    if (address >= readStart && address < readStart + length) {
                         addresses.Add(address);
                         continue;
                     }
-                    var newAddr = address/16*16;
-                    var newLength = newAddr + 16 - readStart;
-                    var maxMerkerLength = _melsec.MaxReadLength*16;
-                    if (newLength > maxMerkerLength)
-                    {
+
+                    int newAddr = address / 16 * 16;
+                    int newLength = newAddr + 16 - readStart;
+                    int maxMerkerLength = _melsec.MaxReadLength * 16;
+                    if (newLength > maxMerkerLength) {
                         ReadBitsFinal(bitsData, readDel, readStart, length, addresses, label);
                         readStart = newAddr;
                         length = 16;
                         addresses.Clear();
-                    }
-                    else
-                    {
+                    } else {
                         if (length < newLength)
                             length = newLength;
                     }
+
                     addresses.Add(address);
                 }
-            }
-            if (length > 0)
-            {
-                ReadBitsFinal(bitsData, readDel, readStart, length, addresses, label);
-            }
+
+            if (length > 0) ReadBitsFinal(bitsData, readDel, readStart, length, addresses, label);
         }
 
         private static void ReadBitsFinal(
             IDictionary<int, bool> bitsData, ReadDelegate readDel, int readStart,
-            int length, IEnumerable<int> addresses, string label)
-        {
+            int length, IEnumerable<int> addresses, string label) {
             var bytes = readDel.Invoke(readStart, length);
-            if (bytes == null || bytes.Count != length/8)
-            {
+            if (bytes == null || bytes.Count != length / 8)
                 throw new Exception(string.Join(Environment.NewLine,
-                    string.Format("Error when reading merkers"),
+                    "Error when reading merkers",
                     string.Format("Address {0}{1}, Length {2}", label, readStart, length)));
-            }
-            foreach (var address in addresses)
-            {
-                var index = address - readStart;
+            foreach (int address in addresses) {
+                int index = address - readStart;
                 bitsData.Add(address, GetBitFromByte(bytes[index / 8], index % 8));
             }
         }
 
-        private static bool GetBitFromByte(byte b, int index)
-        {
-            var mask = 1 << index;
+        private static bool GetBitFromByte(byte b, int index) {
+            int mask = 1 << index;
             return (b & mask) != 0;
         }
 
         private void ReadRegisters(
             IEnumerable<KeyValuePair<int, int>> registersAddresses,
-            IDictionary<KeyValuePair<int, int>, byte[]> registersData, ReadDelegate readDel)
-        {
+            IDictionary<KeyValuePair<int, int>, byte[]> registersData, ReadDelegate readDel) {
             var readStart = 0;
             var length = 0;
             var addresses = new List<KeyValuePair<int, int>>(_melsec.MaxReadLength);
-            foreach (var regAddress in registersAddresses)
-            {
-                var address = regAddress.Key;
-                if (length == 0)
-                {
+            foreach (var regAddress in registersAddresses) {
+                int address = regAddress.Key;
+                if (length == 0) {
                     readStart = address;
                     length = regAddress.Value;
                     addresses.Add(regAddress);
-                }
-                else
-                {
-                    if (address >= readStart && address + regAddress.Value <= readStart + length)
-                    {
+                } else {
+                    if (address >= readStart && address + regAddress.Value <= readStart + length) {
                         addresses.Add(regAddress);
                         continue;
                     }
-                    var newLength = address - readStart + regAddress.Value;
-                    if (newLength > _melsec.MaxReadLength)
-                    {
+
+                    int newLength = address - readStart + regAddress.Value;
+                    if (newLength > _melsec.MaxReadLength) {
                         ReadRegistersFinal(registersData, readDel, readStart, length, addresses);
                         readStart = address;
                         length = regAddress.Value;
                         addresses.Clear();
-                    }
-                    else
-                    {
+                    } else {
                         if (length < newLength)
                             length = newLength;
                     }
+
                     addresses.Add(regAddress);
                 }
             }
-            if (length > 0)
-            {
-                ReadRegistersFinal(registersData, readDel, readStart, length, addresses);
-            }
+
+            if (length > 0) ReadRegistersFinal(registersData, readDel, readStart, length, addresses);
         }
 
         private static void ReadRegistersFinal(
             IDictionary<KeyValuePair<int, int>, byte[]> registersData,
-            ReadDelegate readDel, int readStart, int length, IEnumerable<KeyValuePair<int, int>> addresses)
-        {
+            ReadDelegate readDel, int readStart, int length, IEnumerable<KeyValuePair<int, int>> addresses) {
             var bytes = readDel.Invoke(readStart, length);
             if (bytes == null || bytes.Count != length * 2)
-            {
                 throw new Exception(string.Join(Environment.NewLine,
-                    string.Format("Error when reading registers"),
+                    "Error when reading registers",
                     string.Format("Address {0}, Length {1}", readStart, length)));
-            }
-            foreach (var address in addresses)
-            {
-                var index = (address.Key - readStart) * 2;
+            foreach (var address in addresses) {
+                int index = (address.Key - readStart) * 2;
                 registersData.Add(address, GetBytes(bytes, index, address.Value * 2));
             }
         }
 
-        private static byte[] GetBytes(IList<byte> bytes, int index, int length)
-        {
+        private static byte[] GetBytes(IList<byte> bytes, int index, int length) {
             var result = new byte[length];
-            for (var i = 0; i < length; ++i)
-            {
-                result[i] = bytes[i + index];
-            }
+            for (var i = 0; i < length; ++i) result[i] = bytes[i + index];
             return result;
         }
 
-        public void Write(WriteParameter[] writeParameters)
-        {
-            for (var i = 1; i <= _tryCount; i++)
-            {
-                try
-                {
-                    WriteOnce(writeParameters);
-                    return;
-                }
-                catch
-                {
-                    if (i >= _tryCount)
-                        throw;
-                }
-            }
-        }
-
-        private void WriteOnce(IEnumerable<WriteParameter> writeParameters)
-        {
+        private void WriteOnce(IEnumerable<WriteParameter> writeParameters) {
             if (writeParameters == null)
                 return;
 
@@ -422,77 +326,69 @@ namespace PHmiIoDevice.Melsec
             var lMerkers = new List<BitWriteInfo>();
             var registers = new List<RegisterWriteInfo>();
 
-            var ind = -1;
-            foreach (var parameter in writeParameters)
-            {
+            int ind = -1;
+            foreach (WriteParameter parameter in writeParameters) {
                 ind++;
                 var regex = new Regex(Pattern);
-                var match = regex.Match(parameter.Address);
-                if (!match.Success)
-                {
-                    throw new Exception(parameter.Address + " is not a valid device address");
-                }
+                Match match = regex.Match(parameter.Address);
+                if (!match.Success) throw new Exception(parameter.Address + " is not a valid device address");
 
                 #region Get device address
 
-                var letter = match.Groups[1].ToString().ToUpper();
-                var index = int.Parse(match.Groups[2].ToString());
+                string letter = match.Groups[1].ToString().ToUpper();
+                int index = int.Parse(match.Groups[2].ToString());
 
                 int? length;
-                if (parameter.Value is bool)
-                {
+                if (parameter.Value is bool) {
                     if (letter != "M" && letter != "L")
-                    {
-                        throw new Exception("Type " + parameter.Value.GetType().Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.Value.GetType().Name +
+                                            " is not supported for" + parameter.Address);
                     length = 1;
-                }
-                else
-                {
+                } else {
                     if (letter != "D")
-                    {
-                        throw new Exception("Type " + parameter.Value.GetType().Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.Value.GetType().Name +
+                                            " is not supported for" + parameter.Address);
                     length = TypeToRegistersCount(parameter.Value.GetType());
                     if (length == null)
-                    {
-                        throw new Exception("Type " + parameter.Value.GetType().Name + " is not supported for" + parameter.Address);
-                    }
+                        throw new Exception("Type " + parameter.Value.GetType().Name +
+                                            " is not supported for" + parameter.Address);
                 }
 
-                #endregion
+                #endregion Get device address
 
                 #region Check device index
 
-                var deviceLastIndex = length.Value + index - 1;
-                if ((letter == "M" && deviceLastIndex >= _melsec.MCount)
+                int deviceLastIndex = length.Value + index - 1;
+                if (letter == "M" && deviceLastIndex >= _melsec.MCount
                     ||
-                    (letter == "L" && deviceLastIndex >= _melsec.LCount)
+                    letter == "L" && deviceLastIndex >= _melsec.LCount
                     ||
-                    (letter == "D" && deviceLastIndex >= _melsec.DCount))
-                {
+                    letter == "D" && deviceLastIndex >= _melsec.DCount)
                     throw new Exception(parameter.Address + ": device index is out of range");
-                }
 
-                #endregion
+                #endregion Check device index
 
                 #region Fill ReadInfo
 
-                switch (letter)
-                {
+                switch (letter) {
                     case "M":
-                        merkers.Add(new BitWriteInfo{Address = index, Index = ind, WriteParameter = parameter});
+                        merkers.Add(new BitWriteInfo
+                            {Address = index, Index = ind, WriteParameter = parameter});
                         break;
+
                     case "L":
-                        lMerkers.Add(new BitWriteInfo { Address = index, Index = ind, WriteParameter = parameter });
+                        lMerkers.Add(new BitWriteInfo
+                            {Address = index, Index = ind, WriteParameter = parameter});
                         break;
+
                     case "D":
                         var ir = new KeyValuePair<int, int>(index, length.Value);
-                        registers.Add(new RegisterWriteInfo{Address = ir, Index = ind, WriteParameter = parameter});
+                        registers.Add(new RegisterWriteInfo
+                            {Address = ir, Index = ind, WriteParameter = parameter});
                         break;
                 }
 
-                #endregion
+                #endregion Fill ReadInfo
             }
 
             #region Sort
@@ -501,66 +397,50 @@ namespace PHmiIoDevice.Melsec
             lMerkers = lMerkers.OrderBy(info => info.Address).ToList();
             registers = registers.OrderBy(r => r.Address.Key).ThenByDescending(r => r.Address.Value).ToList();
 
-            #endregion
+            #endregion Sort
 
-            foreach (var merker in merkers)
-            {
+            foreach (BitWriteInfo merker in merkers)
                 _melsec.WriteMerker(merker.Address, merker.WriteParameter.Value as bool? == true);
-            }
 
-            foreach (var info in lMerkers)
-            {
+            foreach (BitWriteInfo info in lMerkers)
                 _melsec.WriteLMerker(info.Address, info.WriteParameter.Value as bool? == true);
-            }
 
-            for (var i = 0; i < registers.Count; ++i)
-            {
-                var r = registers[i];
+            for (var i = 0; i < registers.Count; ++i) {
+                RegisterWriteInfo r = registers[i];
                 var address = r.Address;
-                var bytes = new byte[_melsec.MaxWriteLength*2];
-                var length = address.Value;
+                var bytes = new byte[_melsec.MaxWriteLength * 2];
+                int length = address.Value;
                 var valueBytes = GetBytes(r.WriteParameter.Value);
-                for (var j = 0; j < valueBytes.Length; ++j)
-                {
-                    bytes[j] = valueBytes[j];
-                }
-                for (var j = 1; i + j < registers.Count; ++j)
-                {
-                    var h = registers[i + j];
-                    if (h.Address.Key <= address.Key + length)
-                    {
-                        var newLength = h.Address.Key + h.Address.Value - address.Key;
-                        if (newLength < _melsec.MaxWriteLength)
-                        {
+                for (var j = 0; j < valueBytes.Length; ++j) bytes[j] = valueBytes[j];
+                for (var j = 1; i + j < registers.Count; ++j) {
+                    RegisterWriteInfo h = registers[i + j];
+                    if (h.Address.Key <= address.Key + length) {
+                        int newLength = h.Address.Key + h.Address.Value - address.Key;
+                        if (newLength < _melsec.MaxWriteLength) {
                             var vBytes = GetBytes(h.WriteParameter.Value);
                             for (var k = 0; k < vBytes.Length; ++k)
-                            {
                                 bytes[k + (h.Address.Key - address.Key) * 2] = vBytes[k];
-                            }
                             if (newLength > length)
                                 length = newLength;
                             ++i;
                             continue;
                         }
                     }
+
                     break;
                 }
+
                 var byteList = new List<byte>(length * 2);
-                for (var j = 0; j < length * 2; ++j)
-                {
-                    byteList.Add(bytes[j]);
-                }
+                for (var j = 0; j < length * 2; ++j) byteList.Add(bytes[j]);
                 _melsec.WriteRegisters(address.Key, byteList);
             }
         }
 
-        private static byte[] GetBytes(object value)
-        {
-            return BitConverter.GetBytes((dynamic)value);
+        private static byte[] GetBytes(object value) {
+            return BitConverter.GetBytes((dynamic) value);
         }
 
-        private static int? TypeToRegistersCount(Type type)
-        {
+        private static int? TypeToRegistersCount(Type type) {
             if (type == typeof(short))
                 return 1;
             if (type == typeof(int))
@@ -575,5 +455,7 @@ namespace PHmiIoDevice.Melsec
                 return 4;
             return null;
         }
+
+        private delegate List<byte> ReadDelegate(int address, int length);
     }
 }

@@ -9,23 +9,26 @@
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="Visibility" Value="Visible"/>
-                                <Condition Property="Loading" Value="True"/>
+                                <Condition Property="Visibility" Value="Visible" />
+                                <Condition Property="Loading" Value="True" />
                             </MultiTrigger.Conditions>
                             <MultiTrigger.EnterActions>
                                 <BeginStoryboard Name="animation">
                                     <Storyboard>
-                                        <DoubleAnimation From="0" To="360" Duration="0:0:1" RepeatBehavior="Forever"
-                                                 Storyboard.TargetName="angle" Storyboard.TargetProperty="Angle"/>
+                                        <DoubleAnimation From="0" To="360" Duration="0:0:1"
+                                                         RepeatBehavior="Forever"
+                                                         Storyboard.TargetName="angle"
+                                                         Storyboard.TargetProperty="Angle" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </MultiTrigger.EnterActions>
                             <MultiTrigger.ExitActions>
-                                <StopStoryboard BeginStoryboardName="animation"/>
+                                <StopStoryboard BeginStoryboardName="animation" />
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation To="360" Duration="0:0:0.2"
-                                                 Storyboard.TargetName="angle" Storyboard.TargetProperty="Angle"/>
+                                                         Storyboard.TargetName="angle"
+                                                         Storyboard.TargetProperty="Angle" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </MultiTrigger.ExitActions>
@@ -38,21 +41,24 @@
                                     <DrawingGroup>
                                         <GeometryDrawing Brush="Transparent">
                                             <GeometryDrawing.Geometry>
-                                                <RectangleGeometry Rect="0,0,1,1"/>
+                                                <RectangleGeometry Rect="0,0,1,1" />
                                             </GeometryDrawing.Geometry>
                                         </GeometryDrawing>
                                         <DrawingGroup>
                                             <DrawingGroup.Transform>
-                                                <RotateTransform x:Name="angle" Angle="0" CenterX="0.5" CenterY="0.5"/>
+                                                <RotateTransform x:Name="angle" Angle="0" CenterX="0.5"
+                                                                 CenterY="0.5" />
                                             </DrawingGroup.Transform>
                                             <GeometryDrawing>
                                                 <GeometryDrawing.Pen>
-                                                    <Pen Brush="Green" Thickness="0.1"/>
+                                                    <Pen Brush="Green" Thickness="0.1" />
                                                 </GeometryDrawing.Pen>
                                                 <GeometryDrawing.Geometry>
                                                     <PathGeometry>
                                                         <PathFigure StartPoint="0.9,0.5">
-                                                            <ArcSegment Point="0.5,0.1" RotationAngle="90" SweepDirection="Clockwise" IsLargeArc="True" Size="0.4,0.4"/>
+                                                            <ArcSegment Point="0.5,0.1" RotationAngle="90"
+                                                                        SweepDirection="Clockwise"
+                                                                        IsLargeArc="True" Size="0.4,0.4" />
                                                         </PathFigure>
                                                     </PathGeometry>
                                                 </GeometryDrawing.Geometry>

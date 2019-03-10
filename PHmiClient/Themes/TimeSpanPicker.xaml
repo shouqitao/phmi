@@ -14,30 +14,36 @@
                         <Grid Margin="{TemplateBinding Padding}">
                             <Grid.Resources>
                                 <Style TargetType="ComboBox">
-                                    <Setter Property="IsEditable" Value="True"/>
-                                    <Setter Property="Width" Value="40"/>
-                                    <Setter Property="ItemStringFormat" Value="00"/>
-                                    <Setter Property="Margin" Value="2,0,0,0"/>
+                                    <Setter Property="IsEditable" Value="True" />
+                                    <Setter Property="Width" Value="40" />
+                                    <Setter Property="ItemStringFormat" Value="00" />
+                                    <Setter Property="Margin" Value="2,0,0,0" />
                                 </Style>
                                 <Style TargetType="TextBlock">
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                    <Setter Property="Margin" Value="2,-1,0,0"/>
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="2,-1,0,0" />
                                 </Style>
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Controls:NumericUpDown DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" Value="{Binding Path=Days, Mode=TwoWay}" ToolTip="{x:Static Loc:Res.Days}"/>
-                            <TextBlock Grid.Column="1" Text="."/>
-                            <ComboBox Grid.Column="2" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" Text="{Binding Path=Hours, Mode=TwoWay, StringFormat=00}" SelectedItem="{Binding Path=TimeSpanHours}" ToolTip="{x:Static Loc:Res.Hours}">
+                            <Controls:NumericUpDown
+                                DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                Value="{Binding Path=Days, Mode=TwoWay}" ToolTip="{x:Static Loc:Res.Days}" />
+                            <TextBlock Grid.Column="1" Text="." />
+                            <ComboBox Grid.Column="2"
+                                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                      Text="{Binding Path=Hours, Mode=TwoWay, StringFormat=00}"
+                                      SelectedItem="{Binding Path=TimeSpanHours}"
+                                      ToolTip="{x:Static Loc:Res.Hours}">
                                 <ComboBox.ItemsSource>
                                     <Collections:ArrayList>
                                         <System:Int32>0</System:Int32>
@@ -67,8 +73,12 @@
                                     </Collections:ArrayList>
                                 </ComboBox.ItemsSource>
                             </ComboBox>
-                            <TextBlock Grid.Column="3" Text=":"/>
-                            <ComboBox Grid.Column="4" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" Text="{Binding Path=Minutes, Mode=TwoWay, StringFormat=00}" SelectedItem="{Binding Path=TimeSpanMinutes}" ToolTip="{x:Static Loc:Res.Minutes}">
+                            <TextBlock Grid.Column="3" Text=":" />
+                            <ComboBox Grid.Column="4"
+                                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                      Text="{Binding Path=Minutes, Mode=TwoWay, StringFormat=00}"
+                                      SelectedItem="{Binding Path=TimeSpanMinutes}"
+                                      ToolTip="{x:Static Loc:Res.Minutes}">
                                 <ComboBox.ItemsSource>
                                     <Collections:ArrayList>
                                         <System:Int32>0</System:Int32>
@@ -134,8 +144,12 @@
                                     </Collections:ArrayList>
                                 </ComboBox.ItemsSource>
                             </ComboBox>
-                            <TextBlock Grid.Column="5" Text=":"/>
-                            <ComboBox Grid.Column="6" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" Text="{Binding Path=Seconds, Mode=TwoWay, StringFormat=00}" SelectedItem="{Binding Path=TimeSpanSeconds}" ToolTip="{x:Static Loc:Res.Seconds}">
+                            <TextBlock Grid.Column="5" Text=":" />
+                            <ComboBox Grid.Column="6"
+                                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                      Text="{Binding Path=Seconds, Mode=TwoWay, StringFormat=00}"
+                                      SelectedItem="{Binding Path=TimeSpanSeconds}"
+                                      ToolTip="{x:Static Loc:Res.Seconds}">
                                 <ComboBox.ItemsSource>
                                     <Collections:ArrayList>
                                         <System:Int32>0</System:Int32>
@@ -202,8 +216,12 @@
                                 </ComboBox.ItemsSource>
                             </ComboBox>
 
-                            <TextBlock Grid.Column="7" Text="."/>
-                            <ComboBox Grid.Column="8" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}" Text="{Binding Path=Milliseconds, Mode=TwoWay, StringFormat=000}" SelectedItem="{Binding Path=TimeSpanMilliseconds}" Width="49" ItemStringFormat="000" ToolTip="{x:Static Loc:Res.Milliseconds}">
+                            <TextBlock Grid.Column="7" Text="." />
+                            <ComboBox Grid.Column="8"
+                                      DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                                      Text="{Binding Path=Milliseconds, Mode=TwoWay, StringFormat=000}"
+                                      SelectedItem="{Binding Path=TimeSpanMilliseconds}" Width="49"
+                                      ItemStringFormat="000" ToolTip="{x:Static Loc:Res.Milliseconds}">
                                 <ComboBox.ItemsSource>
                                     <Collections:ArrayList>
                                         <System:Int32>0</System:Int32>

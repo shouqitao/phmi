@@ -4,114 +4,84 @@ using System.Threading;
 using NUnit.Framework;
 using PHmiClient.Utils;
 
-namespace PHmiIntegrationTests.Client.Utils
-{
+namespace PHmiIntegrationTests.Client.Utils {
     [TestFixture]
-    public class EventHelperLoopTests
-    {
-        private bool _stop;
-
+    public class EventHelperLoopTests {
         [SetUp]
-        public void SetUp()
-        {
+        public void SetUp() {
             _stop = false;
         }
 
-        private void LoopTest(Func<bool> raiseFunc, Action loop)
-        {
+        private bool _stop;
+
+        private void LoopTest(Func<bool> raiseFunc, Action loop) {
             var started = false;
             var loopAction = new Action(
-                () =>
-                {
+                () => {
                     started = true;
                     loop.Invoke();
                 });
             loopAction.BeginInvoke(loopAction.EndInvoke, null);
 
-            while (!started)
-            {
-                Thread.Sleep(0);
-            }
+            while (!started) Thread.Sleep(0);
 
             TestDelegate testAction =
-                () =>
-                {
-                    for (var i = 0; i < 100000; i++)
-                    {
+                () => {
+                    for (var i = 0; i < 100000; i++) {
                         raiseFunc.Invoke();
                         i++;
                     }
+
                     _stop = true;
                 };
             Assert.DoesNotThrow(testAction);
         }
 
-        #region Raise
-
         private event EventHandler Event;
 
-        private void Loop()
-        {
+        private void Loop() {
             EventHandler handler = (sender, args) => { };
-            while (!_stop)
-            {
+            while (!_stop) {
                 Event += handler;
                 Event -= handler;
             }
         }
 
-        [Test]
-        public void RaiseLoopTest()
-        {
-            LoopTest(() => EventHelper.Raise(ref Event, this, EventArgs.Empty), Loop);
-        }
-
-        #endregion
-
-        #region RaiseGeneric
-
         private event EventHandler<EventArgs> EventGeneric;
 
-        private void LoopGeneric()
-        {
+        private void LoopGeneric() {
             EventHandler<EventArgs> handler = (sender, args) => { };
-            while (!_stop)
-            {
+            while (!_stop) {
                 EventGeneric += handler;
                 EventGeneric -= handler;
             }
         }
 
-        [Test]
-        public void RaiseLoopGenericTest()
-        {
-            LoopTest(() => EventHelper.Raise(ref EventGeneric, this, EventArgs.Empty), LoopGeneric);
-        }
-
-        #endregion
-
-        #region RaisePropertyChanged
-
         private event PropertyChangedEventHandler EventPropertyChanged;
 
-        private void LoopPropertyChanged()
-        {
+        private void LoopPropertyChanged() {
             PropertyChangedEventHandler handler = (sender, args) => { };
-            while (!_stop)
-            {
+            while (!_stop) {
                 EventPropertyChanged += handler;
                 EventPropertyChanged -= handler;
             }
         }
 
         [Test]
-        public void RaiseLoopPropertyChangedTest()
-        {
+        public void RaiseLoopGenericTest() {
+            LoopTest(() => EventHelper.Raise(ref EventGeneric, this, EventArgs.Empty), LoopGeneric);
+        }
+
+        [Test]
+        public void RaiseLoopPropertyChangedTest() {
             LoopTest(() => EventHelper.Raise(
-                ref EventPropertyChanged, this, new PropertyChangedEventArgs(null)),
+                    ref EventPropertyChanged, this, new PropertyChangedEventArgs(null)),
                 LoopPropertyChanged);
         }
 
-        #endregion
+        [Test]
+        public void RaiseLoopTest() {
+            LoopTest(() => EventHelper.Raise(ref Event, this, EventArgs.Empty), Loop);
+        }
     }
 }

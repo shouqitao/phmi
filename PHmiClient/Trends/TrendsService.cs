@@ -5,60 +5,48 @@ using PHmiClient.Utils.Notifications;
 using PHmiClient.Wcf;
 using PHmiClient.Wcf.ServiceTypes;
 
-namespace PHmiClient.Trends
-{
-    internal class TrendsService : ITrendsService
-    {
+namespace PHmiClient.Trends {
+    internal class TrendsService : ITrendsService {
         public const int MaxRarerer = 10;
+        private readonly IList<TrendsCategoryAbstract> _categories = new List<TrendsCategoryAbstract>();
         private readonly IReporter _reporter;
-        private readonly IList<TrendsCategoryAbstract> _categories = new List<TrendsCategoryAbstract>(); 
 
-        public TrendsService(IReporter reporter)
-        {
+        public TrendsService(IReporter reporter) {
             _reporter = reporter;
         }
 
-        public void Run(IService service)
-        {
+        public void Run(IService service) {
             var categories = new List<TrendsCategoryAbstract>();
             var parameters = new List<RemapTrendsParameter>();
-            foreach (var category in _categories)
-            {
-                var parameter = category.CreateRemapParameter();
+            foreach (TrendsCategoryAbstract category in _categories) {
+                RemapTrendsParameter parameter = category.CreateRemapParameter();
                 if (parameter == null)
                     continue;
                 parameters.Add(parameter);
                 categories.Add(category);
             }
-            if (parameters.Any())
-            {
+
+            if (parameters.Any()) {
                 var result = service.RemapTrends(parameters.ToArray());
-                for (var i = 0; i < categories.Count; i++)
-                {
-                    ApplyResult(categories[i], result[i]);
-                }
+                for (var i = 0; i < categories.Count; i++) ApplyResult(categories[i], result[i]);
             }
         }
 
-        private void ApplyResult(TrendsCategoryAbstract category, RemapTrendsResult result)
-        {
+        public void Clean() {
+            foreach (TrendsCategoryAbstract category in _categories) category.ApplyRemapResult(null);
+        }
+
+        public string Name {
+            get { return Res.TrendsService; }
+        }
+
+        public void Add(TrendsCategoryAbstract category) {
+            _categories.Add(category);
+        }
+
+        private void ApplyResult(TrendsCategoryAbstract category, RemapTrendsResult result) {
             _reporter.Report(result.Notifications);
             category.ApplyRemapResult(result);
-        }
-
-        public void Clean()
-        {
-            foreach (var category in _categories)
-            {
-                category.ApplyRemapResult(null);
-            }
-        }
-
-        public string Name { get { return Res.TrendsService; } }
-
-        public void Add(TrendsCategoryAbstract category)
-        {
-            _categories.Add(category);
         }
     }
 }

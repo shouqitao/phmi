@@ -1,44 +1,30 @@
 ﻿using System;
 using NUnit.Framework;
 
-namespace PHmiClientUnitTests
-{
-    public abstract class Specification
-    {
+namespace PHmiClientUnitTests {
+    public abstract class Specification {
+        protected bool CatchExceptionInEstablishContext = false;
         protected Exception ThrownException;
 
-        protected bool CatchExceptionInEstablishContext = false;
-
         [SetUp]
-        public void SetUp()
-        {
+        public void SetUp() {
             ThrownException = null;
-            try
-            {
+            try {
                 EstablishContext();
-            }
-            catch (Exception exception)
-            {
+            } catch (Exception exception) {
                 ThrownException = exception;
                 if (!CatchExceptionInEstablishContext)
                     throw;
             }
         }
 
-        protected virtual void EstablishContext()
-        {
-
-        }
+        protected virtual void EstablishContext() { }
 
         [TearDown]
-        public void TearDown()
-        {
+        public void TearDown() {
             AfterEach();
         }
 
-        protected virtual void AfterEach()
-        {
-            
-        }
+        protected virtual void AfterEach() { }
     }
 }

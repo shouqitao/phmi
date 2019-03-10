@@ -1,6 +1,3 @@
-﻿namespace PHmiClient.Tags
-{
-    public interface IDigitalTag : ITag<bool?>
-    {
-    }
+﻿namespace PHmiClient.Tags {
+    public interface IDigitalTag : ITag<bool?> { }
 }

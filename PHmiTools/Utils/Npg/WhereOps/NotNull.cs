@@ -1,19 +1,15 @@
-﻿using Npgsql;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Npgsql;
 
-namespace PHmiTools.Utils.Npg.WhereOps
-{
-    public class NotNull : WhereOp
-    {
+namespace PHmiTools.Utils.Npg.WhereOps {
+    public class NotNull : WhereOp {
         private readonly string _column;
 
-        public NotNull(string column)
-        {
+        public NotNull(string column) {
             _column = column;
         }
 
-        public override string Build(IList<NpgsqlParameter> parameters)
-        {
+        public override string Build(IList<NpgsqlParameter> parameters) {
             return string.Format("\"{0}\" NOTNULL", _column);
         }
     }

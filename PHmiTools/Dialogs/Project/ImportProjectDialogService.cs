@@ -2,37 +2,15 @@
 using PHmiTools.Utils.Npg;
 using PHmiTools.Utils.Npg.ExIm;
 
-namespace PHmiTools.Dialogs.Project
-{
+namespace PHmiTools.Dialogs.Project {
     public class ImportProjectDialogService : ProjectDialogService,
-        IImportProjectDialogService
-    {
-        private readonly INpgExImHelper _exImHelper = new NpgExImHelper();
+        IImportProjectDialogService {
+        public INpgHelper NpgHelper { get; } = new NpgHelper();
 
-        private readonly INpgHelper _npgHelper = new NpgHelper();
+        public IActionHelper ActionHelper { get; } = new ActionHelper();
 
-        private readonly IActionHelper _actionHelper = new ActionHelper();
+        public INpgScriptHelper ScriptHelper { get; } = new NpgScriptHelper();
 
-        private readonly INpgScriptHelper _scriptHelper = new NpgScriptHelper();
-
-        public INpgHelper NpgHelper
-        {
-            get { return _npgHelper; }
-        }
-
-        public IActionHelper ActionHelper
-        {
-            get { return _actionHelper; }
-        }
-
-        public INpgScriptHelper ScriptHelper
-        {
-            get { return _scriptHelper; }
-        }
-
-        public INpgExImHelper ExImHelper
-        {
-            get { return _exImHelper; }
-        }
+        public INpgExImHelper ExImHelper { get; } = new NpgExImHelper();
     }
 }

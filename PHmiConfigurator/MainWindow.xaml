@@ -20,7 +20,7 @@
         <Binding Source="{StaticResource ViewModel}" />
     </Window.DataContext>
     <Window.Title>
-        <Binding Path="Title"/>
+        <Binding Path="Title" />
     </Window.Title>
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Shift+Alt" Command="{Binding Path=NewProjectCommand}" />
@@ -30,7 +30,7 @@
         <KeyBinding Key="B" Modifiers="Shift+Alt" Command="{Binding Path=BuildClientCommand}" />
         <KeyBinding Key="F5" Command="{Binding Path=RunProjectCommand}" />
         <KeyBinding Key="X" Modifiers="Alt" Command="{Binding Path=ExitCommand}" />
-        
+
         <KeyBinding Key="Q" Modifiers="Control" Command="{Binding Path=CloseModuleCommand}" />
         <KeyBinding Key="R" Modifiers="Control" Command="{Binding Path=ReloadModuleCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding Path=SaveModuleCommand}" />
@@ -43,97 +43,92 @@
     </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Menu>
             <MenuItem>
                 <MenuItem.Header>
                     <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/db.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.Project}" />
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/db.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.Project}" />
                     </StackPanel>
                 </MenuItem.Header>
                 <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.NewProject}" Command="{Binding Path=NewProjectCommand}" InputGestureText="Shift+Alt+N">
+                    <MenuItem Header="{x:Static Loc:Res.NewProject}"
+                              Command="{Binding Path=NewProjectCommand}" InputGestureText="Shift+Alt+N">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/db_add.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/db_add.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.Open}" Command="{Binding Path=OpenCommand}" InputGestureText="Shift+Alt+O">
+                    <MenuItem Header="{x:Static Loc:Res.Open}" Command="{Binding Path=OpenCommand}"
+                              InputGestureText="Shift+Alt+O">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/fileopen.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/fileopen.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
+                    <Separator />
                     <MenuItem Header="{x:Static Loc:Res.Close}" Command="{Binding Path=CloseCommand}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/fileclose.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/fileclose.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.BuildClient}" Command="{Binding Path=BuildClientCommand}" InputGestureText="Shift+Alt+B">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.BuildClient}"
+                              Command="{Binding Path=BuildClientCommand}" InputGestureText="Shift+Alt+B">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/build.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/build.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.Run}" Command="{Binding Path=RunProjectCommand}" InputGestureText="F5">
+                    <MenuItem Header="{x:Static Loc:Res.Run}" Command="{Binding Path=RunProjectCommand}"
+                              InputGestureText="F5">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/agt_runit.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/agt_runit.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.InstallService}" Command="{Binding Path=InstallServiceCommand}">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.InstallService}"
+                              Command="{Binding Path=InstallServiceCommand}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/kservices.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/kservices.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.UninstallService}" Command="{Binding Path=UninstallServiceCommand}">
+                    <MenuItem Header="{x:Static Loc:Res.UninstallService}"
+                              Command="{Binding Path=UninstallServiceCommand}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/editdelete.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/editdelete.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.Import}" Command="{Binding Path=ImportCommand}" InputGestureText="Shift+Alt+I">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.Import}" Command="{Binding Path=ImportCommand}"
+                              InputGestureText="Shift+Alt+I">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/db_import.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/db_import.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.Export}" Command="{Binding Path=ExportCommand}" InputGestureText="Shift+Alt+E">
+                    <MenuItem Header="{x:Static Loc:Res.Export}" Command="{Binding Path=ExportCommand}"
+                              InputGestureText="Shift+Alt+E">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/db_export.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/db_export.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.Exit}" Command="{Binding Path=ExitCommand}" InputGestureText="Alt+X">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.Exit}" Command="{Binding Path=ExitCommand}"
+                              InputGestureText="Alt+X">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/exit.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem.Items>
-            </MenuItem>
-            <MenuItem>
-                <MenuItem.Header>
-                    <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/tag_gray.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.Tags}" />
-                    </StackPanel>
-                </MenuItem.Header>
-                <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.IoDevices}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:IoDevices}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/input_device.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.DigitalTags}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:DigitalTags}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/tags_dig.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.NumericTags}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:NumericTags}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/tags_num.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/exit.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem.Items>
@@ -141,20 +136,36 @@
             <MenuItem>
                 <MenuItem.Header>
                     <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/bell_gray.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.Alarms}" />
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/tag_gray.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.Tags}" />
                     </StackPanel>
                 </MenuItem.Header>
                 <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.AlarmCategories}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:AlarmCategories}">
+                    <MenuItem Header="{x:Static Loc:Res.IoDevices}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Collection:IoDevices}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/bell.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/input_device.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.AlarmTags}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:AlarmTags}">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.DigitalTags}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Selectable:DigitalTags}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/bell.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/tags_dig.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static Loc:Res.NumericTags}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Selectable:NumericTags}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/tags_num.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem.Items>
@@ -162,20 +173,28 @@
             <MenuItem>
                 <MenuItem.Header>
                     <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/trend_gray.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.Trends}" />
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/bell_gray.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.Alarms}" />
                     </StackPanel>
                 </MenuItem.Header>
                 <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.TrendCategories}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:TrendCategories}">
+                    <MenuItem Header="{x:Static Loc:Res.AlarmCategories}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Collection:AlarmCategories}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/trend.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/bell.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.TrendTags}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:TrendTags}">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.AlarmTags}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Selectable:AlarmTags}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/trend.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/bell.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem.Items>
@@ -183,25 +202,28 @@
             <MenuItem>
                 <MenuItem.Header>
                     <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/system_gray.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.System}" />
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/trend_gray.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.Trends}" />
                     </StackPanel>
                 </MenuItem.Header>
                 <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.Users}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:Users}">
+                    <MenuItem Header="{x:Static Loc:Res.TrendCategories}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Collection:TrendCategories}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/users.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/trend.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="{x:Static Loc:Res.Logs}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:Logs}">
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.TrendTags}"
+                              Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Selectable:TrendTags}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/log.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="{x:Static Loc:Res.Settings}" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Modules:Settings}">
-                        <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/system.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/trend.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem.Items>
@@ -209,19 +231,58 @@
             <MenuItem>
                 <MenuItem.Header>
                     <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
-                        <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/help_gray.png" />
-                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}" Text="{x:Static Loc:Res.Help}" />
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/system_gray.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.System}" />
                     </StackPanel>
                 </MenuItem.Header>
                 <MenuItem.Items>
-                    <MenuItem Header="{x:Static Loc:Res.QuickStartGuide}" Command="{Binding Path=QuickStartCommand}">
+                    <MenuItem Header="{x:Static Loc:Res.Users}" Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Collection:Users}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/pdf_document.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/users.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static Loc:Res.Logs}" Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Collection:Logs}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/log.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{x:Static Loc:Res.Settings}" Command="{Binding Path=OpenModuleCommand}"
+                              CommandParameter="{x:Type Modules:Settings}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/system.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem.Items>
+            </MenuItem>
+            <MenuItem>
+                <MenuItem.Header>
+                    <StackPanel Style="{StaticResource HorizontalStackPanelStyle}">
+                        <Image Style="{StaticResource SmallImageStyle}"
+                               Source="pack://application:,,,/PHmiResources;component/Images/help_gray.png" />
+                        <TextBlock Style="{StaticResource ToolBarTextBlockStyle}"
+                                   Text="{x:Static Loc:Res.Help}" />
+                    </StackPanel>
+                </MenuItem.Header>
+                <MenuItem.Items>
+                    <MenuItem Header="{x:Static Loc:Res.QuickStartGuide}"
+                              Command="{Binding Path=QuickStartCommand}">
+                        <MenuItem.Icon>
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/pdf_document.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static Loc:Res.About}" Command="{Binding Path=AboutCommand}">
                         <MenuItem.Icon>
-                            <Image Style="{StaticResource SmallImageStyle}" Source="pack://application:,,,/PHmiResources;component/Images/help.png" />
+                            <Image Style="{StaticResource SmallImageStyle}"
+                                   Source="pack://application:,,,/PHmiResources;component/Images/help.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem.Items>
@@ -235,86 +296,88 @@
                     </Binding.ConverterParameter>
                     <Binding.Converter>
                         <Converters:FalseToCollapsedConverter>
-                            <Converters:EqualityConverter/>
+                            <Converters:EqualityConverter />
                         </Converters:FalseToCollapsedConverter>
                     </Binding.Converter>
                 </Binding>
             </Grid.Visibility>
             <Grid.Resources>
                 <Style TargetType="Image">
-                    <Setter Property="MaxWidth" Value="256"/>
-                    <Setter Property="MaxHeight" Value="256"/>
-                    <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
+                    <Setter Property="MaxWidth" Value="256" />
+                    <Setter Property="MaxHeight" Value="256" />
+                    <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant" />
                 </Style>
             </Grid.Resources>
             <Grid Margin="10">
                 <Grid.Resources>
                     <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="10,0,0,0"/>
-                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Margin" Value="10,0,0,0" />
+                        <Setter Property="FontSize" Value="14" />
                     </Style>
                     <Style TargetType="Button">
-                        <Setter Property="Margin" Value="10"/>
-                        <Setter Property="MaxWidth" Value="280"/>
-                        <Setter Property="MaxHeight" Value="280"/>
+                        <Setter Property="Margin" Value="10" />
+                        <Setter Property="MaxWidth" Value="280" />
+                        <Setter Property="MaxHeight" Value="280" />
                     </Style>
                 </Grid.Resources>
                 <Grid.Visibility>
                     <Binding Path="ConnectionParameters" ConverterParameter="{x:Null}">
                         <Binding.Converter>
                             <Converters:FalseToCollapsedConverter>
-                                <Converters:EqualityConverter/>
+                                <Converters:EqualityConverter />
                             </Converters:FalseToCollapsedConverter>
                         </Binding.Converter>
                     </Binding>
                 </Grid.Visibility>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Command="{Binding Path=NewProjectCommand}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/db_add.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.NewProject}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/db_add.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.NewProject}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=OpenCommand}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/fileopen.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Open}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/fileopen.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Open}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="1" Grid.Column="2" Command="{Binding Path=ImportCommand}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/db_import.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Import}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/db_import.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Import}" />
                     </Grid>
                 </Button>
             </Grid>
             <Grid Margin="5">
                 <Grid.Resources>
                     <Style TargetType="Button">
-                        <Setter Property="Margin" Value="5"/>
-                        <Setter Property="MaxWidth" Value="280"/>
-                        <Setter Property="MaxHeight" Value="280"/>
+                        <Setter Property="Margin" Value="5" />
+                        <Setter Property="MaxWidth" Value="280" />
+                        <Setter Property="MaxHeight" Value="280" />
                     </Style>
                 </Grid.Resources>
                 <Grid.Visibility>
@@ -322,146 +385,161 @@
                         <Binding.Converter>
                             <Converters:FalseToCollapsedConverter>
                                 <Converters:InvertConverter>
-                                    <Converters:EqualityConverter/>
+                                    <Converters:EqualityConverter />
                                 </Converters:InvertConverter>
                             </Converters:FalseToCollapsedConverter>
                         </Binding.Converter>
                     </Binding>
                 </Grid.Visibility>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:IoDevices}">
+                <Button Grid.Row="0" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Collection:IoDevices}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/input_device.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.IoDevices}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/input_device.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.IoDevices}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:DigitalTags}">
+                <Button Grid.Row="1" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Selectable:DigitalTags}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/tags_dig.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.DigitalTags}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/tags_dig.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.DigitalTags}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:NumericTags}">
+                <Button Grid.Row="2" Grid.Column="0" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Selectable:NumericTags}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/tags_num.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.NumericTags}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/tags_num.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.NumericTags}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:AlarmCategories}">
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Collection:AlarmCategories}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/bell.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.AlarmCategories}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/bell.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.AlarmCategories}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:AlarmTags}">
+                <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Selectable:AlarmTags}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/bell.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.AlarmTags}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/bell.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.AlarmTags}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:Logs}">
+                <Button Grid.Row="2" Grid.Column="1" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Collection:Logs}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/log.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Logs}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/log.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Logs}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="2" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:TrendCategories}">
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Collection:TrendCategories}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/trend.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.TrendCategories}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/trend.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.TrendCategories}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Selectable:TrendTags}">
+                <Button Grid.Row="1" Grid.Column="2" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Selectable:TrendTags}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/trend.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.TrendTags}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/trend.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.TrendTags}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="2" Grid.Column="2" Command="{Binding Path=RunProjectCommand}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/agt_runit.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Run}"/>
+                        <Image
+                            Source="pack://application:,,,/PHmiResources;component/Images/256/agt_runit.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Run}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="3" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Collection:Users}">
+                <Button Grid.Row="0" Grid.Column="3" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Collection:Users}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/users.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Users}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/users.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Users}" />
                     </Grid>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="3" Command="{Binding Path=OpenModuleCommand}" CommandParameter="{x:Type Modules:Settings}">
+                <Button Grid.Row="1" Grid.Column="3" Command="{Binding Path=OpenModuleCommand}"
+                        CommandParameter="{x:Type Modules:Settings}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/system.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Settings}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/system.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.Settings}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="2" Grid.Column="3" Command="{Binding Path=BuildClientCommand}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/build.png"/>
-                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.BuildClient}"/>
+                        <Image Source="pack://application:,,,/PHmiResources;component/Images/256/build.png" />
+                        <TextBlock Grid.Row="1" Text="{x:Static Loc:Res.BuildClient}" />
                     </Grid>
                 </Button>
             </Grid>
         </Grid>
-        <TabControl Grid.Row="1" ItemsSource="{Binding Path=Modules}" SelectionChanged="TabControlSelectionChanged">
+        <TabControl Grid.Row="1" ItemsSource="{Binding Path=Modules}"
+                    SelectionChanged="TabControlSelectionChanged">
             <TabControl.Visibility>
                 <Binding Path="Modules.Count">
                     <Binding.ConverterParameter>
@@ -470,7 +548,7 @@
                     <Binding.Converter>
                         <Converters:FalseToCollapsedConverter>
                             <Converters:InvertConverter>
-                                <Converters:EqualityConverter/>
+                                <Converters:EqualityConverter />
                             </Converters:InvertConverter>
                         </Converters:FalseToCollapsedConverter>
                     </Binding.Converter>

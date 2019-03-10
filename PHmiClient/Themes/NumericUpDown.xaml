@@ -12,26 +12,29 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid>
                             <Grid.Resources>
-                                <Converters:IntToStringConverter x:Key="IntToStringConverter"/>
+                                <Converters:IntToStringConverter x:Key="IntToStringConverter" />
                             </Grid.Resources>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Grid.Column="0" MinWidth="50" Text="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBox Grid.Column="0" MinWidth="50"
+                                     Text="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Grid Grid.Column="1" Height="24">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <RepeatButton Command="{Binding Path=UpCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                <RepeatButton
+                                    Command="{Binding Path=UpCommand, RelativeSource={RelativeSource TemplatedParent}}">
                                     <Viewbox>
-                                        <Path Data="M0,.5 L.5,0 1,.5 Z" Fill="Black"/>
+                                        <Path Data="M0,.5 L.5,0 1,.5 Z" Fill="Black" />
                                     </Viewbox>
                                 </RepeatButton>
-                                <RepeatButton Grid.Row="1" Command="{Binding Path=DownCommand, RelativeSource={RelativeSource TemplatedParent}}">
+                                <RepeatButton Grid.Row="1"
+                                              Command="{Binding Path=DownCommand, RelativeSource={RelativeSource TemplatedParent}}">
                                     <Viewbox>
-                                        <Path Data="M0,0 L.5,.5 1,0 Z" Fill="Black"/>
+                                        <Path Data="M0,0 L.5,.5 1,0 Z" Fill="Black" />
                                     </Viewbox>
                                 </RepeatButton>
                             </Grid>

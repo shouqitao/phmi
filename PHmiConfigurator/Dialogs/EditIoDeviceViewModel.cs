@@ -1,9 +1,5 @@
-﻿using PHmiModel;
-using PHmiModel.Entities;
+﻿using PHmiModel.Entities;
 
-namespace PHmiConfigurator.Dialogs
-{
-    public class EditIoDeviceViewModel : EditDialogViewModel<IoDevice.IoDeviceMetadata>
-    {
-    }
+namespace PHmiConfigurator.Dialogs {
+    public class EditIoDeviceViewModel : EditDialogViewModel<IoDevice.IoDeviceMetadata> { }
 }

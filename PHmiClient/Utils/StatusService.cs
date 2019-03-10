@@ -2,15 +2,12 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace PHmiClient.Utils
-{
-    public class StatusService : IStatusService
-    {
-        private string _message;
+namespace PHmiClient.Utils {
+    public class StatusService : IStatusService {
         private readonly ITimerService _timer;
+        private string _message;
 
-        internal StatusService(ITimerService timer)
-        {
+        internal StatusService(ITimerService timer) {
             _timer = timer;
             LifeTime = TimeSpan.FromSeconds(15);
             _timer.Elapsed += TimerElapsed;
@@ -18,26 +15,17 @@ namespace PHmiClient.Utils
 
         public StatusService() : this(new TimerService()) { }
 
-        private void TimerElapsed(object sender, EventArgs e)
-        {
-            Message = null;
-        }
-
-        public TimeSpan LifeTime
-        {
+        public TimeSpan LifeTime {
             get { return _timer.TimeSpan; }
-            set
-            {
+            set {
                 _timer.TimeSpan = value;
                 OnPropertyChanged(s => s.LifeTime);
             }
         }
 
-        public string Message
-        {
+        public string Message {
             get { return _message; }
-            set
-            {
+            set {
                 _message = value;
                 _timer.Stop();
                 _timer.Start();
@@ -47,8 +35,11 @@ namespace PHmiClient.Utils
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(Expression<Func<StatusService, object>> getPropertyExpression)
-        {
+        private void TimerElapsed(object sender, EventArgs e) {
+            Message = null;
+        }
+
+        private void OnPropertyChanged(Expression<Func<StatusService, object>> getPropertyExpression) {
             EventHelper.Raise(ref PropertyChanged, this,
                 new PropertyChangedEventArgs(PropertyHelper.GetPropertyName(getPropertyExpression)));
         }

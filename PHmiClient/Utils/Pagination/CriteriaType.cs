@@ -1,10 +1,8 @@
 ﻿using System.Runtime.Serialization;
 
-namespace PHmiClient.Utils.Pagination
-{
+namespace PHmiClient.Utils.Pagination {
     [DataContract]
-    public enum CriteriaType
-    {
+    public enum CriteriaType {
         [EnumMember]
         DownFromInfinity,
 

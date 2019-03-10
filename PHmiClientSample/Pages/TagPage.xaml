@@ -10,9 +10,12 @@
     d:DesignHeight="300" d:DesignWidth="300"
     d:DataContext="{d:DesignInstance Type=PHmiClientSample:PHmi, IsDesignTimeCreatable=True}">
     <StackPanel>
-        <CheckBox IsChecked="{Binding Path=IoDevice.M0.Value}" Content="{Binding Path=IoDevice.M0.Description}"/>
-        <CheckBox IsChecked="{Binding Path=IoDevice.M1.Value}" Content="{Binding Path=IoDevice.M1.Description}"/>
-        <CheckBox IsChecked="{Binding Path=IoDevice.M2.Value}" Content="{Binding Path=IoDevice.M2.Description}"/>
-        <Controls:NumericInput NumericTag="{Binding Path=IoDevice.D0}"/>
+        <CheckBox IsChecked="{Binding Path=IoDevice.M0.Value}"
+                  Content="{Binding Path=IoDevice.M0.Description}" />
+        <CheckBox IsChecked="{Binding Path=IoDevice.M1.Value}"
+                  Content="{Binding Path=IoDevice.M1.Description}" />
+        <CheckBox IsChecked="{Binding Path=IoDevice.M2.Value}"
+                  Content="{Binding Path=IoDevice.M2.Description}" />
+        <Controls:NumericInput NumericTag="{Binding Path=IoDevice.D0}" />
     </StackPanel>
 </UserControl>

@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace PHmiIoDeviceTools
-{
+namespace PHmiIoDeviceTools {
     /// <summary>
-    /// IoDevice options editor to be used in configurator instead of TextBox
+    ///     IoDevice options editor to be used in configurator instead of TextBox
     /// </summary>
-    public interface IOptionsEditor
-    {
+    public interface IOptionsEditor {
         void SetOptions(string options);
+
         string GetOptions();
+
         event EventHandler OptionsChanged;
     }
 }

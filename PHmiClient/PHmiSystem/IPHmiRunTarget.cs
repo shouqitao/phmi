@@ -1,8 +1,5 @@
 ﻿using PHmiClient.Utils.Runner;
 
-namespace PHmiClient.PHmiSystem
-{
-    internal interface IPHmiRunTarget : IRunTarget
-    {
-    }
+namespace PHmiClient.PHmiSystem {
+    internal interface IPHmiRunTarget : IRunTarget { }
 }

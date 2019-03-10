@@ -1,27 +1,15 @@
 ﻿using System;
 
-namespace PHmiIoDeviceTools
-{
+namespace PHmiIoDeviceTools {
     [Serializable]
-    public class WriteParameter
-    {
-        private readonly string _address;
-        private readonly object _value;
-
-        public WriteParameter(string address, object value)
-        {
-            _address = address;
-            _value = value;
+    public class WriteParameter {
+        public WriteParameter(string address, object value) {
+            Address = address;
+            Value = value;
         }
 
-        public string Address
-        {
-            get { return _address; }
-        }
+        public string Address { get; }
 
-        public object Value
-        {
-            get { return _value; }
-        }
+        public object Value { get; }
     }
 }

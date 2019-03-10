@@ -2,17 +2,14 @@
 using System.Globalization;
 using System.Windows;
 
-namespace PHmiClient.Converters
-{
-    public class FalseToHiddenConverter : ChainConverter
-    {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+namespace PHmiClient.Converters {
+    public class FalseToHiddenConverter : ChainConverter {
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             return value as bool? == true ? Visibility.Visible : Visibility.Hidden;
         }
 
-        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
+        public override object ConvertBack(object value, Type targetType, object parameter,
+            CultureInfo culture) {
             return value as Visibility? == Visibility.Visible;
         }
     }

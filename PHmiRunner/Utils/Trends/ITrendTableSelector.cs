@@ -1,7 +1,5 @@
-﻿namespace PHmiRunner.Utils.Trends
-{
-    public interface ITrendTableSelector
-    {
+﻿namespace PHmiRunner.Utils.Trends {
+    public interface ITrendTableSelector {
         int NextTable();
     }
 }

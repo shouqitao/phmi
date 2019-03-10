@@ -1,27 +1,15 @@
 ﻿using System;
 
-namespace PHmiIoDeviceTools
-{
+namespace PHmiIoDeviceTools {
     [Serializable]
-    public class ReadParameter
-    {
-        private readonly string _address;
-        private readonly Type _valueType;
-
-        public ReadParameter(string address, Type valueType)
-        {
-            _address = address;
-            _valueType = valueType;
+    public class ReadParameter {
+        public ReadParameter(string address, Type valueType) {
+            Address = address;
+            ValueType = valueType;
         }
 
-        public string Address
-        {
-            get { return _address; }
-        }
+        public string Address { get; }
 
-        public Type ValueType
-        {
-            get { return _valueType; }
-        }
+        public Type ValueType { get; }
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System.Windows.Input;
 
-namespace PHmiClient.Controls
-{
-    public interface IRoot
-    {
-        void Show(object objOrType);
-        void Show<T>();
+namespace PHmiClient.Controls {
+    public interface IRoot {
         object Content { get; set; }
         ICommand ShowCommand { get; }
         object HomePage { get; set; }
@@ -15,5 +11,9 @@ namespace PHmiClient.Controls
         ICommand LogOnCommand { get; }
         ICommand LogOffCommand { get; }
         ICommand ChangePasswordCommand { get; }
+
+        void Show(object objOrType);
+
+        void Show<T>();
     }
 }

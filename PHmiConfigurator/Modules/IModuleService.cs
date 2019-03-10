@@ -2,10 +2,8 @@
 using PHmiModel.Interfaces;
 using PHmiTools.Utils;
 
-namespace PHmiConfigurator.Modules
-{
-    public interface IModuleService
-    {
+namespace PHmiConfigurator.Modules {
+    public interface IModuleService {
         IDialogHelper DialogHelper { get; }
         IModelContextFactory ContextFactory { get; }
         IEditorHelper EditorHelper { get; }

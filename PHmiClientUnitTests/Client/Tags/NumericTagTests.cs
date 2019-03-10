@@ -2,21 +2,18 @@
 using PHmiClient.Tags;
 using PHmiClient.Utils;
 
-namespace PHmiClientUnitTests.Client.Tags
-{
-    public class WhenUsingNumericTag : Specification
-    {
-        protected int Id;
-        protected string Name;
+namespace PHmiClientUnitTests.Client.Tags {
+    public class WhenUsingNumericTag : Specification {
         protected string Description;
-        protected string Format;
         protected string EngUnit;
-        protected double MinValue;
+        protected string Format;
+        protected int Id;
         protected double MaxValue;
+        protected double MinValue;
+        protected string Name;
         protected NumericTag NumericTag;
-        
-        protected override void EstablishContext()
-        {
+
+        protected override void EstablishContext() {
             base.EstablishContext();
             Id = RandomGenerator.GetRandomInt32();
             Name = "Name";
@@ -25,127 +22,102 @@ namespace PHmiClientUnitTests.Client.Tags
             EngUnit = "EngUnit";
             MinValue = RandomGenerator.GetRandomInt32();
             MaxValue = MinValue + 100;
-            NumericTag = new NumericTag(new DispatcherService(), Id, Name, () => Description, () => Format, () => EngUnit, MinValue, MaxValue);
+            NumericTag = new NumericTag(new DispatcherService(), Id, Name, () => Description, () => Format,
+                () => EngUnit, MinValue, MaxValue);
         }
 
-        public class ThenNameIsReturned : WhenUsingNumericTag
-        {
+        public class ThenNameIsReturned : WhenUsingNumericTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(NumericTag.Name, Is.EqualTo(Name));
             }
         }
 
-        public class ThenDescriptionIsReturned : WhenUsingNumericTag
-        {
+        public class ThenDescriptionIsReturned : WhenUsingNumericTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(NumericTag.Description, Is.EqualTo(Description));
             }
         }
 
-        public class ThenMinValueIsReturned : WhenUsingNumericTag
-        {
+        public class ThenMinValueIsReturned : WhenUsingNumericTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(NumericTag.MinValue, Is.EqualTo(MinValue));
             }
         }
 
-        public class ThenMaxValueIsReturned : WhenUsingNumericTag
-        {
+        public class ThenMaxValueIsReturned : WhenUsingNumericTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(NumericTag.MaxValue, Is.EqualTo(MaxValue));
             }
         }
 
-        public class ThenValueStringReturnsNull : WhenUsingNumericTag
-        {
+        public class ThenValueStringReturnsNull : WhenUsingNumericTag {
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(NumericTag.ValueString, Is.Null);
             }
         }
 
-        public class ThenSettingValueRaisesPropertyChangedForValueString : WhenUsingNumericTag
-        {
+        public class ThenSettingValueRaisesPropertyChangedForValueString : WhenUsingNumericTag {
             protected int Counter;
 
-            protected override void EstablishContext()
-            {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 Counter = 0;
-                NumericTag.PropertyChanged += (sender, args) =>
-                    {
-                        if (args.PropertyName == "ValueString")
-                            Counter++;
-                    };
+                NumericTag.PropertyChanged += (sender, args) => {
+                    if (args.PropertyName == "ValueString")
+                        Counter++;
+                };
                 NumericTag.Value = RandomGenerator.GetRandomInt32();
             }
 
             [Test]
-            public void Test()
-            {
+            public void Test() {
                 Assert.That(Counter, Is.EqualTo(1));
             }
         }
 
-        public class AndSettingValue : WhenUsingNumericTag
-        {
-            protected override void EstablishContext()
-            {
+        public class AndSettingValue : WhenUsingNumericTag {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 NumericTag.Value = RandomGenerator.GetRandomInt32();
             }
 
-            public class ThenValueStringReturnsFormattedValue : AndSettingValue
-            {
+            public class ThenValueStringReturnsFormattedValue : AndSettingValue {
                 [Test]
-                public void Test()
-                {
-                    var expected = NumericTag.Value.Value.ToString(Format) + EngUnit;
+                public void Test() {
+                    string expected = NumericTag.Value.Value.ToString(Format) + EngUnit;
                     Assert.That(NumericTag.ValueString, Is.EqualTo(expected));
                 }
             }
         }
 
-        public class AndSettedValueMoreThanMaxValue : WhenUsingNumericTag
-        {
-            protected override void EstablishContext()
-            {
+        public class AndSettedValueMoreThanMaxValue : WhenUsingNumericTag {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 NumericTag.Value = MaxValue + 1;
             }
 
-            public class ThenValueIsMaxValue : AndSettedValueMoreThanMaxValue
-            {
+            public class ThenValueIsMaxValue : AndSettedValueMoreThanMaxValue {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(NumericTag.Value, Is.EqualTo(MaxValue));
                 }
             }
         }
 
-        public class AndSettedValueLessThanMinValue : WhenUsingNumericTag
-        {
-            protected override void EstablishContext()
-            {
+        public class AndSettedValueLessThanMinValue : WhenUsingNumericTag {
+            protected override void EstablishContext() {
                 base.EstablishContext();
                 NumericTag.Value = MinValue - 1;
             }
 
-            public class ThenValueIsMinValue : AndSettedValueLessThanMinValue
-            {
+            public class ThenValueIsMinValue : AndSettedValueLessThanMinValue {
                 [Test]
-                public void Test()
-                {
+                public void Test() {
                     Assert.That(NumericTag.Value, Is.EqualTo(MinValue));
                 }
             }

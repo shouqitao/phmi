@@ -4,37 +4,33 @@ using PHmiClient.Utils;
 using PHmiResources;
 using PHmiResources.Loc;
 
-namespace PHmiModel.Entities
-{
+namespace PHmiModel.Entities {
     [MetadataType(typeof(SettingsMetadata))]
     [Table("settings", Schema = "public")]
-    public class Settings : Entity
-    {
-        public class SettingsMetadata : EntityMetadataBase
-        {
+    public class Settings : Entity {
+        public class SettingsMetadata : EntityMetadataBase {
             private string _server;
             private string _standByServer;
 
             [LocDisplayName("Server", ResourceType = typeof(Res))]
-            [Required(ErrorMessageResourceName = "RequiredErrorMessage", ErrorMessageResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.Server, ErrorMessageResourceName = "ServerNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string Server
-            {
+            [Required(ErrorMessageResourceName = "RequiredErrorMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            [RegularExpression(RegexPatterns.Server, ErrorMessageResourceName = "ServerNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string Server {
                 get { return _server; }
-                set
-                {
+                set {
                     _server = value;
                     OnPropertyChanged(this, m => m.Server);
                 }
             }
 
             [LocDisplayName("StandByServer", ResourceType = typeof(Res))]
-            [RegularExpression(RegexPatterns.Server, ErrorMessageResourceName = "ServerNameMessage", ErrorMessageResourceType = typeof(Res))]
-            public string StandByServer
-            {
+            [RegularExpression(RegexPatterns.Server, ErrorMessageResourceName = "ServerNameMessage",
+                ErrorMessageResourceType = typeof(Res))]
+            public string StandByServer {
                 get { return _standByServer; }
-                set
-                {
+                set {
                     _standByServer = value;
                     OnPropertyChanged(this, m => m.StandByServer);
                 }
@@ -46,84 +42,74 @@ namespace PHmiModel.Entities
         private string _server;
 
         [Column("server")]
-        public string Server
-        {
+        public string Server {
             get { return _server; }
-            set
-            {
-                _server = value; 
+            set {
+                _server = value;
                 OnPropertyChanged(this, e => e.Server);
             }
         }
 
-        #endregion
+        #endregion Server
 
         #region StandByServer
 
         private string _standByServer;
 
         [Column("stand_by_server")]
-        public string StandByServer
-        {
+        public string StandByServer {
             get { return _standByServer; }
-            set
-            {
+            set {
                 _standByServer = value;
                 OnPropertyChanged(this, e => e.StandByServer);
             }
         }
 
-        #endregion
+        #endregion StandByServer
 
         #region Guid
 
         private string _guid;
 
         [Column("guid")]
-        public string Guid
-        {
+        public string Guid {
             get { return _guid; }
-            set
-            {
+            set {
                 _guid = value;
                 OnPropertyChanged(this, e => e.Guid);
             }
         }
 
-        #endregion
+        #endregion Guid
 
         #region Guid2
 
         private string _guid2;
 
         [Column("guid2")]
-        public string Guid2
-        {
+        public string Guid2 {
             get { return _guid2; }
-            set
-            {
+            set {
                 _guid2 = value;
                 OnPropertyChanged(this, e => e.Guid2);
             }
         }
 
-        #endregion
+        #endregion Guid2
 
         #region PhmiGuid
 
         private string _phmiGuid;
 
         [Column("phmi_guid")]
-        public string PhmiGuid
-        {
+        public string PhmiGuid {
             get { return _phmiGuid; }
-            set
-            {
+            set {
                 _phmiGuid = value;
                 OnPropertyChanged(this, e => e.PhmiGuid);
             }
         }
 
-        #endregion
+        #endregion PhmiGuid
     }
 }
